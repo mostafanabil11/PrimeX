@@ -127,6 +127,8 @@
      its `primary`, which measures 9.4:1 and reads as the same accent.
      Rule of thumb: red for fills and anything 24px+, soft for anything below. */
   --color-primary-soft: var(--primary-soft);
+  --color-primary-hover: var(--primary-hover);
+  --color-primary-active: var(--primary-active);
 
   /* Neutral greys carried straight from the design's own scale, so the
      industrial "concrete" mid-tone is nameable rather than reappearing as a
@@ -180,6 +182,21 @@
   --primary: #e60000;
   --primary-foreground: #fff7f5;
   --primary-soft: #ffb4a8;
+
+  /* Hover and pressed states for the red.
+
+     The first version followed the comp literally and dropped the fill to
+     #690000 on hover — from 230 red down to 105, less than half the luminance.
+     On a near-black page a button that dark reads as disabled rather than as
+     responding, and because the label changed colour at the same moment the
+     whole control appeared to swap identity under the cursor.
+
+     These move about 12% and hold both the hue and the label fixed. Hover goes
+     UP: on a dark ground brightening reads as energised, whereas darkening
+     makes the button sink into the page. Pressed goes down, which is the
+     direction people expect from something being pushed. */
+  --primary-hover: #ff1f1f;
+  --primary-active: #c40000;
 
   --secondary: #222424;
   --secondary-foreground: #ffdad4;
@@ -242,6 +259,8 @@
   --primary: #e60000;
   --primary-foreground: #fff7f5;
   --primary-soft: #ffb4a8;
+  --primary-hover: #ff1f1f;
+  --primary-active: #c40000;
   --secondary: #222424;
   --secondary-foreground: #ffdad4;
   --muted: #1a1c1c;
@@ -269,6 +288,36 @@
   --sidebar-accent-foreground: #ffdad4;
   --sidebar-border: #333535;
   --sidebar-ring: #e60000;
+}
+
+/* ---------------------------------------------------------------------------
+   The back-office dialect
+
+   Admin and the member account area are software people work in, not a page
+   they are being sold to. They share this design system's palette, its square
+   corners and its red — but not its voice. The marketing pages are allowed to
+   shout; a table of thirty invoices is not.
+
+   Applied by data-surface="app" on those two layouts, so the whole shift is
+   this block plus two attributes rather than an edit in a hundred files.
+
+   Two changes, both about turning the volume down:
+
+   1. Headings go upright. The heavy italic is the brand and it earns its place
+      at 48px on a hero. At the 20-30px of a card title or a panel heading it
+      stops being expressive and just costs legibility, and there were ~60
+      headings in that range.
+
+   2. The off-white goes neutral. #ffdad4 is warm by design and looks like warm
+      white at display size against black. At 20px in a dense UI it simply
+      reads pink, which is not a serious register for a screen where somebody
+      is reconciling payments. Same lightness, no hue.
+--------------------------------------------------------------------------- */
+
+[data-surface="app"] {
+  --foreground: #e7e4e3;
+  --card-foreground: #e7e4e3;
+  --popover-foreground: #e7e4e3;
 }
 
 @layer base {
@@ -307,6 +356,13 @@
     font-weight: 800;
     font-style: italic;
     font-synthesis: none;
+  }
+
+  /* See the back-office note above: upright, not italic, inside admin and the
+     account area. Weight is kept — these are still headings, just not posters. */
+  [data-surface="app"] .font-display,
+  [data-surface="app"] .font-heading {
+    font-style: normal;
   }
 
   /* Display sizes push to 900 — at 56px+ the extra weight is what makes the

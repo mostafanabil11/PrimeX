@@ -11,7 +11,7 @@ import { apiErrorMessage } from "@/lib/api-error";
 
 const inputBase =
   "w-full border border-border bg-surface-2 px-3.5 py-3 text-[14px] text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring";
-const labelBase = "font-mono text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase";
+const labelBase = "text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase";
 
 export default function AccountSettingsPage() {
   const { data: profile, isLoading } = useQuery({
@@ -194,7 +194,7 @@ function SettingsForm({ profile }: { profile: MemberProfile }) {
         <button
           type="submit"
           disabled={saveProfile.isPending}
-          className="w-fit bg-primary px-7 py-3.5 font-mono text-[13px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
+          className="w-fit bg-primary px-7 py-3.5 text-[13px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
         >
           {saveProfile.isPending ? "Saving…" : "Save changes"}
         </button>
@@ -222,7 +222,7 @@ function SettingsForm({ profile }: { profile: MemberProfile }) {
         <button
           type="submit"
           disabled={savePassword.isPending || !currentPassword || !newPassword}
-          className="w-fit border border-border px-7 py-3.5 font-mono text-[13px] font-semibold tracking-[0.08em] text-foreground uppercase disabled:opacity-40"
+          className="w-fit border border-border px-7 py-3.5 text-[13px] font-semibold tracking-[0.08em] text-foreground uppercase disabled:opacity-40"
         >
           {savePassword.isPending ? "Changing…" : "Change password"}
         </button>
@@ -237,7 +237,7 @@ function SettingsForm({ profile }: { profile: MemberProfile }) {
               or types in — the monospace makes 0/O and 1/l distinguishable,
               which a heavy italic grotesque actively does not. Open tracking
               for the same reason. */}
-          <p className="font-mono text-3xl font-bold tracking-[0.08em] text-primary-soft">
+          <p className="text-3xl font-bold tracking-[0.08em] text-primary-soft">
             {profile.referralCode}
           </p>
           <p className="text-[13px] text-muted-foreground">

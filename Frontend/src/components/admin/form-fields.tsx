@@ -31,7 +31,7 @@ export function Field({ label, hint, error, required, children }: FieldProps) {
     <div className="flex flex-col gap-1.5">
       <label
         htmlFor={id}
-        className="font-mono text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase"
+        className="text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase"
       >
         {label}
         {required && <span className="ml-1 text-destructive">*</span>}
@@ -291,7 +291,7 @@ export function StringList({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <span className="font-mono text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
+      <span className="text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
         {label}
       </span>
       {hint && <p className="text-[12px] text-muted-foreground">{hint}</p>}
@@ -365,7 +365,7 @@ export function PerkList({
 
   return (
     <div className="flex flex-col gap-1.5">
-      <span className="font-mono text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
+      <span className="text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
         {label}
       </span>
       {hint && <p className="text-[12px] text-muted-foreground">{hint}</p>}
@@ -451,14 +451,14 @@ export function FormActions({
       <button
         type="submit"
         disabled={isSaving}
-        className="bg-primary px-6 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
+        className="bg-primary px-6 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
       >
         {isSaving ? "Saving…" : saveLabel}
       </button>
       <button
         type="button"
         onClick={onCancel}
-        className="px-4 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground"
+        className="px-4 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground"
       >
         Cancel
       </button>
@@ -466,7 +466,7 @@ export function FormActions({
         <button
           type="button"
           onClick={destructive.onClick}
-          className="ml-auto px-4 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-destructive uppercase hover:underline"
+          className="ml-auto px-4 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-destructive uppercase hover:underline"
         >
           {destructive.label}
         </button>

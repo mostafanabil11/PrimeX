@@ -49,7 +49,7 @@ export default function MyMembershipPage() {
                     {formatMembershipDateShort(m.startsAt)} – {formatMembershipDateShort(m.endsAt)}
                   </p>
                 </div>
-                <span className="bg-surface-3 px-2 py-1 font-mono text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+                <span className="bg-surface-3 px-2 py-1 text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
                   {STATUS_LABELS[m.status]}
                 </span>
               </div>
@@ -68,7 +68,7 @@ export default function MyMembershipPage() {
         </p>
         <Link
           href="/contact"
-          className="w-fit border border-border px-5 py-2.5 font-mono text-[12px] font-semibold tracking-[0.08em] text-foreground uppercase hover:border-foreground"
+          className="w-fit border border-border px-5 py-2.5 text-[12px] font-semibold tracking-[0.08em] text-foreground uppercase hover:border-foreground"
         >
           Get in touch
         </Link>

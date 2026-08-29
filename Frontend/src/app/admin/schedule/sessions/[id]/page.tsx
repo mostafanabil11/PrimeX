@@ -65,7 +65,7 @@ export default function SessionRosterPage({ params }: { params: Promise<{ id: st
           {session.bookedCount}/{session.capacity} booked
         </span>
         {session.status !== "scheduled" && (
-          <span className="bg-surface-3 px-2 py-1 font-mono text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+          <span className="bg-surface-3 px-2 py-1 text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
             {session.status}
           </span>
         )}
@@ -78,7 +78,7 @@ export default function SessionRosterPage({ params }: { params: Promise<{ id: st
             const reason = prompt("Reason for cancelling this class (shown to members):");
             if (reason !== null) cancel.mutate(reason);
           }}
-          className="mb-6 border border-destructive px-4 py-2 font-mono text-[11px] font-semibold tracking-[0.06em] text-destructive uppercase"
+          className="mb-6 border border-destructive px-4 py-2 text-[11px] font-semibold tracking-[0.06em] text-destructive uppercase"
         >
           Cancel this class
         </button>
@@ -112,7 +112,7 @@ export default function SessionRosterPage({ params }: { params: Promise<{ id: st
               <div className="flex items-center gap-2">
                 {entry.status === "attended" || entry.status === "no_show" ? (
                   <span
-                    className={`px-2.5 py-1 font-mono text-[10px] font-semibold tracking-[0.08em] uppercase ${
+                    className={`px-2.5 py-1 text-[10px] font-semibold tracking-[0.08em] uppercase ${
                       entry.status === "attended"
                         ? "bg-surface-3 text-primary"
                         : "bg-surface-3 text-destructive"
@@ -127,7 +127,7 @@ export default function SessionRosterPage({ params }: { params: Promise<{ id: st
                       onClick={() => attendance.mutate({ bookingId: entry._id, attended: true })}
                       disabled={attendance.isPending}
                       aria-label="Mark attended"
-                      className="flex items-center gap-1.5 border border-border px-3 py-1.5 font-mono text-[11px] font-semibold tracking-[0.06em] text-foreground uppercase hover:border-primary hover:text-primary-soft disabled:opacity-40"
+                      className="flex items-center gap-1.5 border border-border px-3 py-1.5 text-[11px] font-semibold tracking-[0.06em] text-foreground uppercase hover:border-primary hover:text-primary-soft disabled:opacity-40"
                     >
                       <Check className="size-3.5" strokeWidth={2} />
                       Attended
@@ -137,7 +137,7 @@ export default function SessionRosterPage({ params }: { params: Promise<{ id: st
                       onClick={() => attendance.mutate({ bookingId: entry._id, attended: false })}
                       disabled={attendance.isPending}
                       aria-label="Mark no-show"
-                      className="flex items-center gap-1.5 border border-border px-3 py-1.5 font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:border-destructive hover:text-destructive disabled:opacity-40"
+                      className="flex items-center gap-1.5 border border-border px-3 py-1.5 text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:border-destructive hover:text-destructive disabled:opacity-40"
                     >
                       <X className="size-3.5" strokeWidth={2} />
                       No-show

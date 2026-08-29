@@ -63,7 +63,7 @@ export function SiteHeader() {
           />
           <TrackedWhatsAppLink
             message={joinEnquiry()}
-            className="press bg-primary px-4 py-2.5 font-mono text-[13px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-all hover:opacity-90"
+            className="press bg-primary px-4 py-2.5 font-mono text-[13px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-all hover:bg-primary-hover"
           >
             Join Now
           </TrackedWhatsAppLink>

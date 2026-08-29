@@ -39,7 +39,7 @@ export default function OrderConfirmationPage() {
         </p>
         <Link
           href="/track-order"
-          className="bg-primary px-8 py-3 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary/90"
+          className="bg-primary px-8 py-3 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
         >
           Track Your Order
         </Link>
@@ -72,7 +72,7 @@ export default function OrderConfirmationPage() {
       <div className="mx-auto max-w-xl">
         <Link
           href="/"
-          className="mt-8 block w-full bg-primary py-4 text-center text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary/90"
+          className="mt-8 block w-full bg-primary py-4 text-center text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
         >
           Continue Shopping
         </Link>

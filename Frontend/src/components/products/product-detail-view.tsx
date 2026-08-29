@@ -156,7 +156,7 @@ export function ProductDetailView({ product }: { product: ProductDetail }) {
           <button
             type="button"
             onClick={handleAddToBag}
-            className="flex-1 bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary/90"
+            className="flex-1 bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
           >
             Add to Bag
           </button>

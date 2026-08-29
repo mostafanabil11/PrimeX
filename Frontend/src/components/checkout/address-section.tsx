@@ -107,7 +107,7 @@ export function AddressSection({
             <button
               type="submit"
               disabled={createMutation.isPending}
-              className="bg-primary px-6 py-3 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary/90 disabled:opacity-50"
+              className="bg-primary px-6 py-3 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
             >
               {createMutation.isPending ? "Saving…" : "Save Address"}
             </button>

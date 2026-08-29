@@ -117,7 +117,7 @@ export function LoginContent() {
             <button
               type="submit"
               disabled={isPending}
-              className="w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary/90 disabled:opacity-50"
+              className="w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
             >
               {isPending ? "Signing In…" : "Sign In"}
             </button>

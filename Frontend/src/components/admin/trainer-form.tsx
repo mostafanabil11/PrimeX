@@ -219,7 +219,7 @@ export function TrainerForm({ trainer }: { trainer?: Trainer }) {
           onChange={setHourlyRate}
         />
         <div className="flex flex-col gap-2">
-          <span className="font-mono text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
+          <span className="text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
             Availability
           </span>
           {availability.map((a, i) => (

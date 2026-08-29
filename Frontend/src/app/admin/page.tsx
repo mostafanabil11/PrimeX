@@ -59,7 +59,7 @@ export default function AdminDashboardPage() {
                 payment, enquiries are the whole funnel. */}
             <div className="flex items-center justify-between gap-4 bg-background px-6 py-6">
               <div>
-                <p className="mb-2 font-mono text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
+                <p className="mb-2 text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
                   Open enquiries
                 </p>
                 <p className="font-display text-4xl text-foreground tabular-nums">
@@ -69,7 +69,7 @@ export default function AdminDashboardPage() {
               {data.openEnquiries > 0 && (
                 <Link
                   href="/admin/enquiries"
-                  className="flex items-center gap-1.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-primary-soft uppercase hover:underline"
+                  className="flex items-center gap-1.5 text-[12px] font-semibold tracking-[0.06em] text-primary-soft uppercase hover:underline"
                 >
                   <Inbox className="size-4" strokeWidth={1.5} />
                   Review
@@ -90,7 +90,7 @@ export default function AdminDashboardPage() {
                 </h2>
                 <Link
                   href="/admin/memberships"
-                  className="font-mono text-[12px] font-semibold tracking-[0.08em] text-primary-soft uppercase hover:underline"
+                  className="text-[12px] font-semibold tracking-[0.08em] text-primary-soft uppercase hover:underline"
                 >
                   All memberships →
                 </Link>
@@ -172,7 +172,7 @@ function AtRiskSection({ atRisk }: { atRisk: FunnelInsights["atRisk"] }) {
       <div className="mb-5 grid grid-cols-2 gap-px bg-border sm:grid-cols-4">
         {atRisk.buckets.map((b) => (
           <div key={String(b._id)} className="bg-background px-4 py-3">
-            <p className="font-mono text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
+            <p className="text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
               {BUCKET_LABELS[String(b._id)] ?? String(b._id)}
             </p>
             <p className="mt-1 text-[15px] font-semibold text-foreground tabular-nums">
@@ -276,7 +276,7 @@ function FunnelSection({ funnel, days }: { funnel: FunnelInsights["funnel"]; day
 function FunnelStep({ label, value }: { label: string; value: number }) {
   return (
     <div className="min-w-32 flex-1 bg-background px-5 py-4">
-      <p className="font-mono text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
+      <p className="text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
         {label}
       </p>
       <p className="mt-1 font-display text-3xl text-foreground tabular-nums">{value}</p>
@@ -314,7 +314,7 @@ function Stat({
 }) {
   return (
     <div className="bg-background px-6 py-6">
-      <p className="mb-2 flex items-center gap-1.5 font-mono text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
+      <p className="mb-2 flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
         {label}
         {trend === "up" && <TrendingUp className="size-3.5 text-primary" strokeWidth={2} />}
         {trend === "down" && <TrendingDown className="size-3.5 text-muted-foreground" strokeWidth={2} />}

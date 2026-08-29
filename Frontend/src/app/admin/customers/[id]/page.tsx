@@ -77,7 +77,7 @@ export default function AdminCustomerDetailPage({ params }: { params: Promise<{ 
     <div>
       <Link
         href="/admin/customers"
-        className="mb-6 flex w-fit items-center gap-1.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground"
+        className="mb-6 flex w-fit items-center gap-1.5 text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground"
       >
         <ArrowLeft className="size-3.5" strokeWidth={2} />
         Members
@@ -125,7 +125,7 @@ export default function AdminCustomerDetailPage({ params }: { params: Promise<{ 
                     {current.status === "active" && ` · ${daysRemaining(current.endsAt)}d left`}
                   </p>
                 </div>
-                <span className="bg-surface-3 px-3 py-1.5 font-mono text-[11px] font-semibold tracking-[0.08em] text-primary-soft uppercase">
+                <span className="bg-surface-3 px-3 py-1.5 text-[11px] font-semibold tracking-[0.08em] text-primary-soft uppercase">
                   {STATUS_LABELS[current.status]}
                 </span>
               </div>
@@ -137,7 +137,7 @@ export default function AdminCustomerDetailPage({ params }: { params: Promise<{ 
                       type="button"
                       disabled={unfreeze.isPending}
                       onClick={() => unfreeze.mutate(current._id)}
-                      className="border border-border px-4 py-2 font-mono text-[11px] font-semibold tracking-[0.06em] text-foreground uppercase hover:border-foreground disabled:opacity-40"
+                      className="border border-border px-4 py-2 text-[11px] font-semibold tracking-[0.06em] text-foreground uppercase hover:border-foreground disabled:opacity-40"
                     >
                       Unfreeze now
                     </button>
@@ -150,7 +150,7 @@ export default function AdminCustomerDetailPage({ params }: { params: Promise<{ 
                         cancel.mutate(current._id);
                       }
                     }}
-                    className="border border-destructive px-4 py-2 font-mono text-[11px] font-semibold tracking-[0.06em] text-destructive uppercase hover:bg-destructive hover:text-destructive-foreground disabled:opacity-40"
+                    className="border border-destructive px-4 py-2 text-[11px] font-semibold tracking-[0.06em] text-destructive uppercase hover:bg-destructive hover:text-destructive-foreground disabled:opacity-40"
                   >
                     Cancel membership
                   </button>
@@ -172,7 +172,7 @@ export default function AdminCustomerDetailPage({ params }: { params: Promise<{ 
                       {formatMembershipDateShort(m.startsAt)} – {formatMembershipDateShort(m.endsAt)}
                     </p>
                   </div>
-                  <span className="bg-surface-3 px-2 py-1 font-mono text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+                  <span className="bg-surface-3 px-2 py-1 text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
                     {STATUS_LABELS[m.status]}
                   </span>
                 </div>
@@ -195,7 +195,7 @@ export default function AdminCustomerDetailPage({ params }: { params: Promise<{ 
                   className="flex flex-wrap items-center justify-between gap-3 border-b border-border py-3.5 text-[13px]"
                 >
                   <div>
-                    <p className="font-medium text-foreground">{inv.invoiceNumber}</p>
+                    <p className="font-mono font-medium text-foreground">{inv.invoiceNumber}</p>
                     <p className="text-muted-foreground">
                       {formatMembershipDateShort(inv.createdAt)} ·{" "}
                       {paymentMethodLabel(inv.paymentMethod)}
@@ -206,7 +206,7 @@ export default function AdminCustomerDetailPage({ params }: { params: Promise<{ 
                       {formatPrice(inv.totalMinorUnits)}
                     </span>
                     {inv.paymentStatus === "paid" ? (
-                      <span className="bg-surface-3 px-2 py-1 font-mono text-[10px] font-semibold tracking-[0.08em] text-primary-soft uppercase">
+                      <span className="bg-surface-3 px-2 py-1 text-[10px] font-semibold tracking-[0.08em] text-primary-soft uppercase">
                         Paid
                       </span>
                     ) : inv.paymentStatus === "pending" && isSettledByStaff(inv.paymentMethod) ? (
@@ -217,7 +217,7 @@ export default function AdminCustomerDetailPage({ params }: { params: Promise<{ 
                         method={inv.paymentMethod}
                       />
                     ) : (
-                      <span className="bg-surface-3 px-2 py-1 font-mono text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+                      <span className="bg-surface-3 px-2 py-1 text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
                         {inv.paymentStatus}
                       </span>
                     )}
@@ -251,7 +251,7 @@ function BookingList({
 }) {
   return (
     <div>
-      <h3 className="mb-2 font-mono text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">{title}</h3>
+      <h3 className="mb-2 text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">{title}</h3>
       {!bookings ? (
         <div className="h-16 animate-pulse bg-muted" />
       ) : bookings.length === 0 ? (
@@ -270,7 +270,7 @@ function BookingList({
                   {b.session.branch.name}
                 </p>
               </div>
-              <span className="bg-surface-3 px-2 py-1 font-mono text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+              <span className="bg-surface-3 px-2 py-1 text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
                 {b.status.replace("_", " ")}
               </span>
             </div>

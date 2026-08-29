@@ -159,7 +159,7 @@ export default function SignupPage() {
                 <button
                   type="submit"
                   disabled={registerMutation.isPending}
-                  className="w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary/90 disabled:opacity-50"
+                  className="w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
                 >
                   {registerMutation.isPending ? "Creating Account…" : "Create Account"}
                 </button>
@@ -218,7 +218,7 @@ export default function SignupPage() {
                 <button
                   type="submit"
                   disabled={verifyMutation.isPending || otp.length !== 6}
-                  className="w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary/90 disabled:opacity-50"
+                  className="w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
                 >
                   {verifyMutation.isPending ? "Verifying…" : "Verify Email"}
                 </button>

@@ -323,7 +323,7 @@ export default function CheckoutPage() {
                 type="button"
                 onClick={() => placeOrderMutation.mutate()}
                 disabled={!canPlaceOrder}
-                className="w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+                className="w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {placeOrderMutation.isPending
                   ? "Processing…"

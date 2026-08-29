@@ -100,7 +100,7 @@ export default function AdminOrderDetailPage() {
           </div>
 
           <div className="mt-8 border border-border bg-muted p-6 text-[13px]">
-            <p className="mb-2 font-mono text-[12px] font-semibold tracking-[0.1em] text-foreground uppercase">Shipping To</p>
+            <p className="mb-2 text-[12px] font-semibold tracking-[0.1em] text-foreground uppercase">Shipping To</p>
             <p className="text-foreground">
               {order.shippingAddress.firstName} {order.shippingAddress.lastName}
             </p>
@@ -116,7 +116,7 @@ export default function AdminOrderDetailPage() {
 
         <div className="space-y-4">
           <div className="border border-border p-5">
-            <h2 className="mb-4 font-mono text-[12px] font-semibold tracking-[0.1em] text-foreground uppercase">Actions</h2>
+            <h2 className="mb-4 text-[12px] font-semibold tracking-[0.1em] text-foreground uppercase">Actions</h2>
 
             {canShip && (
               <div className="mb-4">
@@ -135,7 +135,7 @@ export default function AdminOrderDetailPage() {
                     })
                   }
                   disabled={statusMutation.isPending}
-                  className="w-full bg-primary py-2.5 font-mono text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase hover:bg-primary/90 disabled:opacity-50"
+                  className="w-full bg-primary py-2.5 text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
                 >
                   Mark as Shipped
                 </button>
@@ -147,7 +147,7 @@ export default function AdminOrderDetailPage() {
                 type="button"
                 onClick={() => statusMutation.mutate({ fulfillmentStatus: "delivered" })}
                 disabled={statusMutation.isPending}
-                className="mb-3 w-full bg-primary py-2.5 font-mono text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase hover:bg-primary/90 disabled:opacity-50"
+                className="mb-3 w-full bg-primary py-2.5 text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
               >
                 Mark as Delivered
               </button>
@@ -162,7 +162,7 @@ export default function AdminOrderDetailPage() {
                   }
                 }}
                 disabled={statusMutation.isPending}
-                className="w-full border border-destructive py-2.5 font-mono text-[12px] font-medium tracking-[0.05em] text-destructive uppercase hover:bg-destructive/10 disabled:opacity-50"
+                className="w-full border border-destructive py-2.5 text-[12px] font-medium tracking-[0.05em] text-destructive uppercase hover:bg-destructive/10 disabled:opacity-50"
               >
                 Mark as Refunded
               </button>

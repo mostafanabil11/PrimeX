@@ -169,11 +169,11 @@ function EnquiryRow({
           <div className="flex flex-wrap items-center gap-2">
             <h2 className="text-[15px] font-semibold text-foreground">{enquiry.name}</h2>
             <span
-              className={`px-2 py-0.5 font-mono text-[10px] font-semibold tracking-[0.08em] uppercase ${STATUS_STYLES[enquiry.status]}`}
+              className={`px-2 py-0.5 text-[10px] font-semibold tracking-[0.08em] uppercase ${STATUS_STYLES[enquiry.status]}`}
             >
               {STATUS_LABELS[enquiry.status]}
             </span>
-            <span className="bg-surface-3 px-2 py-0.5 font-mono text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+            <span className="bg-surface-3 px-2 py-0.5 text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
               {enquiry.type === "trial" ? "Free trial" : "Contact"}
             </span>
           </div>
@@ -282,7 +282,7 @@ function EnquiryRow({
             type="button"
             disabled={!noteBody.trim() || isSavingNote}
             onClick={onSaveNote}
-            className="w-fit bg-primary px-4 py-2 font-mono text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase disabled:opacity-40"
+            className="w-fit bg-primary px-4 py-2 text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase disabled:opacity-40"
           >
             {isSavingNote ? "Saving…" : "Add note"}
           </button>

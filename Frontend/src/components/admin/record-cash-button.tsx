@@ -67,7 +67,7 @@ export function RecordCashButton({
           <button
             type="button"
             disabled={record.isPending}
-            className="bg-primary px-3 py-2 font-mono text-[11px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-opacity hover:opacity-90 disabled:opacity-40"
+            className="bg-primary px-3 py-2 text-[11px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-40"
           />
         }
       >

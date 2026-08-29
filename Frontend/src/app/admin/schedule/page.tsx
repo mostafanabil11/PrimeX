@@ -79,7 +79,7 @@ export default function AdminSchedulePage() {
         <button
           type="button"
           onClick={() => setShowForm(!showForm)}
-          className="ms-auto flex items-center gap-2 bg-primary px-5 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase"
+          className="ms-auto flex items-center gap-2 bg-primary px-5 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase"
         >
           <Plus className="size-4" strokeWidth={2} />
           New slot
@@ -97,7 +97,7 @@ export default function AdminSchedulePage() {
 
       {todayTimetable && todayTimetable.sessions.length > 0 && (
         <div className="mb-8 border border-border bg-surface-1 p-5">
-          <h2 className="mb-3 font-mono text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase">
+          <h2 className="mb-3 text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase">
             Today&apos;s sessions — open one to take the roster or cancel it
           </h2>
           <div className="flex flex-wrap gap-2">
@@ -135,7 +135,7 @@ export default function AdminSchedulePage() {
           <div className="grid min-w-[70rem] grid-cols-7 gap-px bg-border">
             {WEEKDAYS.map((day) => (
               <div key={day} className="bg-surface-1 p-3">
-                <h3 className="mb-3 font-mono text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
+                <h3 className="mb-3 text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
                   {DAY_LABELS[day]}
                 </h3>
                 <div className="flex flex-col gap-2">
@@ -325,14 +325,14 @@ function NewSlotForm({
         <button
           type="submit"
           disabled={create.isPending}
-          className="bg-primary px-6 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase disabled:opacity-50"
+          className="bg-primary px-6 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase disabled:opacity-50"
         >
           {create.isPending ? "Adding…" : "Add slot"}
         </button>
         <button
           type="button"
           onClick={onDone}
-          className="px-4 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase"
+          className="px-4 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase"
         >
           Cancel
         </button>
@@ -344,7 +344,7 @@ function NewSlotForm({
 function Field({ label, hint, children }: { label: string; hint?: string; children: React.ReactNode }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="font-mono text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
+      <label className="text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase">
         {label}
       </label>
       {children}

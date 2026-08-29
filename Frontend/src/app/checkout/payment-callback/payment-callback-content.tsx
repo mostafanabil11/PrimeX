@@ -87,7 +87,7 @@ export function PaymentCallbackContent() {
             <div className="mt-4 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/checkout"
-                className="rounded-lg bg-primary px-6 py-3 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary/90"
+                className="rounded-lg bg-primary px-6 py-3 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
               >
                 Try Again
               </Link>

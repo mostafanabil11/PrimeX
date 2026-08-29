@@ -38,7 +38,7 @@ export function MembershipCard({ subscription }: { subscription: Subscription })
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="font-mono text-[11px] font-semibold tracking-[0.14em] text-muted-foreground uppercase">
+          <p className="text-[11px] font-semibold tracking-[0.14em] text-muted-foreground uppercase">
             Your membership
           </p>
           <h2 className="mt-1 font-display text-3xl tracking-[-0.02em] text-foreground uppercase">
@@ -46,7 +46,7 @@ export function MembershipCard({ subscription }: { subscription: Subscription })
           </h2>
         </div>
         <span
-          className={`px-2.5 py-1 font-mono text-[10px] font-semibold tracking-[0.1em] uppercase ${STATUS_STYLES[subscription.status]}`}
+          className={`px-2.5 py-1 text-[10px] font-semibold tracking-[0.1em] uppercase ${STATUS_STYLES[subscription.status]}`}
         >
           {STATUS_LABELS[subscription.status]}
         </span>
@@ -112,7 +112,7 @@ export function MembershipCard({ subscription }: { subscription: Subscription })
           </p>
           <Link
             href="/join"
-            className="w-fit bg-primary px-6 py-3 font-mono text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-opacity hover:opacity-90"
+            className="w-fit bg-primary px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
           >
             Renew now
           </Link>
@@ -134,13 +134,13 @@ export function NoMembershipCard() {
       <div className="flex flex-wrap gap-3">
         <Link
           href="/join"
-          className="bg-primary px-6 py-3 font-mono text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-opacity hover:opacity-90"
+          className="bg-primary px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
         >
           Choose a plan
         </Link>
         <Link
           href="/membership"
-          className="border border-border px-6 py-3 font-mono text-[12px] font-semibold tracking-[0.08em] text-foreground uppercase"
+          className="border border-border px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-foreground uppercase"
         >
           Compare plans
         </Link>
@@ -164,7 +164,7 @@ export function InvoiceRow({ invoice }: { invoice: import("@/types/membership").
       </div>
       <div className="flex items-center gap-4">
         <span
-          className={`px-2 py-1 font-mono text-[10px] font-semibold tracking-[0.08em] uppercase ${
+          className={`px-2 py-1 text-[10px] font-semibold tracking-[0.08em] uppercase ${
             isPaid ? "bg-surface-3 text-primary" : "bg-surface-3 text-muted-foreground"
           }`}
         >
@@ -181,7 +181,7 @@ export function InvoiceRow({ invoice }: { invoice: import("@/types/membership").
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="font-mono text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase">
+      <dt className="text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase">
         {label}
       </dt>
       <dd className="mt-0.5 text-foreground">{value}</dd>

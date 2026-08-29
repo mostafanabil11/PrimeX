@@ -33,7 +33,7 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-(--spacing-container-max) gap-gutter px-margin-mobile pt-12 pb-stack-lg md:px-margin-desktop md:pt-16">
+    <div data-surface="app" className="mx-auto flex w-full max-w-(--spacing-container-max) gap-gutter px-margin-mobile pt-12 pb-stack-lg md:px-margin-desktop md:pt-16">
       {/* The sidebar is a panel, not a bare column: a surface step plus a
           border is what separates it from the content on a ground this dark,
           where a margin alone reads as an accident. */}
@@ -43,7 +43,7 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
         </Link>
         {/* Red chip rather than grey caps — this is the one label on the page
             that says which side of the site you are standing on. */}
-        <p className="mb-5 ml-4 inline-block bg-primary px-2 py-1 font-mono text-[10px] font-bold tracking-[0.16em] text-primary-foreground uppercase">
+        <p className="mb-5 ml-4 inline-block bg-primary px-2 py-1 text-[10px] font-bold tracking-[0.16em] text-primary-foreground uppercase">
           Admin
         </p>
         <AdminNav />

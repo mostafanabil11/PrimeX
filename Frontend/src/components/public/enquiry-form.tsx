@@ -201,7 +201,7 @@ export function EnquiryForm({
       <button
         type="submit"
         disabled={mutation.isPending}
-        className="w-fit bg-primary px-7 py-3.5 font-mono text-[13px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
+        className="w-fit bg-primary px-7 py-3.5 font-mono text-[13px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
       >
         {mutation.isPending ? "Sending…" : submitLabel}
       </button>

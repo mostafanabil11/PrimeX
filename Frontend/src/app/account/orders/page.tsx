@@ -49,7 +49,7 @@ export default function OrderHistoryPage() {
           <p className="mb-8 text-body-lg text-muted-foreground">You haven&apos;t placed any orders yet.</p>
           <Link
             href="/"
-            className="bg-primary px-8 py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary/90"
+            className="bg-primary px-8 py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
           >
             Start Shopping
           </Link>

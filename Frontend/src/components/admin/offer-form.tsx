@@ -14,7 +14,7 @@ import type { Plan } from "@/types/gym";
 const inputClass =
   "w-full border border-border bg-background px-4 py-2.5 text-sm text-foreground outline-none focus:border-foreground";
 const labelClass =
-  "mb-1.5 block font-mono text-[11px] font-semibold tracking-[0.1em] text-foreground uppercase";
+  "mb-1.5 block text-[11px] font-semibold tracking-[0.1em] text-foreground uppercase";
 
 function toDateInputValue(iso: string | null): string {
   return iso ? iso.slice(0, 10) : "";
@@ -264,14 +264,14 @@ export function OfferForm({ offer }: { offer?: Offer }) {
         <button
           type="submit"
           disabled={mutation.isPending}
-          className="bg-primary px-6 py-3 font-mono text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase disabled:opacity-40"
+          className="bg-primary px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase disabled:opacity-40"
         >
           {mutation.isPending ? "Saving…" : isEdit ? "Save offer" : "Create offer"}
         </button>
         <button
           type="button"
           onClick={() => router.push("/admin/offers")}
-          className="border border-border px-6 py-3 font-mono text-[12px] font-semibold tracking-[0.08em] text-foreground uppercase"
+          className="border border-border px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-foreground uppercase"
         >
           Cancel
         </button>
@@ -294,7 +294,7 @@ function Chip({
       type="button"
       aria-pressed={selected}
       onClick={onClick}
-      className={`border px-4 py-2 font-mono text-[12px] font-semibold tracking-[0.06em] uppercase transition-colors ${
+      className={`border px-4 py-2 text-[12px] font-semibold tracking-[0.06em] uppercase transition-colors ${
         selected
           ? "border-primary bg-primary text-primary-foreground"
           : "border-border text-muted-foreground hover:border-foreground hover:text-foreground"
@@ -315,7 +315,7 @@ function Chip({
 function AffectedPlans({ rows }: { rows: { plan: Plan; newPrice: number }[] }) {
   return (
     <div className="border border-border bg-surface-1 p-5">
-      <p className="mb-3 font-mono text-[11px] font-semibold tracking-[0.1em] text-foreground uppercase">
+      <p className="mb-3 text-[11px] font-semibold tracking-[0.1em] text-foreground uppercase">
         This will change {rows.length} {rows.length === 1 ? "plan" : "plans"}
       </p>
 

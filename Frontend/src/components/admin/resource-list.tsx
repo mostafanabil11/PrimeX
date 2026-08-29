@@ -34,7 +34,7 @@ export function AdminPageHeader({
       {newHref && (
         <Link
           href={newHref}
-          className="flex shrink-0 items-center gap-2 bg-primary px-5 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-opacity hover:opacity-90"
+          className="flex shrink-0 items-center gap-2 bg-primary px-5 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
         >
           <Plus className="size-4" strokeWidth={2} />
           {newLabel ?? "New"}
@@ -97,7 +97,7 @@ export function ResourceList({
               {row.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="bg-surface-3 px-2 py-1 font-mono text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase"
+                  className="bg-surface-3 px-2 py-1 text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase"
                 >
                   {tag}
                 </span>

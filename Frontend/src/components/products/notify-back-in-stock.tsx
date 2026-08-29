@@ -44,7 +44,7 @@ export function NotifyBackInStock({ productId, size }: { productId: string; size
       <button
         type="submit"
         disabled={mutation.isPending}
-        className="shrink-0 border border-foreground px-6 py-3 font-mono text-[12px] font-medium tracking-[0.05em] text-foreground uppercase transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground disabled:opacity-50"
+        className="shrink-0 border border-foreground px-6 py-3 font-mono text-[12px] font-medium tracking-[0.05em] text-foreground uppercase transition-colors hover:border-primary hover:bg-primary/10 disabled:opacity-50"
       >
         {mutation.isPending ? "…" : "Notify Me"}
       </button>

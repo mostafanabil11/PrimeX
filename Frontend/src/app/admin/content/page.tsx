@@ -110,7 +110,7 @@ export default function AdminContentPage() {
                     <div className="flex items-center justify-between gap-3">
                       <label
                         htmlFor={field.key}
-                        className="font-mono text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase"
+                        className="text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase"
                       >
                         {field.label}
                         {isDirty && <span className="ml-2 text-primary">unsaved</span>}
@@ -179,7 +179,7 @@ export default function AdminContentPage() {
           <button
             type="submit"
             disabled={save.isPending || dirtyCount === 0}
-            className="bg-primary px-6 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-opacity hover:opacity-90 disabled:opacity-40"
+            className="bg-primary px-6 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-40"
           >
             {save.isPending
               ? "Saving…"
@@ -191,7 +191,7 @@ export default function AdminContentPage() {
             <button
               type="button"
               onClick={() => setEdits({})}
-              className="px-4 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground"
+              className="px-4 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground"
             >
               Discard
             </button>

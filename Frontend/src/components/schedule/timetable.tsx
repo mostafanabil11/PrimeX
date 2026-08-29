@@ -239,7 +239,7 @@ function SessionRow({ session, timezone }: { session: ClassSession; timezone: st
             type="button"
             disabled={book.isPending || book.isSuccess}
             onClick={() => book.mutate()}
-            className="bg-primary px-4 py-2.5 font-mono text-[11px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
+            className="bg-primary px-4 py-2.5 font-mono text-[11px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
           >
             {book.isSuccess ? "Booked" : book.isPending ? "…" : "Book"}
           </button>

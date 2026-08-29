@@ -15,7 +15,7 @@
  * Square, like everything else in this design.
  */
 const buttonClasses =
-  "flex size-12 items-center justify-center border border-concrete bg-surface-2 text-foreground transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
+  "flex size-12 items-center justify-center border border-concrete bg-surface-2 text-foreground transition-colors hover:border-primary hover:bg-primary/15 hover:text-primary-soft focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary";
 
 export function SocialFloatingButtons() {
   return (

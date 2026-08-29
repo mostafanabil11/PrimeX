@@ -42,9 +42,9 @@ export default function AccountLayout({ children }: LayoutProps<"/account">) {
     : NAV;
 
   return (
-    <div className="mx-auto flex w-full max-w-(--spacing-container-max) flex-col gap-stack-sm px-margin-mobile pt-stack-md pb-stack-lg md:flex-row md:gap-gutter md:px-margin-desktop">
+    <div data-surface="app" className="mx-auto flex w-full max-w-(--spacing-container-max) flex-col gap-stack-sm px-margin-mobile pt-stack-md pb-stack-lg md:flex-row md:gap-gutter md:px-margin-desktop">
       <aside className="shrink-0 md:w-56">
-        <p className="mb-1 font-mono text-[11px] font-semibold tracking-[0.14em] text-muted-foreground uppercase">
+        <p className="mb-1 text-[11px] font-semibold tracking-[0.14em] text-muted-foreground uppercase">
           Your account
         </p>
         <p className="mb-6 font-display text-2xl tracking-[-0.02em] text-foreground uppercase">

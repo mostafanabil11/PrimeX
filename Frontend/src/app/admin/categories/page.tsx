@@ -18,7 +18,7 @@ import { apiErrorMessage } from "@/lib/api-error";
 
 const inputClass =
   "w-full border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-foreground";
-const labelClass = "mb-1.5 block font-mono text-[11px] font-semibold tracking-[0.1em] text-foreground uppercase";
+const labelClass = "mb-1.5 block text-[11px] font-semibold tracking-[0.1em] text-foreground uppercase";
 
 function CategoryFormFields({
   value,
@@ -165,7 +165,7 @@ export default function AdminCategoriesPage() {
         <button
           type="button"
           onClick={() => setCreating((v) => !v)}
-          className="flex items-center gap-2 bg-primary px-5 py-2.5 font-mono text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase hover:bg-primary/90"
+          className="flex items-center gap-2 bg-primary px-5 py-2.5 text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
         >
           {creating ? <X className="size-4" strokeWidth={2} /> : <Plus className="size-4" strokeWidth={2} />}
           {creating ? "Cancel" : "New Category"}
@@ -184,7 +184,7 @@ export default function AdminCategoriesPage() {
           <button
             type="submit"
             disabled={createMutation.isPending}
-            className="mt-4 bg-primary px-6 py-2.5 font-mono text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase hover:bg-primary/90 disabled:opacity-50"
+            className="mt-4 bg-primary px-6 py-2.5 text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
           >
             {createMutation.isPending ? "Creating…" : "Create"}
           </button>
@@ -245,10 +245,10 @@ export default function AdminCategoriesPage() {
                 >
                   <CategoryFormFields value={editValue} onChange={setEditValue} parentOptions={topLevel.filter((c) => c._id !== parent._id)} />
                   <div className="mt-3 flex gap-2">
-                    <button type="submit" className="bg-primary px-5 py-2 font-mono text-[12px] font-medium text-primary-foreground uppercase hover:bg-primary/90">
+                    <button type="submit" className="bg-primary px-5 py-2 text-[12px] font-medium text-primary-foreground uppercase transition-colors hover:bg-primary-hover">
                       Save
                     </button>
-                    <button type="button" onClick={() => setEditingId(null)} className="border border-border px-5 py-2 font-mono text-[12px] uppercase hover:bg-muted">
+                    <button type="button" onClick={() => setEditingId(null)} className="border border-border px-5 py-2 text-[12px] uppercase hover:bg-muted">
                       Cancel
                     </button>
                   </div>
@@ -314,10 +314,10 @@ export default function AdminCategoriesPage() {
                       >
                         <CategoryFormFields value={editValue} onChange={setEditValue} parentOptions={topLevel} />
                         <div className="mt-3 flex gap-2">
-                          <button type="submit" className="bg-primary px-5 py-2 font-mono text-[12px] font-medium text-primary-foreground uppercase hover:bg-primary/90">
+                          <button type="submit" className="bg-primary px-5 py-2 text-[12px] font-medium text-primary-foreground uppercase transition-colors hover:bg-primary-hover">
                             Save
                           </button>
-                          <button type="button" onClick={() => setEditingId(null)} className="border border-border px-5 py-2 font-mono text-[12px] uppercase hover:bg-muted">
+                          <button type="button" onClick={() => setEditingId(null)} className="border border-border px-5 py-2 text-[12px] uppercase hover:bg-muted">
                             Cancel
                           </button>
                         </div>

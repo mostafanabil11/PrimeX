@@ -53,7 +53,7 @@ export default function AdminCustomersPage() {
                   <p className="flex items-center gap-2 font-medium text-foreground">
                     {customer.firstName} {customer.lastName}
                     {customer.role !== "member" && (
-                      <span className="bg-surface-3 px-2 py-0.5 font-mono text-[10px] font-semibold tracking-[0.06em] text-foreground uppercase">
+                      <span className="bg-surface-3 px-2 py-0.5 text-[10px] font-semibold tracking-[0.06em] text-foreground uppercase">
                         {ROLE_LABELS[customer.role] ?? customer.role}
                       </span>
                     )}
@@ -74,7 +74,7 @@ export default function AdminCustomersPage() {
                 type="button"
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="border border-border px-4 py-2 font-mono text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
+                className="border border-border px-4 py-2 text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
               >
                 Previous
               </button>
@@ -85,7 +85,7 @@ export default function AdminCustomersPage() {
                 type="button"
                 onClick={() => setPage((p) => Math.min(data.pagination.pages, p + 1))}
                 disabled={page === data.pagination.pages}
-                className="border border-border px-4 py-2 font-mono text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
+                className="border border-border px-4 py-2 text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
               >
                 Next
               </button>

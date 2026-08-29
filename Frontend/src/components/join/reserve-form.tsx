@@ -313,7 +313,7 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
       <button
         type="submit"
         disabled={reserve.isPending || !accepted}
-        className="press bg-primary px-6 py-4 font-mono text-[13px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-all hover:opacity-90 disabled:opacity-50"
+        className="press bg-primary px-6 py-4 font-mono text-[13px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-all hover:bg-primary-hover disabled:opacity-50"
       >
         {reserve.isPending ? "Reserving…" : "Reserve my membership"}
       </button>

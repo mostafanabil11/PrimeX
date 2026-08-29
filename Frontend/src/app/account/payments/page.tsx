@@ -32,7 +32,7 @@ export default function PaymentsPage() {
       ) : (
         <>
           <div className="border border-border bg-surface-1 p-5">
-            <p className="font-mono text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase">
+            <p className="text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase">
               Paid to date
             </p>
             <p className="mt-1 font-display text-3xl text-foreground tabular-nums">

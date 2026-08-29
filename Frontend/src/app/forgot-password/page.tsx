@@ -49,7 +49,7 @@ export default function ForgotPasswordPage() {
               </p>
               <Link
                 href="/login"
-                className="block w-full bg-primary py-4 text-center text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary/90"
+                className="block w-full bg-primary py-4 text-center text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
               >
                 Back to Sign In
               </Link>
@@ -84,7 +84,7 @@ export default function ForgotPasswordPage() {
                 <button
                   type="submit"
                   disabled={mutation.isPending}
-                  className="w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary/90 disabled:opacity-50"
+                  className="w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
                 >
                   {mutation.isPending ? "Sending…" : "Send Reset Link"}
                 </button>

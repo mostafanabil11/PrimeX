@@ -145,7 +145,7 @@ export function ClassReviewsSection({
             <button
               type="submit"
               disabled={mutation.isPending}
-              className="bg-primary px-6 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-opacity hover:opacity-90 disabled:opacity-50"
+              className="bg-primary px-6 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
             >
               {mutation.isPending ? "Submitting…" : "Submit review"}
             </button>

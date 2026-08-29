@@ -57,7 +57,7 @@ export default async function CategoryPage({ params }: { params: Params }) {
               <Link
                 key={child._id}
                 href={`/products?category=${child._id}`}
-                className="border border-border px-5 py-2 font-mono text-[12px] font-semibold tracking-[0.05em] text-foreground uppercase transition-colors hover:border-primary hover:bg-primary hover:text-primary-foreground"
+                className="border border-border px-5 py-2 font-mono text-[12px] font-semibold tracking-[0.05em] text-foreground uppercase transition-colors hover:border-primary hover:bg-primary/10"
               >
                 {child.name}
               </Link>

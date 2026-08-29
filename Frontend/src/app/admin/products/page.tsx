@@ -26,7 +26,7 @@ export default function AdminProductsPage() {
         <h1 className="font-heading text-headline-sm font-bold text-foreground">Products</h1>
         <Link
           href="/admin/products/new"
-          className="flex items-center gap-2 bg-primary px-5 py-2.5 font-mono text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase hover:bg-primary/90"
+          className="flex items-center gap-2 bg-primary px-5 py-2.5 text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
         >
           <Plus className="size-4" strokeWidth={2} />
           New Product

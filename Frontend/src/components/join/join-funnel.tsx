@@ -462,7 +462,7 @@ export function JoinFunnel({ plans, branches }: { plans: Plan[]; branches: Branc
               type="button"
               disabled={!canContinue[step]}
               onClick={() => goToStep((step + 1) as StepIndex)}
-              className="press ml-auto bg-primary px-7 py-3.5 font-mono text-[13px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-all hover:opacity-90 disabled:opacity-40"
+              className="press ml-auto bg-primary px-7 py-3.5 font-mono text-[13px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-all hover:bg-primary-hover disabled:opacity-40"
             >
               Continue
             </button>
@@ -471,7 +471,7 @@ export function JoinFunnel({ plans, branches }: { plans: Plan[]; branches: Branc
               type="button"
               disabled={!canContinue[3] || submit.isPending}
               onClick={() => submit.mutate()}
-              className="press ml-auto bg-primary px-7 py-3.5 font-mono text-[13px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-all hover:opacity-90 disabled:opacity-40"
+              className="press ml-auto bg-primary px-7 py-3.5 font-mono text-[13px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-all hover:bg-primary-hover disabled:opacity-40"
             >
               {submit.isPending ? "Just a moment…" : "Pay and join"}
             </button>

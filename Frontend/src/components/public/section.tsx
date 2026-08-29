@@ -131,17 +131,28 @@ export function PageHeader({
 // visual contract on an <a> instead of a <Link> — the class string is what
 // matters, not which element renders it.
 //
-// Both variants carry a 2px border at rest, transparent on the primary. That
-// is not decoration: the design's hover state is an inversion — the fill drops
-// out and the border arrives — and a border that only appears on hover would
-// grow the button by 4px at that moment and shove the buttons beside it
-// sideways. Reserving the space up front makes the hover a pure repaint.
+// Both variants carry a 2px border at rest, transparent on the primary, so a
+// hover that brings a border in is a pure repaint rather than a 4px growth
+// that shoves the neighbouring button sideways.
+//
+// The hover itself is deliberately restrained. An earlier version followed the
+// comp literally: the fill collapsed to a very dark red and the label switched
+// to coral at the same moment, so the control appeared to change identity
+// under the cursor rather than acknowledge it. Both variants now hold their
+// label colour fixed and move exactly one property — the primary lifts its
+// fill, the outline gains a faint red wash. `:active` then darkens, so press
+// and hover move in opposite directions and the button reads as a physical
+// thing.
 export function ctaClasses(variant: "primary" | "outline" = "primary", className = ""): string {
   const styles =
     variant === "primary"
-      ? "border-transparent bg-primary text-primary-foreground hover:border-primary hover:bg-[#690000] hover:text-primary-soft"
-      : "border-foreground text-foreground hover:border-primary hover:text-primary-soft";
+      ? "border-transparent bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-active"
+      : "border-foreground text-foreground hover:border-primary hover:bg-primary/10 active:bg-primary/20";
 
+  // transition-all, not transition-colors: this carries `press`, whose scale
+  // comes from a transform. A narrow colour transition would win over the
+  // .press rule in globals.css — utilities sit in a later layer — and the tap
+  // feedback would land instantly instead of easing. See the note there.
   return `press inline-flex items-center justify-center border-2 px-6 py-3.5 font-mono text-[13px] font-bold tracking-[0.1em] uppercase transition-all ${styles} ${className}`;
 }
 

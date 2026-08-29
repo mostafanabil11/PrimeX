@@ -124,7 +124,7 @@ export default function AdminStaffPage() {
         <button
           type="button"
           onClick={() => setAdding(true)}
-          className="mb-8 bg-primary px-5 py-3 font-mono text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase hover:opacity-90"
+          className="mb-8 bg-primary px-5 py-3 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
         >
           Add staff member
         </button>
@@ -147,7 +147,7 @@ export default function AdminStaffPage() {
                 <p className="text-[14px] font-semibold text-foreground">
                   {member.firstName} {member.lastName}
                   {!member.isActive && (
-                    <span className="ml-2 bg-surface-3 px-2 py-0.5 font-mono text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+                    <span className="ml-2 bg-surface-3 px-2 py-0.5 text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
                       Switched off
                     </span>
                   )}
@@ -166,7 +166,7 @@ export default function AdminStaffPage() {
                       reset.mutate(member);
                     }
                   }}
-                  className="flex items-center gap-1.5 border border-border px-3 py-2 font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground disabled:opacity-40"
+                  className="flex items-center gap-1.5 border border-border px-3 py-2 text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground disabled:opacity-40"
                 >
                   <KeyRound className="size-3.5" strokeWidth={1.5} />
                   Reset password
@@ -186,10 +186,10 @@ export default function AdminStaffPage() {
                       toggle.mutate({ id: member._id, isActive: next });
                     }
                   }}
-                  className={`px-3 py-2 font-mono text-[11px] font-semibold tracking-[0.06em] uppercase disabled:opacity-40 ${
+                  className={`px-3 py-2 text-[11px] font-semibold tracking-[0.06em] uppercase disabled:opacity-40 ${
                     member.isActive
                       ? "border border-destructive text-destructive hover:bg-destructive hover:text-background"
-                      : "bg-primary text-primary-foreground hover:opacity-90"
+                      : "bg-primary text-primary-foreground transition-colors hover:bg-primary-hover"
                   }`}
                 >
                   {member.isActive ? "Switch off" : "Switch on"}
@@ -221,7 +221,7 @@ function IssuedPassword({
 
   return (
     <div className="mb-8 border border-primary bg-surface-1 p-6">
-      <p className="font-mono text-[11px] font-semibold tracking-[0.12em] text-primary-soft uppercase">
+      <p className="text-[11px] font-semibold tracking-[0.12em] text-primary-soft uppercase">
         Password for {issued.name}
       </p>
       <p className="mt-1 mb-4 text-[13px] text-muted-foreground">
@@ -235,7 +235,7 @@ function IssuedPassword({
           setCopied(true);
           window.setTimeout(() => setCopied(false), 2000);
         }}
-        className="flex items-center gap-3 border border-border bg-background px-5 py-3 font-mono text-xl tracking-[0.1em] text-foreground hover:border-foreground"
+        className="flex items-center gap-3 border border-border bg-background px-5 py-3 text-xl tracking-[0.1em] text-foreground hover:border-foreground"
       >
         {issued.password}
         {copied ? (
@@ -248,7 +248,7 @@ function IssuedPassword({
       <button
         type="button"
         onClick={onDismiss}
-        className="mt-4 block font-mono text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground"
+        className="mt-4 block text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground"
       >
         I have saved it
       </button>

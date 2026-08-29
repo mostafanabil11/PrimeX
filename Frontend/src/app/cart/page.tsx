@@ -28,7 +28,7 @@ export default function CartPage() {
         </p>
         <Link
           href="/"
-          className="bg-primary px-8 py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary/90"
+          className="bg-primary px-8 py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
         >
           Continue Shopping
         </Link>
@@ -156,7 +156,7 @@ export default function CartPage() {
             aria-disabled={!canCheckout}
             className={`block w-full py-4 text-center text-button font-medium tracking-[0.05em] uppercase transition-colors ${
               canCheckout
-                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                ? "bg-primary text-primary-foreground transition-colors hover:bg-primary-hover"
                 : "pointer-events-none bg-primary/40 text-primary-foreground/70"
             }`}
           >

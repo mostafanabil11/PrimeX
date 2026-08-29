@@ -61,7 +61,7 @@ export default function MyClassesPage() {
             key={s}
             type="button"
             onClick={() => setScope(s)}
-            className={`px-4 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] uppercase transition-colors ${
+            className={`px-4 py-2.5 text-[12px] font-semibold tracking-[0.06em] uppercase transition-colors ${
               scope === s
                 ? "bg-primary text-primary-foreground"
                 : "border border-border text-muted-foreground hover:text-foreground"
@@ -84,7 +84,7 @@ export default function MyClassesPage() {
           {scope === "upcoming" && (
             <Link
               href="/schedule"
-              className="bg-primary px-6 py-3 font-mono text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase"
+              className="bg-primary px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase"
             >
               Browse the timetable
             </Link>
@@ -166,7 +166,7 @@ function BookingRow({ booking, scope }: { booking: Booking; scope: "upcoming" | 
 
       <div className="flex shrink-0 items-center gap-3">
         <span
-          className={`px-2.5 py-1 font-mono text-[10px] font-semibold tracking-[0.08em] uppercase ${
+          className={`px-2.5 py-1 text-[10px] font-semibold tracking-[0.08em] uppercase ${
             booking.status === "attended"
               ? "bg-surface-3 text-primary"
               : booking.status === "no_show"
@@ -184,7 +184,7 @@ function BookingRow({ booking, scope }: { booking: Booking; scope: "upcoming" | 
             onClick={() => {
               if (confirm(`Cancel your place on ${session.classType.name}?`)) cancel.mutate();
             }}
-            className="border border-border px-4 py-2.5 font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:border-foreground hover:text-foreground disabled:opacity-40"
+            className="border border-border px-4 py-2.5 text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:border-foreground hover:text-foreground disabled:opacity-40"
           >
             {cancel.isPending ? "…" : "Cancel"}
           </button>

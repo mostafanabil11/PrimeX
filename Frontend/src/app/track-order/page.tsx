@@ -93,7 +93,7 @@ export default function TrackOrderPage() {
           <button
             type="submit"
             disabled={!orderNumber.trim() || !email.trim() || mutation.isPending}
-            className="flex w-full items-center justify-center gap-2 bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
+            className="flex w-full items-center justify-center gap-2 bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
           >
             {mutation.isPending ? (
               <Loader2 className="size-4 animate-spin" strokeWidth={2} />
@@ -119,7 +119,7 @@ export default function TrackOrderPage() {
           <div className="mx-auto mt-8 max-w-xl">
             <Link
               href="/"
-              className="block w-full bg-primary py-4 text-center text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary/90"
+              className="block w-full bg-primary py-4 text-center text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
             >
               Continue Shopping
             </Link>

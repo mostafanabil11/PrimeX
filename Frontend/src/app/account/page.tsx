@@ -49,7 +49,7 @@ export default function AccountDashboardPage() {
             </h2>
             <Link
               href="/account/payments"
-              className="font-mono text-[12px] font-semibold tracking-[0.08em] text-primary-soft uppercase hover:underline"
+              className="text-[12px] font-semibold tracking-[0.08em] text-primary-soft uppercase hover:underline"
             >
               See all →
             </Link>
@@ -87,7 +87,7 @@ function UpcomingClasses() {
         </h2>
         <Link
           href="/account/classes"
-          className="font-mono text-[12px] font-semibold tracking-[0.08em] text-primary-soft uppercase hover:underline"
+          className="text-[12px] font-semibold tracking-[0.08em] text-primary-soft uppercase hover:underline"
         >
           See all →
         </Link>
@@ -100,7 +100,7 @@ function UpcomingClasses() {
           </p>
           <Link
             href="/schedule"
-            className="bg-primary px-5 py-2.5 font-mono text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase"
+            className="bg-primary px-5 py-2.5 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase"
           >
             Find a class
           </Link>

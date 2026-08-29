@@ -75,7 +75,7 @@ export default function AdminMembershipsPage() {
               setStatus(f.value);
               setPage(1);
             }}
-            className={`px-3.5 py-2 font-mono text-[12px] font-semibold tracking-[0.06em] uppercase transition-colors ${
+            className={`px-3.5 py-2 text-[12px] font-semibold tracking-[0.06em] uppercase transition-colors ${
               status === f.value
                 ? "bg-primary text-primary-foreground"
                 : "border border-border text-muted-foreground hover:text-foreground"
@@ -110,7 +110,7 @@ export default function AdminMembershipsPage() {
                     <th
                       key={h}
                       scope="col"
-                      className="px-3 py-3 text-left font-mono text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase whitespace-nowrap"
+                      className="px-3 py-3 text-left text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase whitespace-nowrap"
                     >
                       {h}
                     </th>
@@ -142,7 +142,7 @@ export default function AdminMembershipsPage() {
                         <SourceBadge origin={subscription?.origin ?? null} />
                       </td>
                       <td className="px-3 py-3.5 align-top whitespace-nowrap">
-                        <span className="font-medium text-foreground">{invoice.invoiceNumber}</span>
+                        <span className="font-mono font-medium text-foreground">{invoice.invoiceNumber}</span>
                         <span className="mt-0.5 block text-[12px] text-muted-foreground">
                           {formatMembershipDateShort(invoice.createdAt)}
                         </span>
@@ -163,7 +163,7 @@ export default function AdminMembershipsPage() {
                       </td>
                       <td className="px-3 py-3.5 align-top whitespace-nowrap">
                         <span
-                          className={`px-2 py-1 font-mono text-[10px] font-semibold tracking-[0.08em] uppercase ${STATUS_STYLES[invoice.paymentStatus]}`}
+                          className={`px-2 py-1 text-[10px] font-semibold tracking-[0.08em] uppercase ${STATUS_STYLES[invoice.paymentStatus]}`}
                         >
                           {invoice.paymentStatus === "pending"
                             ? "Awaiting"
@@ -201,7 +201,7 @@ export default function AdminMembershipsPage() {
                 type="button"
                 disabled={page <= 1}
                 onClick={() => setPage(page - 1)}
-                className="border border-border px-4 py-2 font-mono text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
+                className="border border-border px-4 py-2 text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
               >
                 Previous
               </button>
@@ -212,7 +212,7 @@ export default function AdminMembershipsPage() {
                 type="button"
                 disabled={page >= data.totalPages}
                 onClick={() => setPage(page + 1)}
-                className="border border-border px-4 py-2 font-mono text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
+                className="border border-border px-4 py-2 text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
               >
                 Next
               </button>
@@ -237,7 +237,7 @@ function SourceBadge({ origin }: { origin: string | null }) {
   const isWebsite = origin === "website";
   return (
     <span
-      className={`mt-1 block w-fit px-1.5 py-0.5 font-mono text-[10px] font-semibold tracking-[0.06em] uppercase ${
+      className={`mt-1 block w-fit px-1.5 py-0.5 text-[10px] font-semibold tracking-[0.06em] uppercase ${
         isWebsite ? "bg-surface-3 text-primary" : "bg-surface-3 text-muted-foreground"
       }`}
     >
@@ -249,7 +249,7 @@ function SourceBadge({ origin }: { origin: string | null }) {
 function Stat({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className="bg-background px-5 py-4">
-      <p className="font-mono text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase">
+      <p className="text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase">
         {label}
       </p>
       <p className="mt-1 font-display text-3xl text-foreground tabular-nums">{value}</p>
