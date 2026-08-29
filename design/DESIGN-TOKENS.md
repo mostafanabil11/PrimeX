@@ -26,7 +26,7 @@ on `<html>` is what makes them apply at all).
 | surface 1 | `--surface-1` | `#0f1111` | recessed: footer, sidebars |
 | surface 2 | `--surface-2` / `--card` | `#1a1c1c` | cards, panels |
 | surface 3 | `--surface-3` | `#222424` | raised / hover |
-| text | `--foreground` | `#ffdad4` | **warm** off-white, headings |
+| text | `--foreground` | `#ffffff` | pure white, headings |
 | body text | `--muted-foreground` | `#c8c6c5` | running copy |
 | brand | `--primary` | `#e60000` | fills, large type, rules |
 | on brand | `--primary-foreground` | `#fff7f5` | text on red |
@@ -36,9 +36,10 @@ on `<html>` is what makes them apply at all).
 
 ### The two rules that matter
 
-1. **The off-white is warm.** `#ffdad4` carries a trace of red through every
-   heading and is what stops this reading as generic dark mode. Swapping it for
-   `#fff` or a neutral grey drains the brand out of the page.
+1. **The foreground is pure white**, not the comp's warm `#ffdad4`. That warm
+   off-white was tried and dropped: at real sizes it read dusty rather than
+   warm, and cost more in crispness than it returned in family resemblance.
+   `#fff7f5` is the halfway house if warmth is ever wanted back.
 
 2. **Red has a size threshold.** `#e60000` on `#121414` measures **3.9:1** — it
    clears the 3:1 bar for large text and is fine for fills, but it **fails**

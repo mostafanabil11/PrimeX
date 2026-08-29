@@ -154,26 +154,30 @@
    Values are lifted from the design's own neutral-background variant rather
    than eyeballed from the screenshots. Two things to know before editing:
 
-   1. The off-white is WARM (#ffdad4), not neutral. It carries a trace of the
-      red through every headline and is what stops the palette reading as
-      generic dark-mode grey. Replacing it with #fff or #e5e5e5 pulls the whole
-      page cold and is the single fastest way to lose the brand.
+   1. The foreground is pure #ffffff. The design comp used a warm off-white
+      (#ffdad4) to tie the type to the red, and this app shipped that first.
+      Seen side by side at real sizes it read dusty rather than warm — closer
+      to faded salmon than to white — and it lost more in crispness than it
+      gained in family resemblance. Pure white also measures ~17:1 against the
+      #121414 ground against roughly 14:1 for the warm. If the warmth is ever
+      wanted back, #fff7f5 (already here as --primary-foreground) is the
+      halfway house, not #ffdad4.
    2. Body copy is NOT the same colour as headlines. Headings take --foreground,
       running text takes --muted-foreground (#c8c6c5, the design's "concrete
       light"). That two-step is the hierarchy — there are no other weights or
       sizes doing that job. */
 :root {
   --background: #121414;
-  --foreground: #ffdad4;
+  --foreground: #ffffff;
 
   --surface-1: #0f1111;
   --surface-2: #1a1c1c;
   --surface-3: #222424;
 
   --card: #1a1c1c;
-  --card-foreground: #ffdad4;
+  --card-foreground: #ffffff;
   --popover: #1a1c1c;
-  --popover-foreground: #ffdad4;
+  --popover-foreground: #ffffff;
 
   /* The red does all the shouting. Everything else stays near-monochrome,
      which is the whole reason it lands. Fills and large type only — see the
@@ -199,13 +203,13 @@
   --primary-active: #c40000;
 
   --secondary: #222424;
-  --secondary-foreground: #ffdad4;
+  --secondary-foreground: #ffffff;
 
   --muted: #1a1c1c;
   --muted-foreground: #c8c6c5;
 
   --accent: #222424;
-  --accent-foreground: #ffdad4;
+  --accent-foreground: #ffffff;
 
   --destructive: #ffb4ab;
   --destructive-foreground: #690005;
@@ -235,11 +239,11 @@
   --radius: 0px;
 
   --sidebar: #0f1111;
-  --sidebar-foreground: #ffdad4;
+  --sidebar-foreground: #ffffff;
   --sidebar-primary: #e60000;
   --sidebar-primary-foreground: #fff7f5;
   --sidebar-accent: #222424;
-  --sidebar-accent-foreground: #ffdad4;
+  --sidebar-accent-foreground: #ffffff;
   --sidebar-border: #333535;
   --sidebar-ring: #e60000;
 }
@@ -248,25 +252,25 @@
    to the same values rather than a stale neutral palette. */
 .dark {
   --background: #121414;
-  --foreground: #ffdad4;
+  --foreground: #ffffff;
   --surface-1: #0f1111;
   --surface-2: #1a1c1c;
   --surface-3: #222424;
   --card: #1a1c1c;
-  --card-foreground: #ffdad4;
+  --card-foreground: #ffffff;
   --popover: #1a1c1c;
-  --popover-foreground: #ffdad4;
+  --popover-foreground: #ffffff;
   --primary: #e60000;
   --primary-foreground: #fff7f5;
   --primary-soft: #ffb4a8;
   --primary-hover: #ff1f1f;
   --primary-active: #c40000;
   --secondary: #222424;
-  --secondary-foreground: #ffdad4;
+  --secondary-foreground: #ffffff;
   --muted: #1a1c1c;
   --muted-foreground: #c8c6c5;
   --accent: #222424;
-  --accent-foreground: #ffdad4;
+  --accent-foreground: #ffffff;
   --destructive: #ffb4ab;
   --destructive-foreground: #690005;
   --success: #7ddc8a;
@@ -281,11 +285,11 @@
   --chart-4: #474746;
   --chart-5: #b08781;
   --sidebar: #0f1111;
-  --sidebar-foreground: #ffdad4;
+  --sidebar-foreground: #ffffff;
   --sidebar-primary: #e60000;
   --sidebar-primary-foreground: #fff7f5;
   --sidebar-accent: #222424;
-  --sidebar-accent-foreground: #ffdad4;
+  --sidebar-accent-foreground: #ffffff;
   --sidebar-border: #333535;
   --sidebar-ring: #e60000;
 }
@@ -308,10 +312,12 @@
       stops being expressive and just costs legibility, and there were ~60
       headings in that range.
 
-   2. The off-white goes neutral. #ffdad4 is warm by design and looks like warm
-      white at display size against black. At 20px in a dense UI it simply
-      reads pink, which is not a serious register for a screen where somebody
-      is reconciling payments. Same lightness, no hue.
+   2. The white is pulled back a step, #ffffff to #e7e4e3. This began as a
+      correction for the warm off-white the app used to have, which read pink
+      at 20px in a dense UI. The base is neutral now so that reason is gone,
+      but the rule stays for a second one: a dense table of pure-white text is
+      glary to work in for an hour, and dimming it is the same "turn the volume
+      down" move as the upright headings above.
 --------------------------------------------------------------------------- */
 
 [data-surface="app"] {
