@@ -23,7 +23,7 @@ export function SiteFooter() {
           <div className="inline-flex flex-col items-center">
             {/* The full lockup with its strapline, which the header has no room
                 for — at 28px tall the tagline would set at about 6px. */}
-            <Wordmark withTagline className="h-24 w-auto text-foreground" />
+            <Wordmark className="h-24 w-auto" />
             {/* Social lives here and nowhere else now. The floating rail was
                 removed for reading as clutter, so this is the site's only
                 social presence — which is the conventional home for it. */}

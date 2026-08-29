@@ -108,8 +108,10 @@ step.
 
 - Real photography; the current images are placeholders from the old brand.
 - `public/brand/og.jpg` — the share card is an old gym photo with lime accents.
-- The official logo files. The header/footer wordmark and the bolt favicon are
-  drawn in code (`components/layout/wordmark.tsx`, `app/icon.svg`,
-  `scripts/generate-icons.mjs`) as stand-ins.
+- ~~The official logo file.~~ **Done.** The master is
+  `Primex _web_design/logo/final logo.png`, and
+  `Frontend/scripts/generate-logo-assets.mjs` derives what the site renders. The
+  favicon is still drawn in code (`app/icon.svg`, `scripts/generate-icons.mjs`)
+  and deliberately so — the lockup's thin barbs vanish at 16px.
 - Mobile layouts were never designed in any comp; the build is responsive but
   unverified against a design.

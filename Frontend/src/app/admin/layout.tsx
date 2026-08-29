@@ -39,7 +39,7 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
           where a margin alone reads as an accident. */}
       <aside className="hidden w-60 shrink-0 border border-border bg-surface-1 py-6 md:block">
         <Link href="/" className="mb-6 block px-4">
-          <Wordmark className="h-11 w-auto text-foreground" />
+          <Wordmark className="h-12 w-auto" />
         </Link>
         {/* Red chip rather than grey caps — this is the one label on the page
             that says which side of the site you are standing on. */}

@@ -1,88 +1,55 @@
+import Image from "next/image";
 import { BRAND } from "@/lib/brand";
 
 /**
- * The PrimeX lockup, traced from the master logo.
+ * The PrimeX lockup — the real logo, not a redraw.
  *
- * Vector rather than an embedded bitmap: a few hundred bytes, sharp at every
- * size, recolours through currentColor, and it inherits the page's own font so
- * the wordmark and the headlines cannot drift apart the way an exported image
- * does the moment the type is retuned.
+ * This component used to draw the mark as inline SVG, traced by eye first from
+ * a photograph of the illuminated sign and then from a flat export. Both traces
+ * were close and neither was right: the word was set in Anybody rather than the
+ * logo's own typeface, which is wider and shorter, and the barbs on the bolt
+ * were drawn as straight cuts. A logo that is almost right is worse than one
+ * that is right, so all of that is gone.
  *
- * GEOMETRY
+ * What renders now is derived from the master artwork in
+ * `design/Primex _web_design/logo/final logo.png` — RGBA, transparent ground,
+ * type in pure white. `public/brand/primex-lockup.png` is produced from it by
+ * `scripts/generate-logo-assets.mjs` rather than exported by hand, so the trim
+ * cannot silently drift from the master. Re-run that script if the master
+ * changes; do not edit the PNG.
  *
- * One bolt, not two marks. It enters bottom-left, passes behind the word, and
- * exits top-right; the two red shapes are the parts you can see either side of
- * the letters, which is why they are offset rather than mirrored.
+ * ONE MARK, WHOLE, EVERYWHERE. An earlier version generated a second file with
+ * "Commit to be fit" erased, on the reasoning that at header height the
+ * strapline renders around 4px and stops being legible as words. That was
+ * overruled and the variant is gone: the strapline is part of the lockup, and
+ * the brand is shown whole rather than quietly edited to suit a layout. Where
+ * it is too small to read it still reads as part of the mark.
  *
- * Each dart is a BARB, not a triangle — four points, with a notch cut into the
- * base so the tail reads as a swallowtail. Two earlier passes drew them as
- * plain triangles and the mark read as a word flanked by two arrows rather than
- * as a bolt behind a word. The notch is the whole character of it.
- *
- * The darts overshoot the word at both ends. That is faithful to the original,
- * and it also makes the mark tolerant of the type reflowing a few pixels
- * between the fallback font and Anybody arriving — the barbs never have to meet
- * a letterform at an exact point.
- *
- * The word is live <text>, so it stays selectable and readable to a screen
- * reader; the aria-label carries the accessible name and the visual text is
- * marked presentational so the name is not announced twice.
- *
- * KNOWN DIVERGENCE. The word is set in Anybody, which is not the logo's
- * typeface. The original is a wider, shorter face — at matching cap height it
- * runs about 10% wider than Anybody reaches without letter-spacing that would
- * look sprung. Cap height is matched and the width left slightly narrow, since
- * height is what the eye reads as "the right size". Swap this file out for the
- * real vector when it turns up; the props do not need to change.
+ * The white type is baked into the pixels, so this only works on a dark ground.
+ * That is fine — the app has one theme and it is dark. A light-background
+ * placement would need its own export from the master.
  */
 export function Wordmark({
   className = "",
-  withTagline = false,
+  priority = false,
 }: {
   className?: string;
-  /** Adds the strapline. The master lockup always carries it, but at header
-   *  height it would set at around 4px, so the header uses the word alone. */
-  withTagline?: boolean;
+  /** Set on the header, which is the topmost thing on every page — without it
+   *  the logo lazy-loads and the header flashes empty on first paint. */
+  priority?: boolean;
 }) {
   return (
-    <svg viewBox="0 0 600 312" className={className} role="img" aria-label={BRAND.name}>
-      {/* Painted before the text, so the letters sit on top and the bolt reads
-          as passing behind them. Point order per dart: tip, far corner, near
-          corner, notch. */}
-      <path d="M0 312 L245 199 L94 197 L127 225 Z" fill="var(--primary)" />
-      <path d="M600 1 L355 114 L506 115 L472 88 Z" fill="var(--primary)" />
-
-      {/* currentColor so one instance serves the dark header, a light print
-          stylesheet, and a one-colour export without needing a variant. */}
-      <text
-        x="123"
-        y="184"
-        aria-hidden="true"
-        className="font-display"
-        fontSize="76"
-        fontWeight="900"
-        fontStyle="italic"
-        letterSpacing="1"
-        fill="currentColor"
-      >
-        Primex
-      </text>
-
-      {withTagline && (
-        <text
-          x="474"
-          y="207"
-          aria-hidden="true"
-          textAnchor="end"
-          className="font-display"
-          fontSize="17"
-          fontWeight="500"
-          fontStyle="italic"
-          fill="currentColor"
-        >
-          {BRAND.tagline}
-        </text>
-      )}
-    </svg>
+    <Image
+      src="/brand/primex-lockup.png"
+      alt={BRAND.name}
+      // The intrinsic size of the trimmed artwork. Passed so Next reserves the
+      // right box and nothing shifts on load; the rendered size comes from the
+      // height utility in className, with width following the ratio.
+      width={942}
+      height={488}
+      priority={priority}
+      quality={90}
+      className={className}
+    />
   );
 }

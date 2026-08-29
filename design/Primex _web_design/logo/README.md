@@ -1,46 +1,55 @@
 # Logo
 
-## What is here
+`final logo.png` is the master: 981×528 RGBA, transparent ground, type in pure
+white, bolt in the brand red. Everything the site shows is derived from it.
 
 | File | What it is |
 |---|---|
-| `primex-lockup-trace.svg` | Vector trace of the master. This is the shape the site renders. |
-| `screen.png` | **Outdated.** The AI-generated concept this project started from, on a navy field. Superseded by the real logo and kept only until the master file replaces it. |
-| `DESIGN.md` | The palette and type spec the concept came with. |
+| `final logo.png` | **The master.** Do not edit in place — replace it. |
+| `DESIGN.md` | The palette and type spec the original concept shipped with. |
 
-## What is missing
+## How it reaches the site
 
-**The master file.** Whoever cut the illuminated sign in the gym will have it as
-AI, EPS, PDF or SVG — sign makers need vector to drive the cutter, so it exists.
-Ask the owner for it.
+`Frontend/scripts/generate-logo-assets.mjs` reads this file and writes
+`Frontend/public/brand/primex-lockup.png`. It does one thing: trims the 20px of
+transparent padding the master carries on every side, which otherwise becomes
+part of the box the browser lays out, leaving the mark floating inside its own
+container and aligned to nothing.
 
-Drop it in here as `primex-lockup.svg` (or `.ai`/`.eps` alongside an SVG export)
-and delete `screen.png`.
+```bash
+cd Frontend && node scripts/generate-logo-assets.mjs
+```
 
-## Why the trace is not good enough long term
+Run that after replacing the master. Do not hand-edit the PNG in `public/` —
+it is generated, and a manual edit will be silently overwritten.
 
-It is close, and it is better than a bitmap, but it is a redraw by eye from a
-photograph and a flat export. Two things are known to be wrong:
+The script also re-encodes with PNG Sub filtering, which takes the file from
+365 KB to 138 KB losslessly. It is written against `node:zlib` alone, so it
+needs no image library and runs anywhere node does.
 
-- **The typeface.** The word is set in Anybody, the site's headline face. The
-  logo's is wider and shorter — at matching cap height it runs roughly 10%
-  wider than Anybody reaches without letter-spacing that would look sprung.
-  Cap height is matched and the width left slightly narrow, because height is
-  what the eye reads as "the right size".
-- **The barb corners** are drawn as straight cuts. The original may carry small
-  radii or a slightly different notch angle; neither can be resolved from a
-  screenshot.
+## Notes
 
-A logo that is *almost* right is worse than one that is right, so this should
-not survive to launch.
+**The type is baked in as white pixels**, so the lockup only works on a dark
+ground. The site has one theme and it is dark, so that is fine — but a
+light-background placement (print, a letterhead, a partner's site) needs its own
+export from the master rather than a CSS filter.
 
-## Where it is used
+**The strapline stays on at every size.** In the header the lockup renders about
+80px tall, which puts "Commit to be fit" at roughly 3px. A variant with it
+erased was built and then dropped: the strapline is part of the lockup, and the
+brand is shown whole rather than quietly edited to suit a layout.
 
-The app does not read this file. The lockup is a React component at
-`Frontend/src/components/layout/wordmark.tsx`, so the word can be live text
-that inherits the page font and the red can come from the `--primary` token.
-This SVG mirrors it for design reference and standalone use.
+**The favicon is deliberately different.** `Frontend/src/app/icon.svg` and
+`Frontend/scripts/generate-icons.mjs` draw a single chunky bolt, because the
+lockup's long thin barbs disappear entirely at 16px.
 
-The favicon is separate and deliberately different: `Frontend/src/app/icon.svg`
-plus `Frontend/scripts/generate-icons.mjs` draw a single chunky bolt, because
-the lockup's long thin barbs disappear entirely at 16px.
+## History
+
+Two things used to live here and are gone:
+
+- `screen.png` — the AI-generated concept this project started from, on a navy
+  field. Superseded by the master.
+- `primex-lockup-trace.svg` — a hand trace of the mark, used while there was no
+  real asset. It was close and it was not right: the word was set in Anybody
+  rather than the logo's own typeface, and the barbs were drawn as straight
+  cuts. A logo that is almost right is worse than one that is right.
