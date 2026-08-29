@@ -1,0 +1,57 @@
+# Keeps the API from going to sleep during the hours customers actually shop.
+#
+# Render's free tier stops a service after 15 minutes without traffic, and the
+# next request then waits the better part of a minute for it to start again.
+# That costs a sale outright — someone tapping a link and staring at a blank
+# page usually leaves — and it also stops the in-process schedulers, so stock
+# reserved by an abandoned card checkout is not released on time.
+#
+# A request every ten minutes is enough to keep it running. This is deliberately
+# not a 24-hour job: there is no reason to hold a free instance open while
+# nobody is buying, and the first visitor of the morning is the one who pays the
+# cold start anyway.
+#
+# Replacing this with Render's paid tier removes the need entirely.
+name: Keep API awake
+
+on:
+  schedule:
+    # Every 10 minutes, 06:00–21:00 UTC — roughly 08:00 to midnight in Cairo.
+    # GitHub runs scheduled jobs on a best-effort basis and may delay them under
+    # load; for keeping a service warm that is perfectly acceptable.
+    - cron: "*/10 6-21 * * *"
+  # So it can be triggered by hand from the Actions tab when testing.
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping the health endpoint
+        run: |
+          # PLACEHOLDER — this is the hostname of a service that no longer
+          # belongs to this project. render.yaml now names the service
+          # primex-api, and the PrimeX deploy creates a brand new Render
+          # service, so this URL is wrong until somebody pastes the real one in
+          # after that first deploy.
+          #
+          # Until then this workflow pings a stranger's app and reports a
+          # false green. Replace the URL, or disable the workflow.
+          URL="https://primex-api.onrender.com/health"
+
+          # --max-time 90 because a cold start is slow by definition: this
+          # request is the one doing the waking, so it must be allowed to wait.
+          # A single retry covers the case where the instance is still starting
+          # when the first attempt gives up.
+          code=$(curl -sS -o /tmp/body.txt -w '%{http_code}' --max-time 90 --retry 1 --retry-delay 10 "$URL" || echo 000)
+
+          echo "HTTP $code"
+          cat /tmp/body.txt || true
+          echo
+
+          # A failed ping is worth surfacing — if the API is genuinely down,
+          # this job going red is the cheapest monitoring available.
+          if [ "$code" != "200" ]; then
+            echo "::error::Health check returned $code"
+            exit 1
+          fi

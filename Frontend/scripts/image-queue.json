@@ -1,0 +1,72 @@
+[
+  {
+    "filename": "home-intro-1.jpg",
+    "prompt": "Close-up photograph of chalked hands gripping a barbell, mid-grip, tight crop, dramatic side lighting on dark charcoal background (#161616), a thin streak of lime-green (#d2f000) light reflecting off the bar, brightly lit and well-exposed with deep shadow only at the frame edges, no text, portrait orientation",
+    "aspectRatio": "3:4"
+  },
+  {
+    "filename": "home-intro-2.jpg",
+    "prompt": "Photograph of a single athlete's focused face mid-exhale during a heavy lift, sweat visible, shot from a low angle, dark industrial gym background thrown out of focus, warm key light with a lime-green (#d2f000) rim light on one side, brightly lit subject, no text, portrait orientation",
+    "aspectRatio": "3:4"
+  },
+  {
+    "filename": "home-intro-3.jpg",
+    "prompt": "Wide shot of a lone figure training in an empty gym at dawn, silhouetted against a large window with early light, dark charcoal interior (#161616), a single lime-green (#d2f000) accent light visible on a wall or rack, brightly lit subject against the window light, no text, portrait orientation",
+    "aspectRatio": "3:4"
+  },
+  {
+    "filename": "about-story.jpg",
+    "prompt": "Photograph of a coach writing a training program on a chalkboard in an empty gym at early morning light, dark charcoal walls (#161616), warm practical lighting, a subtle lime-green (#d2f000) accent light in the background, quiet and deliberate mood, brightly lit, no visible text on the chalkboard, landscape orientation",
+    "aspectRatio": "16:9"
+  },
+  {
+    "filename": "class-strength-foundations.jpg",
+    "prompt": "Photograph of an athlete performing a barbell back squat in a dark industrial gym, chalk dust visible in the light, dramatic side lighting, lime-green (#d2f000) accent light in the background, brightly lit subject, no text, landscape",
+    "aspectRatio": "16:9"
+  },
+  {
+    "filename": "class-hiit-inferno.jpg",
+    "prompt": "Photograph of an athlete mid-sprint on an assault bike, intense effort, motion blur on the fan wheel, dark gym background, sweat visible, lime-green (#d2f000) rim light, brightly lit, no text, landscape",
+    "aspectRatio": "16:9"
+  },
+  {
+    "filename": "class-olympic-lifting.jpg",
+    "prompt": "Photograph of an athlete at the catch position of a clean and jerk on a lifting platform, chalk cloud frozen mid-air, dramatic overhead lighting, dark charcoal background, lime-green (#d2f000) accent light, brightly lit, no text, landscape",
+    "aspectRatio": "16:9"
+  },
+  {
+    "filename": "class-metabolic-conditioning.jpg",
+    "prompt": "Photograph of an athlete flipping a heavy tire in a dark gym conditioning zone, dynamic action shot, dramatic lighting, lime-green (#d2f000) accent light, brightly lit subject, no text, landscape",
+    "aspectRatio": "16:9"
+  },
+  {
+    "filename": "class-mobility-core.jpg",
+    "prompt": "Photograph of a person in a deep mobility stretch on a gym floor mat, calm and controlled, soft directional lighting, dark charcoal studio background (#161616), subtle lime-green (#d2f000) accent light, brightly lit, no text, landscape",
+    "aspectRatio": "16:9"
+  },
+  {
+    "filename": "class-boxing.jpg",
+    "prompt": "Photograph of an athlete throwing a punch at a heavy bag, mid-motion, chalk or wrap visible on hands, dramatic gym lighting, dark background, lime-green (#d2f000) rim light, brightly lit subject, no text, landscape",
+    "aspectRatio": "16:9"
+  },
+  {
+    "filename": "class-spin.jpg",
+    "prompt": "Photograph of a row of stationary bikes in a dark studio, one rider mid-pedal in dynamic motion, colored studio lighting with a dominant lime-green (#d2f000) wash, brightly lit, no text, landscape",
+    "aspectRatio": "16:9"
+  },
+  {
+    "filename": "class-yoga.jpg",
+    "prompt": "Photograph of a person in a standing yoga pose in a calm, minimal dark studio, soft natural window light, dark charcoal walls, subtle lime-green (#d2f000) accent, brightly lit subject, no text, landscape",
+    "aspectRatio": "16:9"
+  },
+  {
+    "filename": "class-functional-circuit.jpg",
+    "prompt": "Photograph of an athlete mid-burpee or box jump in a functional training zone, dynamic action, dark industrial gym background, lime-green (#d2f000) accent lighting, brightly lit, no text, landscape",
+    "aspectRatio": "16:9"
+  },
+  {
+    "filename": "class-recovery-stretch.jpg",
+    "prompt": "Photograph of a person using a foam roller or resistance band on a gym mat, calm and restorative mood, soft even lighting, dark charcoal background, subtle lime-green (#d2f000) accent, brightly lit, no text, landscape",
+    "aspectRatio": "16:9"
+  }
+]

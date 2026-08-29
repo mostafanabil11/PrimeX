@@ -1,0 +1,22 @@
+# One row per tier per term. 4 tiers x 4 terms = 16 rows.
+# price_egp: whole pounds as the owner quotes them (1800, not 180000) - the x100 to piastres is done on import.
+# access_scope: gym_or_fitness = one or the other | gym_plus_fitness = both
+# class_access: none | unlimited | credits  (if credits, fill class_credits_per_month)
+# perks / benefits: separate multiple values with a pipe |
+tier,term,price_egp,sessions_included,days_per_week,access_scope,class_access,class_credits_per_month,guest_passes,freeze_days,perks,benefits,featured
+Starter,1 month,1800,8,2,gym_or_fitness,none,,1,0,,,no
+Starter,3 months,,,,,,,,,,,no
+Starter,6 months,,,,,,,,,,,no
+Starter,1 year,,,,,,,,,,,no
+Go Pro,1 month,,,,,,,,,,,no
+Go Pro,3 months,,,,,,,,,,,no
+Go Pro,6 months,,,,,,,,,,,no
+Go Pro,1 year,,,,,,,,,,,no
+Master,1 month,,,,,,,,,,,yes
+Master,3 months,,,,,,,,,,,no
+Master,6 months,,,,,,,,,,,no
+Master,1 year,,,,,,,,,,,no
+Elite,1 month,,,,,,,,,,,no
+Elite,3 months,,,,,,,,,,,no
+Elite,6 months,,,,,,,,,,,no
+Elite,1 year,,,,,,,,,,,no

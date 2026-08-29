@@ -1,0 +1,609 @@
+/**
+ * Seeds the gym with a believable starting state: three Cairo branches, five
+ * membership plans, nine class types, six trainers and six testimonials.
+ *
+ *   npm run seed:gym
+ *
+ * Idempotent. Every document is matched on its slug (or name, for
+ * testimonials) and updated in place, so re-running refreshes the data rather
+ * than duplicating it. Pass --fresh to delete the gym collections first, which
+ * is what you want after changing a schema in a way that leaves stale fields.
+ *
+ * Deliberately does NOT touch users, subscriptions, invoices or bookings —
+ * anything that represents a real person or a real payment. Re-running this
+ * against production should be dull, not destructive.
+ *
+ * Prices are in minor units (piastres) and anchored to the Cairo market:
+ * roughly 1,500 EGP monthly and 6,800 EGP annual, which is where Gold's Gym
+ * Egypt and comparable operators sit.
+ */
+import { connect, disconnect, model, Model } from 'mongoose';
+import * as dotenv from 'dotenv';
+import { Branch, BranchSchema } from '@/branches/schemas/branch.schema';
+import { Plan, PlanSchema } from '@/plans/schemas/plan.schema';
+import { Trainer, TrainerSchema } from '@/trainers/schemas/trainer.schema';
+import { ClassType, ClassTypeSchema } from '@/class-types/schemas/class-type.schema';
+import { Testimonial, TestimonialSchema } from '@/content/schemas/testimonial.schema';
+
+dotenv.config();
+
+const FRESH = process.argv.includes('--fresh');
+
+// The gym is open 24/7, every day of the week. The public site does not
+// render this table (see contact/page.tsx), but the model stays in place for
+// when per-branch hours matter again — see the comment on OpeningHours.
+const standardHours = [
+  { day: 'sunday', opensAt: '00:00', closesAt: '23:59' },
+  { day: 'monday', opensAt: '00:00', closesAt: '23:59' },
+  { day: 'tuesday', opensAt: '00:00', closesAt: '23:59' },
+  { day: 'wednesday', opensAt: '00:00', closesAt: '23:59' },
+  { day: 'thursday', opensAt: '00:00', closesAt: '23:59' },
+  { day: 'friday', opensAt: '00:00', closesAt: '23:59' },
+  { day: 'saturday', opensAt: '00:00', closesAt: '23:59' },
+];
+
+const BRANCHES = [
+  {
+    slug: 'maadi',
+    name: 'Maadi',
+    description:
+      'Eight racks, a conditioning zone, a studio and a sauna. Calm, unhurried, and open around the clock.',
+    addressLine: 'Road 9',
+    city: 'Maadi',
+    governorate: 'Cairo',
+    latitude: 29.9601,
+    longitude: 31.2569,
+    phone: '+20 2 2359 1200',
+    whatsappNumber: '+20 100 555 0333',
+    email: 'maadi@primex.eg',
+    facilities: [
+      'Eight power racks',
+      'Conditioning zone',
+      'One studio',
+      'Sauna',
+      'Stretching area',
+      'Juice bar',
+    ],
+    images: ['/images/branch-maadi-hero.jpg'],
+    openingHours: standardHours,
+    womenOnlyWindows: [{ day: 'saturday', startsAt: '09:00', endsAt: '12:00' }],
+    sortOrder: 1,
+  },
+];
+
+/**
+ * The pricing grid: four tiers, each sold over four terms.
+ *
+ * Written as tiers and terms rather than sixteen plan literals because that
+ * is what it actually is — two axes — and a flat list of sixteen is where
+ * inconsistencies breed: one cell keeps an old price, another is missing a
+ * perk, and nobody notices until a member points at the website.
+ *
+ * Offers target the same two axes (see the Offer schema), so "30% off annual"
+ * stays one record rather than four.
+ */
+const TERMS = [
+  { months: 1, label: 'Monthly', slug: 'monthly' },
+  { months: 3, label: '3 Months', slug: '3-months' },
+  { months: 6, label: '6 Months', slug: '6-months' },
+  { months: 12, label: 'Annual', slug: 'annual' },
+] as const;
+
+// Jacuzzi, sauna and InBody always move together in this gym's pricing, so
+// they are generated from one number rather than repeated three times a cell.
+const recovery = (n: number) =>
+  n === 0
+    ? []
+    : [
+        { label: 'Jacuzzi', value: n },
+        { label: 'Sauna', value: n },
+        { label: 'InBody', value: n },
+      ];
+
+const PLAN_TIERS = [
+  {
+    name: 'Starter',
+    slug: 'starter',
+    accessScope: 'gym_or_fitness' as const,
+    daysPerWeek: 2,
+    classAccess: { mode: 'none' as const, creditsPerCycle: 0 },
+    description:
+      'Two sessions a week, on the gym floor or in the studio — you pick which. Enough to build the habit without paying for days you will not use.',
+    benefits: [
+      'Gym floor or studio, your choice',
+      'Two sessions a week',
+      'Locker and towel service',
+    ],
+    cells: [
+      { months: 1, price: 180000, sessions: 8, guestPasses: 1, recovery: 0, freezeDays: 0 },
+      { months: 3, price: 498000, sessions: 24, guestPasses: 2, recovery: 0, freezeDays: 0 },
+      { months: 6, price: 920000, sessions: 48, guestPasses: 3, recovery: 0, freezeDays: 0 },
+      { months: 12, price: 1580000, sessions: 96, guestPasses: 4, recovery: 0, freezeDays: 0 },
+    ],
+  },
+  {
+    name: 'Go Pro',
+    slug: 'go-pro',
+    accessScope: 'gym_or_fitness' as const,
+    daysPerWeek: 3,
+    classAccess: { mode: 'none' as const, creditsPerCycle: 0 },
+    description:
+      'Three sessions a week, floor or studio. The step up for people who have stopped negotiating with themselves about turning up.',
+    benefits: [
+      'Gym floor or studio, your choice',
+      'Three sessions a week',
+      'Locker and towel service',
+    ],
+    cells: [
+      { months: 1, price: 240000, sessions: 12, guestPasses: 1, recovery: 0, freezeDays: 0 },
+      { months: 3, price: 660000, sessions: 36, guestPasses: 2, recovery: 0, freezeDays: 0 },
+      { months: 6, price: 1220000, sessions: 72, guestPasses: 3, recovery: 0, freezeDays: 0 },
+      { months: 12, price: 2160000, sessions: 144, guestPasses: 4, recovery: 0, freezeDays: 0 },
+    ],
+  },
+  {
+    name: 'Master',
+    slug: 'master',
+    accessScope: 'gym_plus_fitness' as const,
+    daysPerWeek: 5,
+    classAccess: { mode: 'unlimited' as const, creditsPerCycle: 0 },
+    description:
+      'Five days a week across the gym floor and the full class timetable, with recovery included. For people training seriously rather than occasionally.',
+    benefits: [
+      'Gym floor and every class',
+      'Five sessions a week',
+      'Jacuzzi, sauna and InBody scans',
+      'Locker and towel service',
+    ],
+    cells: [
+      { months: 1, price: 320000, sessions: 20, guestPasses: 1, recovery: 0, freezeDays: 0 },
+      { months: 3, price: 880000, sessions: 60, guestPasses: 1, recovery: 1, freezeDays: 0 },
+      { months: 6, price: 1640000, sessions: 120, guestPasses: 6, recovery: 5, freezeDays: 30 },
+      { months: 12, price: 2880000, sessions: 240, guestPasses: 10, recovery: 10, freezeDays: 30 },
+    ],
+  },
+  {
+    name: 'Elite',
+    slug: 'elite',
+    accessScope: 'gym_plus_fitness' as const,
+    daysPerWeek: null,
+    classAccess: { mode: 'unlimited' as const, creditsPerCycle: 0 },
+    description:
+      'Every day, everything. The floor, every class on the timetable, jacuzzi, sauna and regular InBody scans. Nothing capped, nothing off limits.',
+    benefits: [
+      'Gym floor and every class',
+      'Train every day, no session cap',
+      'Jacuzzi, sauna and InBody scans',
+      'Locker and towel service',
+    ],
+    cells: [
+      { months: 1, price: 440000, sessions: null, guestPasses: 1, recovery: 1, freezeDays: 0 },
+      { months: 3, price: 1200000, sessions: null, guestPasses: 3, recovery: 3, freezeDays: 0 },
+      { months: 6, price: 2240000, sessions: null, guestPasses: 6, recovery: 6, freezeDays: 30 },
+      { months: 12, price: 3960000, sessions: null, guestPasses: 12, recovery: 12, freezeDays: 30 },
+    ],
+  },
+];
+
+const PLANS = PLAN_TIERS.flatMap((tier, tierIndex) =>
+  tier.cells.map(cell => {
+    const term = TERMS.find(t => t.months === cell.months)!;
+
+    return {
+      slug: `${tier.slug}-${term.slug}`,
+      name: `${tier.name} ${term.label}`,
+      tier: tier.name,
+      description: tier.description,
+      benefits: tier.benefits,
+
+      durationValue: cell.months,
+      durationUnit: 'month',
+      priceMinorUnits: cell.price,
+      // Null everywhere: a standing sale price belongs in an Offer, which the
+      // admin can schedule and switch off. This field stays for one-off
+      // corrections rather than being the promotion mechanism.
+      discountPriceMinorUnits: null,
+      // The annual commitment waives the joining fee; everything else uses the
+      // gym-wide default, which is what null means here.
+      joiningFeeMinorUnits: cell.months === 12 ? 0 : null,
+
+      classAccess: tier.classAccess,
+      branchAccess: 'single',
+      accessScope: tier.accessScope,
+      sessionsIncluded: cell.sessions,
+      daysPerWeek: tier.daysPerWeek,
+      freezeDaysAllowed: cell.freezeDays,
+      guestPasses: cell.guestPasses,
+      perks: recovery(cell.recovery),
+
+      // Tier first, then term, so the admin list reads in the same order as
+      // the pricing page.
+      sortOrder: tierIndex * 10 + TERMS.findIndex(t => t.months === cell.months),
+      // Highlighted on whichever term the visitor has toggled to, which is why
+      // this is set per tier rather than on one cell.
+      isFeatured: tier.name === 'Master',
+      isActive: true,
+    };
+  })
+);
+
+// Slugs from the pre-tier pricing. Deactivated rather than deleted on seed:
+// subscriptions still point at them, and a dangling reference would be worse
+// than a hidden document.
+const RETIRED_PLAN_SLUGS = [
+  'single-session',
+  'monthly',
+  'quarterly',
+  'six-months',
+  'annual',
+  'student',
+];
+
+const CLASS_TYPES = [
+  {
+    slug: 'strength-foundations',
+    name: 'Strength Foundations',
+    image: '/images/class-strength-foundations.jpg',
+    description:
+      'Squat, press, hinge, pull. The four movements everything else is built on, coached properly and loaded slowly.',
+    intensity: 3,
+    durationMinutes: 60,
+    equipment: ['Barbell', 'Rack', 'Plates'],
+    defaultCapacity: 12,
+    colorToken: 'primary',
+    sortOrder: 1,
+  },
+  {
+    slug: 'hiit-inferno',
+    name: 'HIIT Inferno',
+    image: '/images/class-hiit-inferno.jpg',
+    description: 'Forty-five minutes of intervals with nowhere to hide. Come having eaten.',
+    intensity: 5,
+    durationMinutes: 45,
+    equipment: ['Kettlebells', 'Rower', 'Assault bike'],
+    defaultCapacity: 20,
+    colorToken: 'destructive',
+    sortOrder: 2,
+  },
+  {
+    slug: 'olympic-lifting',
+    name: 'Olympic Lifting',
+    image: '/images/class-olympic-lifting.jpg',
+    description:
+      'Snatch and clean and jerk, from the platform. Technique first — you will spend a session on an empty bar and be glad of it.',
+    intensity: 4,
+    durationMinutes: 90,
+    equipment: ['Olympic barbell', 'Platform', 'Bumper plates'],
+    defaultCapacity: 8,
+    colorToken: 'chart-2',
+    sortOrder: 3,
+  },
+  {
+    slug: 'metabolic-conditioning',
+    name: 'Metabolic Conditioning',
+    image: '/images/class-metabolic-conditioning.jpg',
+    description:
+      'Sustained work at a pace you can hold. Builds the engine everything else runs on.',
+    intensity: 4,
+    durationMinutes: 50,
+    equipment: ['Rower', 'Ski erg', 'Sled'],
+    defaultCapacity: 16,
+    colorToken: 'chart-2',
+    sortOrder: 4,
+  },
+  {
+    slug: 'mobility-core',
+    name: 'Mobility & Core',
+    image: '/images/class-mobility-core.jpg',
+    description: 'Slow, deliberate, and the reason your other sessions keep working. Bring socks.',
+    intensity: 1,
+    durationMinutes: 45,
+    equipment: ['Mat', 'Bands', 'Foam roller'],
+    defaultCapacity: 24,
+    colorToken: 'chart-5',
+    sortOrder: 5,
+  },
+  {
+    slug: 'boxing',
+    name: 'Boxing',
+    image: '/images/class-boxing.jpg',
+    description: 'Footwork, combinations and pad work. No sparring, no experience needed.',
+    intensity: 4,
+    durationMinutes: 60,
+    equipment: ['Gloves', 'Wraps', 'Pads'],
+    defaultCapacity: 16,
+    colorToken: 'chart-4',
+    sortOrder: 6,
+  },
+  {
+    slug: 'yoga',
+    name: 'Yoga',
+    image: '/images/class-yoga.jpg',
+    description: 'Vinyasa flow, open to every level. The quietest hour in the building.',
+    intensity: 2,
+    durationMinutes: 60,
+    equipment: ['Mat', 'Blocks'],
+    defaultCapacity: 20,
+    colorToken: 'chart-5',
+    sortOrder: 7,
+  },
+  {
+    slug: 'functional-circuit',
+    name: 'Functional Circuit',
+    image: '/images/class-functional-circuit.jpg',
+    description:
+      'Stations, timed rotations, full body. The best place to start if classes are new.',
+    intensity: 3,
+    durationMinutes: 45,
+    equipment: ['Kettlebells', 'Dumbbells', 'Box', 'Sled'],
+    defaultCapacity: 18,
+    colorToken: 'primary',
+    sortOrder: 8,
+  },
+  {
+    slug: 'recovery-stretch',
+    name: 'Recovery & Stretch',
+    description: 'Guided mobility for the day after a heavy session. Thirty minutes, no shoes.',
+    intensity: 1,
+    durationMinutes: 30,
+    equipment: ['Mat', 'Foam roller', 'Bands'],
+    defaultCapacity: 20,
+    colorToken: 'chart-5',
+    sortOrder: 9,
+  },
+];
+
+const TRAINERS = [
+  {
+    slug: 'marcus-vance',
+    name: 'Marcus Vance',
+    photo: '/images/trainer-marcus.jpg',
+    headline: 'Head of Strength',
+    bio: 'Fifteen years under a barbell and eight coaching other people under theirs. Marcus ran the strength programme for two national teams before joining us, and still competes in raw powerlifting.',
+    specialties: ['Powerlifting', 'Strength programming', 'Return from injury'],
+    certifications: ['NSCA CSCS', 'IPF Level 2 Coach', 'FRC Mobility Specialist'],
+    languages: ['English', 'Arabic'],
+    yearsOfExperience: 15,
+    hourlyRateMinorUnits: 90000,
+    branchSlugs: ['maadi'],
+    availability: [
+      { day: 'sunday', startsAt: '07:00', endsAt: '15:00' },
+      { day: 'tuesday', startsAt: '07:00', endsAt: '15:00' },
+      { day: 'thursday', startsAt: '07:00', endsAt: '15:00' },
+    ],
+    sortOrder: 1,
+  },
+  {
+    slug: 'tarek-zaki',
+    name: 'Tarek Zaki',
+    photo: '/images/trainer-tarek.jpg',
+    headline: 'Conditioning Lead',
+    bio: 'Tarek came from competitive rowing and brought the engine with him. He writes our conditioning blocks and teaches the HIIT sessions people are quietly frightened of.',
+    specialties: ['Conditioning', 'HIIT', 'Endurance'],
+    certifications: ['ACE CPT', 'Precision Nutrition L1', 'British Rowing Coach'],
+    languages: ['English'],
+    yearsOfExperience: 9,
+    hourlyRateMinorUnits: 75000,
+    branchSlugs: ['maadi'],
+    availability: [
+      { day: 'monday', startsAt: '06:00', endsAt: '13:00' },
+      { day: 'wednesday', startsAt: '06:00', endsAt: '13:00' },
+      { day: 'saturday', startsAt: '09:00', endsAt: '14:00' },
+    ],
+    sortOrder: 2,
+  },
+  {
+    slug: 'david-kim',
+    name: 'David Kim',
+    photo: '/images/trainer-david.jpg',
+    headline: 'Olympic Lifting Coach',
+    bio: 'David spent a decade on the platform and now spends it beside one. Expect to be corrected often and to lift more than you did last month.',
+    specialties: ['Olympic weightlifting', 'Technique', 'Youth athletes'],
+    certifications: ['IWF Level 2', 'USAW Sports Performance'],
+    languages: ['English', 'Korean'],
+    yearsOfExperience: 12,
+    hourlyRateMinorUnits: 85000,
+    branchSlugs: ['maadi'],
+    availability: [
+      { day: 'monday', startsAt: '15:00', endsAt: '21:00' },
+      { day: 'wednesday', startsAt: '15:00', endsAt: '21:00' },
+    ],
+    sortOrder: 3,
+  },
+  {
+    slug: 'youssef-darwish',
+    name: 'Youssef Darwish',
+    photo: '/images/trainer-youssef.jpg',
+    headline: 'Mobility & Recovery',
+    bio: 'A physiotherapist first and a coach second, which is why our heaviest lifters book him. Youssef runs mobility, recovery and the return-to-training work after injury.',
+    specialties: ['Mobility', 'Injury rehabilitation', 'Yoga'],
+    certifications: ['MSc Physiotherapy', 'RYT-500', 'FRC Mobility Specialist'],
+    languages: ['English', 'Italian', 'Arabic'],
+    yearsOfExperience: 11,
+    hourlyRateMinorUnits: 80000,
+    branchSlugs: ['maadi'],
+    availability: [
+      { day: 'sunday', startsAt: '10:00', endsAt: '18:00' },
+      { day: 'thursday', startsAt: '10:00', endsAt: '18:00' },
+    ],
+    sortOrder: 4,
+  },
+  {
+    slug: 'omar-hassan',
+    name: 'Omar Hassan',
+    photo: '/images/trainer-omar.jpg',
+    headline: 'Boxing Coach',
+    bio: 'Egyptian national squad, twice. Omar teaches boxing the way he was taught it: footwork for a month before anyone throws a real punch.',
+    specialties: ['Boxing', 'Footwork', 'Conditioning'],
+    certifications: ['AIBA Level 2', 'Egyptian Boxing Federation Coach'],
+    languages: ['Arabic', 'English'],
+    yearsOfExperience: 14,
+    hourlyRateMinorUnits: 70000,
+    branchSlugs: ['maadi'],
+    availability: [
+      { day: 'tuesday', startsAt: '16:00', endsAt: '22:00' },
+      { day: 'saturday', startsAt: '10:00', endsAt: '16:00' },
+    ],
+    sortOrder: 5,
+  },
+  {
+    slug: 'karim-fahmy',
+    name: 'Karim Fahmy',
+    photo: '/images/trainer-karim.jpg',
+    headline: 'Coach, Beginners Programme',
+    bio: 'Karim built our beginners programming from scratch and coaches most of it himself. Strength-led, unhurried, and completely unintimidating.',
+    specialties: ['Strength for beginners', 'Technique', 'Nutrition coaching'],
+    certifications: ['NASM CPT', 'Pre/Postnatal Coaching Certification', 'Precision Nutrition L1'],
+    languages: ['Arabic', 'English'],
+    yearsOfExperience: 7,
+    hourlyRateMinorUnits: 65000,
+    branchSlugs: ['maadi'],
+    availability: [
+      { day: 'sunday', startsAt: '09:00', endsAt: '15:00' },
+      { day: 'wednesday', startsAt: '09:00', endsAt: '15:00' },
+    ],
+    sortOrder: 6,
+  },
+];
+
+const TESTIMONIALS = [
+  {
+    name: 'Ahmed Fouad',
+    quote:
+      'I had trained for six years and never learned to squat properly. Marcus fixed it in three sessions. My back has not hurt since.',
+    attribution: 'Member since 2022 · New Cairo',
+    rating: 5,
+    sortOrder: 1,
+  },
+  {
+    name: 'Hazem Mansour',
+    quote: 'The quiet hours are what got me through the door. The coaching is what kept me here.',
+    attribution: 'Member since 2023 · Maadi',
+    rating: 5,
+    sortOrder: 2,
+  },
+  {
+    name: 'Karim El-Sayed',
+    quote:
+      'Every other gym I joined felt like a showroom. This one feels like a workshop. The equipment is used and it is maintained.',
+    attribution: 'Member since 2021 · Sheikh Zayed',
+    rating: 5,
+    sortOrder: 3,
+  },
+  {
+    name: 'Sherif Adel',
+    quote:
+      'Classes are capped, so the coach actually sees you. I have been corrected mid-set more times here than in four years anywhere else.',
+    attribution: 'Member since 2023 · New Cairo',
+    rating: 5,
+    sortOrder: 4,
+  },
+  {
+    name: 'Youssef Ibrahim',
+    quote:
+      'I travel for work and train at all three branches. Same standard every time, which is rarer than it should be.',
+    attribution: 'Member since 2020 · All branches',
+    rating: 5,
+    sortOrder: 5,
+  },
+  {
+    name: 'Tamer Nabil',
+    quote:
+      'Came back from a knee reconstruction. Youssef built the whole return around it and never once let me rush. I am lifting heavier now than before the injury.',
+    attribution: 'Member since 2022 · Maadi',
+    rating: 5,
+    sortOrder: 6,
+  },
+];
+
+async function upsertBySlug<T>(m: Model<T>, docs: Array<Record<string, unknown>>) {
+  for (const doc of docs) {
+    await m.findOneAndUpdate({ slug: doc.slug }, { $set: doc }, { upsert: true, new: true });
+  }
+}
+
+async function main() {
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    console.error('MONGODB_URI is not set. Put it in Backend/.env.');
+    process.exit(1);
+  }
+
+  await connect(uri);
+
+  const BranchModel = model(Branch.name, BranchSchema);
+  const PlanModel = model(Plan.name, PlanSchema);
+  const TrainerModel = model(Trainer.name, TrainerSchema);
+  const ClassTypeModel = model(ClassType.name, ClassTypeSchema);
+  const TestimonialModel = model(Testimonial.name, TestimonialSchema);
+
+  if (FRESH) {
+    await Promise.all([
+      BranchModel.deleteMany({}),
+      PlanModel.deleteMany({}),
+      TrainerModel.deleteMany({}),
+      ClassTypeModel.deleteMany({}),
+      TestimonialModel.deleteMany({}),
+    ]);
+    console.log('--fresh: cleared branches, plans, trainers, class types and testimonials');
+  }
+
+  await upsertBySlug(BranchModel, BRANCHES);
+  console.log(`branches      : ${BRANCHES.length}`);
+
+  await upsertBySlug(PlanModel, PLANS);
+  console.log(`plans         : ${PLANS.length}`);
+
+  // Anything sold under the old flat pricing is hidden rather than removed.
+  // Idempotent: a second run matches the same slugs and changes nothing.
+  const retired = await PlanModel.updateMany(
+    { slug: { $in: RETIRED_PLAN_SLUGS } },
+    { $set: { isActive: false } }
+  );
+  if (retired.modifiedCount > 0) {
+    console.log(`retired plans : ${retired.modifiedCount} deactivated`);
+  }
+
+  await upsertBySlug(ClassTypeModel, CLASS_TYPES);
+  console.log(`class types   : ${CLASS_TYPES.length}`);
+
+  // Trainers reference branches by slug in this file so the seed stays
+  // readable; the ids are resolved here, after the branches definitely exist.
+  const branchIdBySlug = new Map<string, unknown>();
+  for (const b of await BranchModel.find().select('_id slug').lean()) {
+    branchIdBySlug.set((b as { slug: string }).slug, (b as { _id: unknown })._id);
+  }
+
+  for (const { branchSlugs, ...trainer } of TRAINERS) {
+    const branches = branchSlugs.map(s => {
+      const id = branchIdBySlug.get(s);
+      if (!id) {
+        throw new Error(`Trainer ${trainer.slug} references unknown branch "${s}"`);
+      }
+      return id;
+    });
+
+    await TrainerModel.findOneAndUpdate(
+      { slug: trainer.slug },
+      { $set: { ...trainer, branches } },
+      { upsert: true, new: true }
+    );
+  }
+  console.log(`trainers      : ${TRAINERS.length}`);
+
+  // Testimonials have no slug, so they match on the quote — the name alone
+  // would collide the day two members share one.
+  for (const t of TESTIMONIALS) {
+    await TestimonialModel.findOneAndUpdate({ quote: t.quote }, { $set: t }, { upsert: true });
+  }
+  console.log(`testimonials  : ${TESTIMONIALS.length}`);
+
+  await disconnect();
+  console.log('\nSeed complete.');
+}
+
+main().catch(async err => {
+  console.error(err);
+  await disconnect();
+  process.exit(1);
+});

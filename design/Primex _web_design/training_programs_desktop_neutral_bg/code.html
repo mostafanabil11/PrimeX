@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Training Programs | PrimeX</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:ital,wght@0,700;0,800;0,900;1,700;1,800;1,900&amp;family=Hanken+Grotesk:wght@400;500;600&amp;family=JetBrains+Mono:wght@500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "surface-tint": "#ffb4a8",
+                "on-primary-fixed": "#410000",
+                "primary": "#ffb4a8",
+                "tertiary-fixed": "#dae2ff",
+                "outline": "#b08781",
+                "primary-fixed-dim": "#ffb4a8",
+                "on-secondary-fixed": "#1b1c1b",
+                "charcoal": "#1a1c1c",
+                "on-background": "#ffdad4",
+                "on-surface-variant": "#e9bcb5",
+                "tertiary": "#b2c5ff",
+                "tertiary-container": "#0068f9",
+                "secondary-fixed": "#e4e2e1",
+                "electric-red": "#e60000",
+                "surface-dim": "#0a0b0b",
+                "secondary-container": "#474746",
+                "on-tertiary-container": "#f8f7ff",
+                "on-secondary-container": "#b6b5b4",
+                "on-tertiary-fixed": "#001847",
+                "on-tertiary": "#002c72",
+                "inverse-primary": "#c00000",
+                "on-secondary": "#303030",
+                "secondary-fixed-dim": "#c8c6c5",
+                "error": "#ffb4ab",
+                "surface-variant": "#1e2020",
+                "on-tertiary-fixed-variant": "#0040a0",
+                "error-container": "#93000a",
+                "primary-fixed": "#ffdad4",
+                "inverse-on-surface": "#1e2020",
+                "on-secondary-fixed-variant": "#474746",
+                "on-primary-fixed-variant": "#930100",
+                "outline-variant": "#5f3f3a",
+                "surface-container-highest": "#1e2020",
+                "surface-container": "#161818",
+                "surface-container-lowest": "#000000",
+                "background": "#121414",
+                "on-primary-container": "#fff7f5",
+                "tertiary-fixed-dim": "#b2c5ff",
+                "surface": "#121414",
+                "secondary": "#c8c6c5",
+                "surface-container-high": "#1a1c1c",
+                "on-primary": "#690000",
+                "inverse-surface": "#ffdad4",
+                "concrete": "#474746",
+                "surface-bright": "#282a2a",
+                "on-error": "#690005",
+                "on-error-container": "#ffdad6",
+                "surface-container-low": "#121414",
+                "on-surface": "#ffdad4",
+                "pure-black": "#000000",
+                "primary-container": "#e60000"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "gutter": "24px",
+                "margin-desktop": "64px",
+                "margin-mobile": "20px",
+                "stack-unit": "8px",
+                "section-gap": "120px"
+        },
+        "fontFamily": {
+                "body-md": [
+                        "Hanken Grotesk"
+                ],
+                "headline-md": [
+                        "Anybody"
+                ],
+                "display-xl": [
+                        "Anybody"
+                ],
+                "headline-lg": [
+                        "Anybody"
+                ],
+                "label-sm": [
+                        "JetBrains Mono"
+                ],
+                "body-lg": [
+                        "Hanken Grotesk"
+                ],
+                "label-bold": [
+                        "JetBrains Mono"
+                ],
+                "headline-lg-mobile": [
+                        "Anybody"
+                ]
+        },
+        "fontSize": {
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "1.5",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-md": [
+                        "32px",
+                        {
+                                "lineHeight": "1.2",
+                                "fontWeight": "700"
+                        }
+                ],
+                "display-xl": [
+                        "72px",
+                        {
+                                "lineHeight": "1.0",
+                                "letterSpacing": "-0.04em",
+                                "fontWeight": "900"
+                        }
+                ],
+                "headline-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "1.1",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "800"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "1.0",
+                                "fontWeight": "500"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-bold": [
+                        "14px",
+                        {
+                                "lineHeight": "1.0",
+                                "fontWeight": "700"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "36px",
+                        {
+                                "lineHeight": "1.1",
+                                "fontWeight": "800"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Kinetic background pattern for cards */
+        .card-pattern {
+            background-image: repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 10px,
+                rgba(255, 255, 255, 0.02) 10px,
+                rgba(255, 255, 255, 0.02) 11px
+            );
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex flex-col antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-50 w-full flex justify-between items-center px-margin-desktop h-20 bg-surface-dim border-b-2 border-surface-variant flat no shadows">
+<a class="font-display-xl text-headline-md uppercase italic tracking-tighter text-primary-container dark:text-primary-container transition-opacity hover:opacity-80" href="#"><img alt="PrimeX Logo" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvPaaDz_LNPBYPemlAxa6tdzp0aXMuqjz_winsHEXv7FcrckWFZYK4qtP2s0ZGobu9s9KIRUhIB2Ye0yNhOUSCrW2P2lekKf7jO6UiRdqwwj94oZ6IgRgty2u_cFAGClFYR5Z3WvYjBVYggfZLDOqpkXicM1PzYUKjHXr5llDUHsBsrrUjN_R99nsIwKGeCC97APPOuW7Vl6tB7t3nM6A3UcNsXVNBz9gR3J6Bb4Bds8gZn2KmjL6RZQ"/></a>
+<nav class="hidden md:flex gap-8 items-center h-full">
+<a class="font-label-bold text-label-bold uppercase h-full flex items-center text-primary-container border-b-2 border-primary-container scale-95 transition-transform duration-150 pb-1" href="#">Programs</a>
+<a class="font-label-bold text-label-bold uppercase h-full flex items-center text-on-surface hover:text-primary-container transition-colors duration-200" href="#">Facility</a>
+<a class="font-label-bold text-label-bold uppercase h-full flex items-center text-on-surface hover:text-primary-container transition-colors duration-200" href="#">Stories</a>
+</nav>
+<button class="hidden md:inline-flex bg-primary-container text-on-primary-container font-label-bold text-label-bold uppercase px-6 py-3 rounded-none border-2 border-transparent hover:border-on-primary-container transition-all duration-300 items-center justify-center">
+            Join Now
+        </button>
+<button class="md:hidden text-primary-container">
+<span class="material-symbols-outlined text-3xl">menu</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col">
+<!-- Hero Title Section -->
+<section class="w-full px-margin-mobile md:px-margin-desktop pt-24 pb-16 border-b border-surface-variant relative overflow-hidden">
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle at 80% 20%, #e60000 0%, transparent 40%);"></div>
+<div class="max-w-7xl mx-auto relative z-10">
+<div class="inline-flex items-center gap-2 mb-4">
+<span class="w-8 h-1 bg-primary-container block"></span>
+<span class="font-label-bold text-label-bold uppercase tracking-widest text-secondary">Industrial Strength Discipline</span>
+</div>
+<h1 class="font-display-xl text-headline-lg-mobile md:text-display-xl uppercase italic text-on-surface max-w-4xl">
+<span class="text-primary-container">Dominance</span> Requires Design.
+                </h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mt-6">
+                    Select your protocol. Every program is architected for maximum yield. No filler. No excuses. Execute the plan.
+                </p>
+</div>
+</section>
+<!-- Programs Grid -->
+<section class="w-full px-margin-mobile md:px-margin-desktop py-section-gap bg-background">
+<div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- Card 1: Strength & Conditioning -->
+<article class="bg-surface-container-highest rounded-none border-l-4 border-primary-container p-8 md:p-12 relative overflow-hidden group hover:bg-surface-variant transition-colors duration-300 flex flex-col justify-between min-h-[400px]">
+<div class="absolute top-0 right-0 w-32 h-32 bg-primary-container opacity-5 transform rotate-45 translate-x-16 -translate-y-16 group-hover:opacity-10 transition-opacity"></div>
+<div class="card-pattern absolute inset-0 pointer-events-none mix-blend-overlay opacity-30"></div>
+<div class="relative z-10">
+<div class="inline-block bg-primary-container text-on-primary-container font-label-sm text-label-sm uppercase px-3 py-1 mb-6 border border-on-primary-container/20">Protocol Alpha</div>
+<h2 class="font-headline-lg text-headline-md md:text-headline-lg text-on-surface uppercase italic tracking-tighter mb-4">Strength &amp;<br/><span class="text-primary-container">Conditioning</span></h2>
+<ul class="space-y-3 mb-8">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container text-xl shrink-0" data-weight="fill" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Hypertrophy &amp; Functional Mass</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container text-xl shrink-0" data-weight="fill" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Metabolic Conditioning Finishers</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container text-xl shrink-0" data-weight="fill" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Mobility &amp; Joint Integrity</span>
+</li>
+</ul>
+</div>
+<div class="relative z-10 mt-auto pt-6 border-t border-surface-variant">
+<button class="w-full md:w-auto bg-transparent border-2 border-on-surface text-on-surface font-label-bold text-label-bold uppercase px-8 py-4 hover:bg-on-surface hover:text-background transition-colors duration-300 flex items-center justify-between group-hover:border-primary-container group-hover:text-primary-container group-hover:hover:bg-primary-container group-hover:hover:text-on-primary-container">
+                            View Details
+                            <span class="material-symbols-outlined ml-2 transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Card 2: Powerlifting -->
+<article class="bg-surface-container-highest rounded-none border-l-4 border-surface-variant p-8 md:p-12 relative overflow-hidden group hover:border-primary-container hover:bg-surface-variant transition-all duration-300 flex flex-col justify-between min-h-[400px]">
+<div class="card-pattern absolute inset-0 pointer-events-none mix-blend-overlay opacity-30"></div>
+<div class="relative z-10">
+<div class="inline-block bg-surface-bright text-on-surface font-label-sm text-label-sm uppercase px-3 py-1 mb-6 border border-surface-variant group-hover:bg-primary-container group-hover:text-on-primary-container transition-colors">Protocol Heavy</div>
+<h2 class="font-headline-lg text-headline-md md:text-headline-lg text-on-surface uppercase italic tracking-tighter mb-4">Pure<br/>Powerlifting</h2>
+<ul class="space-y-3 mb-8">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-surface-variant group-hover:text-primary-container transition-colors text-xl shrink-0" data-weight="fill" style="font-variation-settings: 'FILL' 1;">add</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Squat, Bench, Deadlift Mastery</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-surface-variant group-hover:text-primary-container transition-colors text-xl shrink-0" data-weight="fill" style="font-variation-settings: 'FILL' 1;">add</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Peaking &amp; Meet Prep Cycles</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-surface-variant group-hover:text-primary-container transition-colors text-xl shrink-0" data-weight="fill" style="font-variation-settings: 'FILL' 1;">add</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Maximal CNS Output</span>
+</li>
+</ul>
+</div>
+<div class="relative z-10 mt-auto pt-6 border-t border-surface-variant">
+<button class="w-full md:w-auto bg-transparent border-2 border-on-surface text-on-surface font-label-bold text-label-bold uppercase px-8 py-4 hover:bg-on-surface hover:text-background transition-colors duration-300 flex items-center justify-between group-hover:border-primary-container group-hover:text-primary-container group-hover:hover:bg-primary-container group-hover:hover:text-on-primary-container">
+                            View Details
+                            <span class="material-symbols-outlined ml-2 transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Card 3: HIIT -->
+<article class="bg-surface-container-highest rounded-none border-l-4 border-surface-variant p-8 md:p-12 relative overflow-hidden group hover:border-primary-container hover:bg-surface-variant transition-all duration-300 flex flex-col justify-between min-h-[400px]">
+<div class="card-pattern absolute inset-0 pointer-events-none mix-blend-overlay opacity-30"></div>
+<div class="relative z-10">
+<div class="inline-block bg-surface-bright text-on-surface font-label-sm text-label-sm uppercase px-3 py-1 mb-6 border border-surface-variant group-hover:bg-primary-container group-hover:text-on-primary-container transition-colors">Protocol Burn</div>
+<h2 class="font-headline-lg text-headline-md md:text-headline-lg text-on-surface uppercase italic tracking-tighter mb-4">High Intensity<br/>Intervals</h2>
+<ul class="space-y-3 mb-8">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-surface-variant group-hover:text-primary-container transition-colors text-xl shrink-0" data-weight="fill" style="font-variation-settings: 'FILL' 1;">add</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Lactate Threshold Expansion</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-surface-variant group-hover:text-primary-container transition-colors text-xl shrink-0" data-weight="fill" style="font-variation-settings: 'FILL' 1;">add</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Ergometer &amp; Prowler Sprints</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-surface-variant group-hover:text-primary-container transition-colors text-xl shrink-0" data-weight="fill" style="font-variation-settings: 'FILL' 1;">add</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Mental Fortitude Testing</span>
+</li>
+</ul>
+</div>
+<div class="relative z-10 mt-auto pt-6 border-t border-surface-variant">
+<button class="w-full md:w-auto bg-transparent border-2 border-on-surface text-on-surface font-label-bold text-label-bold uppercase px-8 py-4 hover:bg-on-surface hover:text-background transition-colors duration-300 flex items-center justify-between group-hover:border-primary-container group-hover:text-primary-container group-hover:hover:bg-primary-container group-hover:hover:text-on-primary-container">
+                            View Details
+                            <span class="material-symbols-outlined ml-2 transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+</article>
+<!-- Card 4: Athletic Performance -->
+<article class="bg-surface-container-highest rounded-none border-l-4 border-surface-variant p-8 md:p-12 relative overflow-hidden group hover:border-primary-container hover:bg-surface-variant transition-all duration-300 flex flex-col justify-between min-h-[400px]">
+<div class="card-pattern absolute inset-0 pointer-events-none mix-blend-overlay opacity-30"></div>
+<div class="relative z-10">
+<div class="inline-block bg-surface-bright text-on-surface font-label-sm text-label-sm uppercase px-3 py-1 mb-6 border border-surface-variant group-hover:bg-primary-container group-hover:text-on-primary-container transition-colors">Protocol Elite</div>
+<h2 class="font-headline-lg text-headline-md md:text-headline-lg text-on-surface uppercase italic tracking-tighter mb-4">Athletic<br/>Performance</h2>
+<ul class="space-y-3 mb-8">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-surface-variant group-hover:text-primary-container transition-colors text-xl shrink-0" data-weight="fill" style="font-variation-settings: 'FILL' 1;">add</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Explosive Plyometrics &amp; Velocity</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-surface-variant group-hover:text-primary-container transition-colors text-xl shrink-0" data-weight="fill" style="font-variation-settings: 'FILL' 1;">add</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Multidirectional Agility</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-surface-variant group-hover:text-primary-container transition-colors text-xl shrink-0" data-weight="fill" style="font-variation-settings: 'FILL' 1;">add</span>
+<span class="font-body-md text-body-md text-on-surface-variant">Sport-Specific Energy Systems</span>
+</li>
+</ul>
+</div>
+<div class="relative z-10 mt-auto pt-6 border-t border-surface-variant">
+<button class="w-full md:w-auto bg-transparent border-2 border-on-surface text-on-surface font-label-bold text-label-bold uppercase px-8 py-4 hover:bg-on-surface hover:text-background transition-colors duration-300 flex items-center justify-between group-hover:border-primary-container group-hover:text-primary-container group-hover:hover:bg-primary-container group-hover:hover:text-on-primary-container">
+                            View Details
+                            <span class="material-symbols-outlined ml-2 transition-transform group-hover:translate-x-1">arrow_forward</span>
+</button>
+</div>
+</article>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="grid grid-cols-1 md:grid-cols-12 gap-gutter px-margin-desktop py-section-gap w-full bg-surface-container-highest border-t-4 border-primary-container flat no shadows">
+<div class="md:col-span-4 flex flex-col justify-between">
+<img alt="PrimeX Logo" class="h-12 w-auto object-contain mb-6" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvPaaDz_LNPBYPemlAxa6tdzp0aXMuqjz_winsHEXv7FcrckWFZYK4qtP2s0ZGobu9s9KIRUhIB2Ye0yNhOUSCrW2P2lekKf7jO6UiRdqwwj94oZ6IgRgty2u_cFAGClFYR5Z3WvYjBVYggfZLDOqpkXicM1PzYUKjHXr5llDUHsBsrrUjN_R99nsIwKGeCC97APPOuW7Vl6tB7t3nM6A3UcNsXVNBz9gR3J6Bb4Bds8gZn2KmjL6RZQ"/>
+<p class="font-body-md text-body-md text-on-surface opacity-70 max-w-xs">
+                © 2024 PRIMEX PERFORMANCE. ALL RIGHTS RESERVED. INDUSTRIAL STRENGTH DISCIPLINE.
+            </p>
+</div>
+<div class="md:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-8">
+<div class="flex flex-col gap-4">
+<a class="font-label-sm text-label-sm text-secondary hover:text-on-surface transition-colors uppercase outline-none focus:border-b-2 focus:border-primary-container hover:text-primary-container" href="#">Locations</a>
+<a class="font-label-sm text-label-sm text-secondary hover:text-on-surface transition-colors uppercase outline-none focus:border-b-2 focus:border-primary-container hover:text-primary-container" href="#">Trainers</a>
+</div>
+<div class="flex flex-col gap-4">
+<a class="font-label-sm text-label-sm text-secondary hover:text-on-surface transition-colors uppercase outline-none focus:border-b-2 focus:border-primary-container hover:text-primary-container" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-secondary hover:text-on-surface transition-colors uppercase outline-none focus:border-b-2 focus:border-primary-container hover:text-primary-container" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-secondary hover:text-on-surface transition-colors uppercase outline-none focus:border-b-2 focus:border-primary-container hover:text-primary-container" href="#">Contact</a>
+</div>
+</div>
+</footer>
+</body></html>

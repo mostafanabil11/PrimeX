@@ -1,0 +1,7 @@
+# One row per trainer PER DAY they work. A trainer working 5 days = 5 rows.
+# Times are 24h wall-clock HH:MM. Split a broken shift into two rows for the same day.
+# This maps 1:1 onto Trainer.availability - no interpretation needed on import.
+trainer_name,day,starts_at,ends_at
+Ahmed Hassan,sunday,09:00,14:00
+Ahmed Hassan,sunday,17:00,21:00
+Ahmed Hassan,monday,09:00,14:00

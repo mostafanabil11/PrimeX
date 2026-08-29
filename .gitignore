@@ -1,0 +1,37 @@
+# dependencies
+node_modules/
+
+# env files — never commit secrets
+.env
+.env.*
+!.env.example
+
+# build output
+dist/
+.next/
+out/
+build/
+*.tsbuildinfo
+
+# logs
+*.log
+npm-debug.log*
+
+# editor / OS
+.DS_Store
+.vscode/
+.idea/
+
+# coverage
+coverage/
+
+# Database dumps — real member data, never commit
+Backend/backups/
+
+# Unoptimised photo originals. The web-ready copies in Frontend/public/images
+# are what the site serves; these are the multi-megabyte sources they were made
+# from and do not belong in the history.
+Frontend/image-source/
+
+# Planning document from an earlier iteration of the project.
+FORGE-Build-Plan.pdf

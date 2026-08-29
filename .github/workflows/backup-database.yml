@@ -1,0 +1,135 @@
+# Nightly off-site copy of the production database.
+#
+# This is step 3 of docs/BACKUPS.md, the one that protects against the failures
+# an Atlas snapshot cannot: a compromised Atlas account, or a bad migration
+# noticed a week later. Atlas's own backups live inside the account they are
+# protecting, so a copy that leaves Atlas entirely is the only thing that
+# survives losing it.
+#
+# WHY NOT UPLOAD-ARTIFACT
+#
+# The obvious free option is actions/upload-artifact, and it is wrong here:
+# this repository is PUBLIC, and artifacts on a public repository are
+# downloadable by anyone. A dump contains every member's phone number and every
+# invoice. If the repository is ever made private, artifacts become a
+# reasonable fallback — until then, the file must go somewhere access-controlled.
+#
+# WHY BACKBLAZE B2
+#
+# 10 GB free permanently, which this database will not approach for years, and
+# application keys can be granted writeFiles WITHOUT deleteFiles. That property
+# is the whole point: if these credentials leak, an attacker can add junk to the
+# bucket but cannot erase the backup history. A key that can delete gives away
+# ransomware protection for nothing. Cloudflare R2 works identically via the
+# same S3 API if you prefer it — only the endpoint changes — but its tokens do
+# not separate write from delete as cleanly.
+#
+# RETENTION is a bucket lifecycle rule in the B2 console, deliberately NOT done
+# here: pruning from this workflow would require a key that can delete, which
+# is exactly what the paragraph above is avoiding. Let the storage expire old
+# versions server-side.
+#
+# REQUIRED SECRETS (Settings -> Secrets and variables -> Actions)
+#
+#   MONGODB_URI    the production connection string
+#   B2_KEY_ID      application key ID
+#   B2_APP_KEY     application key
+#   B2_BUCKET      bucket name, e.g. primex-gym-backups
+#   B2_ENDPOINT    e.g. https://s3.us-west-004.backblazeb2.com
+#
+# Secrets are never passed to workflows triggered by forked pull requests, so
+# putting the connection string here does not expose it to drive-by PRs. It IS
+# readable by anyone with admin on the repository — that is the trade named in
+# docs/BACKUPS.md, accepted because the alternative is no backups at all.
+name: Backup database
+
+on:
+  schedule:
+    # 02:30 UTC — roughly 04:30 in Cairo. Quiet, and well clear of the
+    # keep-api-awake window so the two jobs never contend.
+    - cron: "30 2 * * *"
+  # Run it by hand before a migration, from the Actions tab.
+  workflow_dispatch:
+
+# One backup at a time. Two overlapping runs would both hold connections open
+# against an M0 cluster, which has a hard connection cap.
+concurrency:
+  group: backup-database
+  cancel-in-progress: false
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: Backend/package-lock.json
+
+      # scripts/backup-db.js needs only mongodb + bson, both of which arrive
+      # hoisted via mongoose. npm ci rather than npm install so the lockfile
+      # decides versions — a backup script is the last place to want a
+      # surprise major version of the driver.
+      - name: Install dependencies
+        working-directory: Backend
+        run: npm ci
+
+      - name: Take the backup
+        working-directory: Backend
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
+        run: node scripts/backup-db.js backups
+
+      # The failure this guards against is the quiet one: a backup that runs
+      # green every night and writes an empty file, discovered only on the day
+      # it is needed. An empty gzip is ~50 bytes and the real dump is tens of
+      # KB, so anything under 1 KB means the dump found nothing and the run
+      # must go red rather than upload a useless file.
+      - name: Check the file is not empty
+        id: check
+        working-directory: Backend
+        run: |
+          file=$(ls -1t backups/*.json.gz 2>/dev/null | head -1)
+          if [ -z "$file" ]; then
+            echo "::error::backup-db.js produced no file"
+            exit 1
+          fi
+
+          size=$(stat -c%s "$file")
+          echo "$file — $size bytes"
+
+          if [ "$size" -lt 1024 ]; then
+            echo "::error::Backup is only $size bytes — the database looks empty. Not uploading."
+            exit 1
+          fi
+
+          echo "file=$file" >> "$GITHUB_OUTPUT"
+          echo "name=$(basename "$file")" >> "$GITHUB_OUTPUT"
+
+      - name: Upload to Backblaze B2
+        working-directory: Backend
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.B2_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.B2_APP_KEY }}
+          # B2's S3 API requires a region that matches the endpoint. The
+          # endpoint carries the real routing; this only has to be non-empty
+          # and consistent for request signing.
+          AWS_DEFAULT_REGION: us-west-004
+        run: |
+          aws s3 cp "${{ steps.check.outputs.file }}" \
+            "s3://${{ secrets.B2_BUCKET }}/daily/${{ steps.check.outputs.name }}" \
+            --endpoint-url "${{ secrets.B2_ENDPOINT }}" \
+            --only-show-errors
+          echo "Uploaded ${{ steps.check.outputs.name }}"
+
+      # A backup job that fails silently is worse than no backup job, because it
+      # buys false confidence. GitHub emails the repository owner when a
+      # scheduled workflow fails, and this step makes the reason legible in the
+      # run summary rather than buried in a log.
+      - name: Report failure
+        if: failure()
+        run: |
+          echo "::error::Nightly database backup FAILED. Check MONGODB_URI and the B2 credentials in repository secrets."

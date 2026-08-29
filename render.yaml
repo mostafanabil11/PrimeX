@@ -1,0 +1,96 @@
+# Render blueprint for the PrimeX API.
+#
+# The frontend is not here: it stays on Vercel. This file describes only the
+# NestJS backend, which needs a host that runs a persistent process — the
+# order and cart schedulers are in-process cron jobs (see orders.scheduler.ts),
+# and a serverless platform would never run them.
+#
+# Secrets are deliberately marked sync:false rather than written here, so they
+# are entered in the Render dashboard and never committed. See README.md.
+services:
+  - type: web
+    name: primex-api
+    runtime: node
+    plan: free
+    region: frankfurt
+    rootDir: Backend
+    # --include=dev is load-bearing. NODE_ENV below is production, which makes
+    # npm omit devDependencies — and the compiler lives there: @nestjs/cli and
+    # typescript are build-time tools, not runtime ones. Without this the
+    # install "succeeds", then `nest build` is not found. The runtime still
+    # only needs dependencies; this affects the build step alone.
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm run start:prod
+
+    # Render restarts the service if this stops responding. AppController's
+    # /health returns a plain ok without touching the database, so a slow
+    # query can't be mistaken for a dead process.
+    healthCheckPath: /health
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: NODE_VERSION
+        value: "22"
+
+      # Render assigns the port and expects the process to bind it.
+      - key: PORT
+        value: "10000"
+
+      # Set in the dashboard, not here.
+      #
+      # MONGODB_URI   Atlas connection string (mongodb+srv://...)
+      # JWT_SECRET    at least 32 chars — openssl rand -base64 48
+      # FRONTEND_URL  the Vercel site URL; accepts a comma-separated list so
+      #               preview deployments and a custom domain also pass CORS
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: FRONTEND_URL
+        sync: false
+
+      - key: JWT_EXPIRATION
+        value: 15m
+      - key: JWT_REFRESH_EXPIRATION
+        value: 7d
+      - key: OTP_EXPIRATION_MINUTES
+        value: "10"
+      - key: MAX_LOGIN_ATTEMPTS
+        value: "5"
+      - key: LOCK_TIME_MINUTES
+        value: "15"
+
+      # Email. Use Brevo here, not SMTP: free Render instances block outbound
+      # traffic on ports 25, 465 and 587, so Gmail works in development and
+      # delivers nothing once deployed. Brevo sends over HTTPS, which is not
+      # blocked, and verifies a single sender address rather than a domain.
+      # EMAIL_USER / EMAIL_PASSWORD are left available for a paid instance.
+      - key: BREVO_API_KEY
+        sync: false
+      - key: MAIL_FROM_ADDRESS
+        sync: false
+      - key: MAIL_FROM_NAME
+        value: PrimeX
+
+      # Customer-facing brand: email templates, API greeting, sender name.
+      - key: BRAND_NAME
+        value: PrimeX
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASSWORD
+        sync: false
+      - key: GOOGLE_CLIENT_ID
+        sync: false
+      - key: GOOGLE_CLIENT_SECRET
+        sync: false
+      - key: GOOGLE_CALLBACK_URL
+        sync: false
+      - key: PAYMOB_API_KEY
+        sync: false
+      - key: PAYMOB_INTEGRATION_ID
+        sync: false
+      - key: PAYMOB_IFRAME_ID
+        sync: false
+      - key: PAYMOB_HMAC_SECRET
+        sync: false

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PrimeX | Join Now</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:ital,wght@0,100..900;1,100..900&amp;family=Hanken+Grotesk:ital,wght@0,100..900;1,100..900&amp;family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+                "surface-tint": "#ffb4a8",
+                "on-primary-fixed": "#410000",
+                "primary": "#ffb4a8",
+                "tertiary-fixed": "#dae2ff",
+                "outline": "#b08781",
+                "primary-fixed-dim": "#ffb4a8",
+                "on-secondary-fixed": "#1b1c1b",
+                "charcoal": "#1a1c1c",
+                "on-background": "#ffdad4",
+                "on-surface-variant": "#e9bcb5",
+                "tertiary": "#b2c5ff",
+                "tertiary-container": "#0068f9",
+                "secondary-fixed": "#e4e2e1",
+                "electric-red": "#e60000",
+                "surface-dim": "#121414",
+                "secondary-container": "#474746",
+                "on-tertiary-container": "#f8f7ff",
+                "on-secondary-container": "#b6b5b4",
+                "on-tertiary-fixed": "#001847",
+                "on-tertiary": "#002c72",
+                "inverse-primary": "#c00000",
+                "on-secondary": "#303030",
+                "secondary-fixed-dim": "#c8c6c5",
+                "error": "#ffb4ab",
+                "surface-variant": "#2a2d2d",
+                "on-tertiary-fixed-variant": "#0040a0",
+                "error-container": "#93000a",
+                "primary-fixed": "#ffdad4",
+                "inverse-on-surface": "#242626",
+                "on-secondary-fixed-variant": "#474746",
+                "on-primary-fixed-variant": "#930100",
+                "outline-variant": "#404444",
+                "surface-container-highest": "#2a2d2d",
+                "surface-container": "#1a1c1c",
+                "surface-container-lowest": "#000000",
+                "background": "#000000",
+                "on-primary-container": "#fff7f5",
+                "tertiary-fixed-dim": "#b2c5ff",
+                "surface": "#121414",
+                "secondary": "#c8c6c5",
+                "surface-container-high": "#242626",
+                "on-primary": "#690000",
+                "inverse-surface": "#ffdad4",
+                "concrete": "#474746",
+                "surface-bright": "#303333",
+                "on-error": "#690005",
+                "on-error-container": "#ffdad6",
+                "surface-container-low": "#161818",
+                "on-surface": "#ffdad4",
+                "pure-black": "#000000",
+                "primary-container": "#e60000"
+        },
+        "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+        },
+        "spacing": {
+                "gutter": "24px",
+                "margin-desktop": "64px",
+                "margin-mobile": "20px",
+                "stack-unit": "8px",
+                "section-gap": "120px"
+        },
+        "fontFamily": {
+                "body-md": [
+                        "Hanken Grotesk"
+                ],
+                "headline-md": [
+                        "Anybody"
+                ],
+                "display-xl": [
+                        "Anybody"
+                ],
+                "headline-lg": [
+                        "Anybody"
+                ],
+                "label-sm": [
+                        "JetBrains Mono"
+                ],
+                "body-lg": [
+                        "Hanken Grotesk"
+                ],
+                "label-bold": [
+                        "JetBrains Mono"
+                ],
+                "headline-lg-mobile": [
+                        "Anybody"
+                ]
+        },
+        "fontSize": {
+                "body-md": [
+                        "16px",
+                        {
+                                "lineHeight": "1.5",
+                                "fontWeight": "400"
+                        }
+                ],
+                "headline-md": [
+                        "32px",
+                        {
+                                "lineHeight": "1.2",
+                                "fontWeight": "700"
+                        }
+                ],
+                "display-xl": [
+                        "72px",
+                        {
+                                "lineHeight": "1.0",
+                                "letterSpacing": "-0.04em",
+                                "fontWeight": "900"
+                        }
+                ],
+                "headline-lg": [
+                        "48px",
+                        {
+                                "lineHeight": "1.1",
+                                "letterSpacing": "-0.02em",
+                                "fontWeight": "800"
+                        }
+                ],
+                "label-sm": [
+                        "12px",
+                        {
+                                "lineHeight": "1.0",
+                                "fontWeight": "500"
+                        }
+                ],
+                "body-lg": [
+                        "18px",
+                        {
+                                "lineHeight": "1.6",
+                                "fontWeight": "400"
+                        }
+                ],
+                "label-bold": [
+                        "14px",
+                        {
+                                "lineHeight": "1.0",
+                                "fontWeight": "700"
+                        }
+                ],
+                "headline-lg-mobile": [
+                        "36px",
+                        {
+                                "lineHeight": "1.1",
+                                "fontWeight": "800"
+                        }
+                ]
+        }
+},
+    },
+  }
+</script>
+<style>
+        /* Grain overlay for gritty texture */
+        .texture-grain {
+            position: relative;
+        }
+        .texture-grain::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: 10;
+        }
+        /* Kinetic slash accents */
+        .lightning-cut {
+            clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%);
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased texture-grain min-h-screen flex flex-col">
+<!-- TopNavBar: Standard Transactional/Top-level rendering (nav hidden based on transactional rule - wait, prompt is 'membership page', let's render standard nav but focus on pricing) -->
+<!-- The prompt says "A clean desktop membership page". We will render the nav but keep it minimal. -->
+<header class="flex justify-between items-center px-margin-desktop w-full h-20 bg-surface-dim border-b-2 border-surface-variant sticky top-0 z-50">
+<div class="h-12 flex items-center"><img alt="PrimeX Logo" class="h-full w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvPaaDz_LNPBYPemlAxa6tdzp0aXMuqjz_winsHEXv7FcrckWFZYK4qtP2s0ZGobu9s9KIRUhIB2Ye0yNhOUSCrW2P2lekKf7jO6UiRdqwwj94oZ6IgRgty2u_cFAGClFYR5Z3WvYjBVYggfZLDOqpkXicM1PzYUKjHXr5llDUHsBsrrUjN_R99nsIwKGeCC97APPOuW7Vl6tB7t3nM6A3UcNsXVNBz9gR3J6Bb4Bds8gZn2KmjL6RZQ"/></div>
+<!-- Hide nav links for linear transactional flow per style guide, or keep them? Membership page is a destination. -->
+<div class="hidden md:flex gap-8">
+<a class="text-on-surface hover:text-primary-container transition-colors duration-200 font-label-bold text-label-bold uppercase" href="#">Programs</a>
+<a class="text-on-surface hover:text-primary-container transition-colors duration-200 font-label-bold text-label-bold uppercase" href="#">Facility</a>
+<a class="text-on-surface hover:text-primary-container transition-colors duration-200 font-label-bold text-label-bold uppercase" href="#">Stories</a>
+</div>
+<div>
+<!-- No active action needed here since we are ON the Join Now page, but keeping it per component JSON -->
+<button class="bg-primary-container text-on-primary-container font-label-bold text-label-bold uppercase px-6 py-3 rounded-none hover:bg-inverse-primary transition-all duration-300">Join Now</button>
+</div>
+</header>
+<main class="flex-grow flex flex-col items-center justify-center py-section-gap px-margin-desktop w-full max-w-[1440px] mx-auto space-y-section-gap">
+<!-- Hero Title -->
+<section class="text-center w-full max-w-4xl mx-auto space-y-6">
+<h1 class="font-display-xl text-display-xl text-on-surface uppercase italic">Forge Your <span class="text-primary-container">Legacy</span></h1>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl mx-auto">Select your commitment level. No excuses. Industrial strength discipline required.</p>
+</section>
+<!-- Pricing Tiers -->
+<section class="w-full grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Base Camp -->
+<div class="bg-surface-container-high border-2 border-surface-variant p-8 flex flex-col justify-between hover:border-primary-container transition-colors duration-300 group">
+<div>
+<h3 class="font-headline-md text-headline-md uppercase italic text-on-surface mb-2">Base Camp</h3>
+<p class="font-body-md text-on-surface-variant mb-6 h-12">Essential access to the facility and core equipment.</p>
+<div class="text-4xl font-headline-md mb-8">$49<span class="text-body-md font-body-md text-on-surface-variant">/mo</span></div>
+<ul class="space-y-4 mb-8 font-label-bold text-label-bold text-on-surface uppercase">
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">check</span> Open Gym Access</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">check</span> Standard Locker Room</li>
+<li class="flex items-center gap-3 text-surface-variant line-through"><span class="material-symbols-outlined">close</span> Group Classes</li>
+</ul>
+</div>
+<button class="w-full bg-transparent border-2 border-on-surface text-on-surface font-label-bold text-label-bold uppercase py-4 group-hover:bg-on-surface group-hover:text-surface transition-colors duration-300">Select Base</button>
+</div>
+<!-- Iron Club (Featured) -->
+<div class="bg-surface-container-highest border-2 border-primary-container p-8 flex flex-col justify-between transform md:-translate-y-4 shadow-[0_0_30px_rgba(230,0,0,0.15)] relative">
+<div class="absolute -top-4 left-1/2 transform -translate-x-1/2 bg-primary-container text-on-primary-container font-label-sm text-label-sm px-4 py-1 uppercase tracking-wider">Most Chosen</div>
+<div>
+<h3 class="font-headline-md text-headline-md uppercase italic text-primary-container mb-2">Iron Club</h3>
+<p class="font-body-md text-on-surface-variant mb-6 h-12">Full access plus dynamic group conditioning classes.</p>
+<div class="text-4xl font-headline-md mb-8 text-primary-container">$89<span class="text-body-md font-body-md text-on-surface-variant">/mo</span></div>
+<ul class="space-y-4 mb-8 font-label-bold text-label-bold text-on-surface uppercase">
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">check</span> Open Gym Access</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">check</span> Premium Locker Room</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">check</span> Unlimited Group Classes</li>
+</ul>
+</div>
+<button class="w-full bg-primary-container text-on-primary-container font-label-bold text-label-bold uppercase py-4 hover:bg-inverse-primary transition-colors duration-300">Select Iron</button>
+</div>
+<!-- Elite Beast -->
+<div class="bg-surface-container-high border-2 border-surface-variant p-8 flex flex-col justify-between hover:border-primary-container transition-colors duration-300 group">
+<div>
+<h3 class="font-headline-md text-headline-md uppercase italic text-on-surface mb-2">Elite Beast</h3>
+<p class="font-body-md text-on-surface-variant mb-6 h-12">The ultimate package for serious competitors.</p>
+<div class="text-4xl font-headline-md mb-8">$149<span class="text-body-md font-body-md text-on-surface-variant">/mo</span></div>
+<ul class="space-y-4 mb-8 font-label-bold text-label-bold text-on-surface uppercase">
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">check</span> 24/7 Access</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">check</span> Recovery Zone Access</li>
+<li class="flex items-center gap-3"><span class="material-symbols-outlined text-primary-container" style="font-variation-settings: 'FILL' 1;">check</span> 1-on-1 PT Monthly Assessment</li>
+</ul>
+</div>
+<button class="w-full bg-transparent border-2 border-on-surface text-on-surface font-label-bold text-label-bold uppercase py-4 group-hover:bg-on-surface group-hover:text-surface transition-colors duration-300">Select Elite</button>
+</div>
+</section>
+<!-- 3-Day Trial Form Section -->
+<section class="w-full max-w-3xl bg-surface-container-lowest border border-surface-variant p-10 md:p-16">
+<div class="text-center mb-10">
+<h2 class="font-headline-lg text-headline-lg uppercase italic text-on-surface mb-4">Not Ready? <span class="text-outline">Prove It.</span></h2>
+<p class="font-body-md text-on-surface-variant">Claim your 3-day guest pass. Experience the intensity firsthand.</p>
+</div>
+<form class="space-y-6">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="flex flex-col gap-2">
+<label class="font-label-bold text-label-bold uppercase text-on-surface-variant">First Name</label>
+<input class="bg-surface-container-high border-b-2 border-surface-variant text-on-surface font-label-bold px-4 py-3 focus:outline-none focus:border-primary-container focus:ring-0 transition-colors" placeholder="ENTER NAME" type="text"/>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-bold text-label-bold uppercase text-on-surface-variant">Email</label>
+<input class="bg-surface-container-high border-b-2 border-surface-variant text-on-surface font-label-bold px-4 py-3 focus:outline-none focus:border-primary-container focus:ring-0 transition-colors" placeholder="ENTER EMAIL" type="email"/>
+</div>
+</div>
+<div class="flex flex-col gap-2">
+<label class="font-label-bold text-label-bold uppercase text-on-surface-variant">Primary Goal</label>
+<select class="bg-surface-container-high border-b-2 border-surface-variant text-on-surface font-label-bold px-4 py-3 focus:outline-none focus:border-primary-container focus:ring-0 transition-colors appearance-none">
+<option>Strength &amp; Conditioning</option>
+<option>Hypertrophy</option>
+<option>Endurance</option>
+</select>
+</div>
+<button class="w-full bg-surface-variant text-on-surface border-2 border-transparent hover:border-primary-container hover:text-primary-container font-label-bold text-label-bold uppercase py-5 mt-4 transition-all duration-300 tracking-wider" type="submit">Request Trial Access</button>
+</form>
+</section>
+</main>
+<!-- Footer -->
+<footer class="grid grid-cols-1 md:grid-cols-12 gap-gutter px-margin-desktop py-section-gap w-full bg-surface-container-highest border-t-4 border-primary-container">
+<div class="col-span-1 md:col-span-12 flex flex-col items-center justify-center space-y-8">
+<div class="h-20 flex items-center justify-center"><img alt="PrimeX Logo" class="h-full w-auto object-contain" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvPaaDz_LNPBYPemlAxa6tdzp0aXMuqjz_winsHEXv7FcrckWFZYK4qtP2s0ZGobu9s9KIRUhIB2Ye0yNhOUSCrW2P2lekKf7jO6UiRdqwwj94oZ6IgRgty2u_cFAGClFYR5Z3WvYjBVYggfZLDOqpkXicM1PzYUKjHXr5llDUHsBsrrUjN_R99nsIwKGeCC97APPOuW7Vl6tB7t3nM6A3UcNsXVNBz9gR3J6Bb4Bds8gZn2KmjL6RZQ"/></div>
+<div class="flex flex-wrap justify-center gap-6 font-label-sm text-label-sm uppercase">
+<a class="text-secondary hover:text-on-surface transition-colors hover:text-primary-container" href="#">Locations</a>
+<a class="text-secondary hover:text-on-surface transition-colors hover:text-primary-container" href="#">Trainers</a>
+<a class="text-secondary hover:text-on-surface transition-colors hover:text-primary-container" href="#">Privacy Policy</a>
+<a class="text-secondary hover:text-on-surface transition-colors hover:text-primary-container" href="#">Terms of Service</a>
+<a class="text-secondary hover:text-on-surface transition-colors hover:text-primary-container" href="#">Contact</a>
+</div>
+<div class="font-label-sm text-label-sm text-secondary text-center max-w-md mx-auto">
+                © 2024 PRIMEX PERFORMANCE. ALL RIGHTS RESERVED. INDUSTRIAL STRENGTH DISCIPLINE.
+            </div>
+</div>
+</footer>
+</body></html>

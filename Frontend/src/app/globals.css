@@ -1,0 +1,782 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Three faces, three jobs.
+
+     Anybody carries every headline. It is a variable grotesque set here at
+     800–900 and italic — the slant is the brand, not decoration, so it lives
+     in the .font-display rule below rather than being asked for at each call
+     site. Being a wide face at heavy weights it needs NEGATIVE tracking to
+     stay dense; the old Bebas needed positive. Any tracking utility sitting
+     next to font-display was retuned when the faces were swapped.
+
+     Hanken Grotesk does all the reading. JetBrains Mono is the "spec sheet"
+     voice — eyebrows, stat labels, button text, timestamps — which is what
+     gives the UI its industrial, instrument-panel register. */
+  --font-display: var(--font-anybody);
+  --font-sans: var(--font-hanken);
+  --font-heading: var(--font-anybody);
+  --font-mono: var(--font-jetbrains);
+
+  /* Layout rhythm */
+  --spacing-unit: 8px;
+  --spacing-gutter: 24px;
+  --spacing-stack-sm: 32px;
+  --spacing-stack-md: 48px;
+  --spacing-stack-lg: 80px;
+  --spacing-stack-xl: 120px;
+  --spacing-margin-mobile: 20px;
+  --spacing-margin-desktop: 64px;
+  --spacing-container-max: 1440px;
+
+  /* Type scale
+
+     Two families share this ladder and they pull in opposite directions.
+     The label sizes are JetBrains Mono and want OPEN tracking — a monospace
+     set tight reads as a password field. The headline sizes are Anybody at
+     800–900 and want NEGATIVE tracking, because a heavy wide face at 48px+
+     with default spacing falls apart into separate letters instead of
+     landing as one block. Hence the sign flip halfway down the list. */
+  --text-label-caps: 12px;
+  --text-label-caps--line-height: 1;
+  --text-label-caps--letter-spacing: 0.12em;
+  --text-label-caps--font-weight: 500;
+
+  --text-button: 13px;
+  --text-button--line-height: 1;
+  --text-button--letter-spacing: 0.1em;
+  --text-button--font-weight: 700;
+
+  --text-body-md: 16px;
+  --text-body-md--line-height: 1.5;
+
+  --text-body-lg: 18px;
+  --text-body-lg--line-height: 1.6;
+  --text-body-lg--letter-spacing: 0.01em;
+
+  --text-headline-sm: 24px;
+  --text-headline-sm--line-height: 1.15;
+  --text-headline-sm--letter-spacing: -0.015em;
+  --text-headline-sm--font-weight: 700;
+
+  --text-headline-md: 36px;
+  --text-headline-md--line-height: 1.1;
+  --text-headline-md--letter-spacing: -0.02em;
+  --text-headline-md--font-weight: 800;
+
+  --text-display-md: 56px;
+  --text-display-md--line-height: 1;
+  --text-display-md--letter-spacing: -0.03em;
+  --text-display-md--font-weight: 900;
+
+  --text-display-lg: 80px;
+  --text-display-lg--line-height: 0.95;
+  --text-display-lg--letter-spacing: -0.04em;
+  --text-display-lg--font-weight: 900;
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Surface ladder, darkest to lightest. Cards and panels step up from the
+     page rather than casting shadows — on a ground this dark a shadow reads
+     as nothing at all, and the design brief calls for tonal layering and hard
+     1px outlines instead of ambient depth. */
+  --color-surface-1: var(--surface-1);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+
+  /* The brand red is #e60000, and against the #121414 ground it measures 3.9:1.
+     That clears 3:1 for large text — which is the only place the design ever
+     puts it, the display headline and the button fills — but it FAILS the 4.5:1
+     body threshold. Small red text (the 11–12px mono eyebrows, stat captions,
+     inline links) therefore uses --primary-soft, the coral the design ships as
+     its `primary`, which measures 9.4:1 and reads as the same accent.
+     Rule of thumb: red for fills and anything 24px+, soft for anything below. */
+  --color-primary-soft: var(--primary-soft);
+
+  /* Neutral greys carried straight from the design's own scale, so the
+     industrial "concrete" mid-tone is nameable rather than reappearing as a
+     one-off hex on every border that needs to be visible against a card. */
+  --color-concrete: var(--concrete);
+
+  --radius-sm: calc(var(--radius) * 0.5);
+  --radius-md: var(--radius);
+  --radius-lg: calc(var(--radius) * 1.5);
+  --radius-xl: calc(var(--radius) * 2);
+  --radius-2xl: calc(var(--radius) * 3);
+  --radius-3xl: calc(var(--radius) * 4);
+  --radius-4xl: calc(var(--radius) * 5);
+}
+
+/* PrimeX — "Voltage Industrial".
+
+   The design commits to one visual world: a black room, concrete greys, and a
+   single high-voltage red. There is no light palette to switch to, so the
+   tokens live on :root rather than behind a .dark class and the app renders
+   the same way regardless of the visitor's system preference.
+
+   Values are lifted from the design's own neutral-background variant rather
+   than eyeballed from the screenshots. Two things to know before editing:
+
+   1. The off-white is WARM (#ffdad4), not neutral. It carries a trace of the
+      red through every headline and is what stops the palette reading as
+      generic dark-mode grey. Replacing it with #fff or #e5e5e5 pulls the whole
+      page cold and is the single fastest way to lose the brand.
+   2. Body copy is NOT the same colour as headlines. Headings take --foreground,
+      running text takes --muted-foreground (#c8c6c5, the design's "concrete
+      light"). That two-step is the hierarchy — there are no other weights or
+      sizes doing that job. */
+:root {
+  --background: #121414;
+  --foreground: #ffdad4;
+
+  --surface-1: #0f1111;
+  --surface-2: #1a1c1c;
+  --surface-3: #222424;
+
+  --card: #1a1c1c;
+  --card-foreground: #ffdad4;
+  --popover: #1a1c1c;
+  --popover-foreground: #ffdad4;
+
+  /* The red does all the shouting. Everything else stays near-monochrome,
+     which is the whole reason it lands. Fills and large type only — see the
+     --primary-soft note in the @theme block for why small red text uses the
+     coral instead. */
+  --primary: #e60000;
+  --primary-foreground: #fff7f5;
+  --primary-soft: #ffb4a8;
+
+  --secondary: #222424;
+  --secondary-foreground: #ffdad4;
+
+  --muted: #1a1c1c;
+  --muted-foreground: #c8c6c5;
+
+  --accent: #222424;
+  --accent-foreground: #ffdad4;
+
+  --destructive: #ffb4ab;
+  --destructive-foreground: #690005;
+
+  --success: #7ddc8a;
+  --warning: #e5b769;
+
+  --concrete: #474746;
+
+  /* Borders are structural here, not hairlines to be hidden — the design
+     replaces shadows with visible 1px outlines, so this sits a step brighter
+     than it would in a shadow-based system. */
+  --border: #333535;
+  --input: #333535;
+  --ring: #e60000;
+
+  --chart-1: #e60000;
+  --chart-2: #ffb4a8;
+  --chart-3: #c8c6c5;
+  --chart-4: #474746;
+  --chart-5: #b08781;
+
+  /* Zero. The design brief is explicit: every button, field, card and image
+     is 90 degrees. Rounding anything here is not a taste call, it reads as a
+     different brand. Kept as a variable because shadcn's primitives compute
+     their own radii from it. */
+  --radius: 0px;
+
+  --sidebar: #0f1111;
+  --sidebar-foreground: #ffdad4;
+  --sidebar-primary: #e60000;
+  --sidebar-primary-foreground: #fff7f5;
+  --sidebar-accent: #222424;
+  --sidebar-accent-foreground: #ffdad4;
+  --sidebar-border: #333535;
+  --sidebar-ring: #e60000;
+}
+
+/* Kept in step with :root so any dark: variant inherited from shadcn resolves
+   to the same values rather than a stale neutral palette. */
+.dark {
+  --background: #121414;
+  --foreground: #ffdad4;
+  --surface-1: #0f1111;
+  --surface-2: #1a1c1c;
+  --surface-3: #222424;
+  --card: #1a1c1c;
+  --card-foreground: #ffdad4;
+  --popover: #1a1c1c;
+  --popover-foreground: #ffdad4;
+  --primary: #e60000;
+  --primary-foreground: #fff7f5;
+  --primary-soft: #ffb4a8;
+  --secondary: #222424;
+  --secondary-foreground: #ffdad4;
+  --muted: #1a1c1c;
+  --muted-foreground: #c8c6c5;
+  --accent: #222424;
+  --accent-foreground: #ffdad4;
+  --destructive: #ffb4ab;
+  --destructive-foreground: #690005;
+  --success: #7ddc8a;
+  --warning: #e5b769;
+  --concrete: #474746;
+  --border: #333535;
+  --input: #333535;
+  --ring: #e60000;
+  --chart-1: #e60000;
+  --chart-2: #ffb4a8;
+  --chart-3: #c8c6c5;
+  --chart-4: #474746;
+  --chart-5: #b08781;
+  --sidebar: #0f1111;
+  --sidebar-foreground: #ffdad4;
+  --sidebar-primary: #e60000;
+  --sidebar-primary-foreground: #fff7f5;
+  --sidebar-accent: #222424;
+  --sidebar-accent-foreground: #ffdad4;
+  --sidebar-border: #333535;
+  --sidebar-ring: #e60000;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+    /* Written as logical properties throughout the app. Adding Arabic later
+       is then a translation job rather than a re-layout — direction is the
+       expensive half of that port, and it costs nothing to avoid now. */
+    color-scheme: dark;
+  }
+  /* The headline voice, in one place.
+
+     Bebas had a single weight and this rule used to pin it to 400 so the
+     browser could not synthesise a bold. Anybody is the opposite problem: it
+     is a variable face whose default 400 upright looks like nothing at all,
+     and the design never once uses it that way. Every headline in the comps is
+     heavy and slanted, so the weight and the italic belong to the face rather
+     than to each call site — that is why ~150 headings across the app inherit
+     it here instead of repeating `italic font-extrabold` forever.
+
+     `italic`, not `oblique <angle>`. Anybody ships a real italic cut — which
+     layout.tsx loads via style: ["normal", "italic"] — but exposes no `slnt`
+     variation axis, so an angled `oblique` is silently ignored and the type
+     renders bolt upright. That is exactly what happened here first time: the
+     computed style read `oblique 12deg` while the page showed no slant at all.
+     `font-synthesis: none` then guarantees we are seeing the designed italic
+     rather than a browser-sheared fake of the upright. */
+  .font-display,
+  .font-heading {
+    font-weight: 800;
+    font-style: italic;
+    font-synthesis: none;
+  }
+
+  /* Display sizes push to 900 — at 56px+ the extra weight is what makes the
+     type read as a solid block rather than a row of letters. */
+  .text-display-lg,
+  .text-display-md {
+    font-weight: 900;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Entrance motion
+
+   Every animation here moves only `transform` and `opacity`. Those are the two
+   the browser can hand to the compositor — no layout, no paint, no main-thread
+   work per frame. Height, width, top and margin all force a reflow on every
+   frame instead, which is exactly what made the pricing accordion stutter on a
+   phone before it was rewritten.
+
+   Nothing here loops. Each element animates once, on arrival, and is then
+   finished — so there is no ambient cost and nothing draining a battery.
+--------------------------------------------------------------------------- */
+
+@layer components {
+  /* ---- Brand motifs ---------------------------------------------------
+     The three marks that carry "Voltage Industrial" beyond the palette. Each
+     is a utility rather than a component because they are applied to
+     sections, cards and images alike.
+  -------------------------------------------------------------------- */
+
+  /* A fine noise wash over the whole page. Flat near-black on a modern panel
+     shows banding where large areas meet; a little grain breaks that up and
+     is also what stops the surfaces reading as clean digital swatches rather
+     than the matte, powder-coated finish the brief asks for.
+
+     Inline SVG turbulence, so it costs one small data URI and no network
+     request. Opacity is deliberately tiny — at 0.05 it is felt, not seen. */
+  .industrial-grain {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+  }
+
+  /* The bolt motif, as a corner. A 45-degree cut off the bottom-right of a
+     card or image, echoing the lightning in the wordmark. Used sparingly —
+     on hero images and featured cards — because on every card at once it
+     stops reading as a signature and starts reading as a rendering bug. */
+  .lightning-cut {
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 85% 100%, 0 100%);
+  }
+
+  .lightning-cut-sm {
+    clip-path: polygon(0 0, 100% 0, 100% 92%, 92% 100%, 0 100%);
+  }
+
+  /* The short red rule that sits under every section heading in the comps.
+     A pseudo-element rather than an extra <div> so headings stay one element
+     and the markup does not carry a decorative node for a screen reader to
+     walk past. */
+  .rule-accent::after {
+    content: "";
+    display: block;
+    inline-size: 4rem;
+    block-size: 4px;
+    margin-block-start: 0.75rem;
+    background-color: var(--primary);
+  }
+
+  .rule-accent-lg::after {
+    inline-size: 6rem;
+    block-size: 8px;
+  }
+
+  /* Scroll reveal. Elements ship hidden and are un-hidden by the observer in
+     reveal.tsx, which sets data-revealed once they enter the viewport. */
+  [data-reveal] {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+    transition:
+      opacity 620ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  [data-reveal][data-revealed] {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* The hero needs no observer: it is on screen the instant the page is, so a
+     plain keyframe on load is cheaper than watching for something already
+     true. Stagger comes from an inline animation-delay. */
+  .motion-rise {
+    opacity: 0;
+    animation: motion-rise 700ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  @keyframes motion-rise {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 16px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ---- Photographs ----------------------------------------------------
+     Faded in by Photo once the file has decoded. The slight scale settling
+     out is what stops it reading as a plain opacity ramp.
+  -------------------------------------------------------------------- */
+
+  [data-photo] {
+    opacity: 0;
+  }
+
+  [data-photo][data-loaded] {
+    opacity: 1;
+  }
+
+  /* Photography treatment.
+
+     The brief is explicit that imagery is high-contrast and near-monochrome so
+     that red stays the only saturated thing on the page. It also solves a real
+     problem right now: every photograph on the site was shot for the previous
+     brand and is lit acid-green, which against #e60000 is a straight
+     red/green clash — the two most vibrating hues you can put side by side.
+     Pulling the saturation out removes the fight entirely and is why the
+     placeholder photos sit quietly instead of dating the page.
+
+     Deliberately 0.85 and not a full grayscale(1): a trace of the original
+     colour keeps skin tones from going metallic, which is what makes the
+     trainer portraits still read as people.
+
+     `filter` is not in the transition list above, so this does not animate —
+     it is a constant treatment, not part of the fade-in.
+
+     When real PrimeX photography arrives, keep this. If a particular shot
+     needs its colour, override with a `saturate-100` utility on that Photo —
+     a utility's filter replaces this one wholesale. */
+  [data-photo] {
+    filter: grayscale(0.85) contrast(1.1);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    [data-photo] {
+      transform: scale(1.02);
+      transition:
+        opacity 500ms ease-out,
+        transform 700ms cubic-bezier(0.22, 1, 0.36, 1),
+        /* `scale` is listed separately and is not redundant. Tailwind v4's
+           scale-* utilities no longer compose `transform` — they write to the
+           standalone `scale` property (`scale: var(--tw-scale-x) …`). A
+           transition naming only `transform` therefore does nothing for them,
+           which is why the hover zoom on the cards jumped instead of easing.
+           Anything here that grows on hover needs this line. */
+        scale 500ms cubic-bezier(0.22, 1, 0.36, 1),
+        translate 500ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    [data-photo][data-loaded] {
+      transform: none;
+    }
+  }
+
+  /* ---- Press feedback -------------------------------------------------
+     Not decoration. A phone has no hover, so until something moves there is
+     no acknowledgement that a tap landed at all — and on a slow connection
+     the gap before the next page paints is long enough for people to tap
+     twice. Kept small: this should register, not perform.
+  -------------------------------------------------------------------- */
+
+  /* The transition here is only a fallback for a .press used on its own.
+     Where the element also carries a Tailwind transition-* utility, that
+     utility wins — utilities sit in a later layer — and it decides which
+     properties animate. So every .press in this codebase is paired with
+     transition-all rather than a narrow transition-colors or
+     transition-opacity, which would exclude transform and make the press
+     land instantly. */
+  .press {
+    transition: transform 120ms ease-out;
+  }
+
+  .press:active {
+    transform: scale(0.98);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .press,
+    .press:active {
+      transform: none;
+      transition: none;
+    }
+  }
+
+  /* ---- Header ---------------------------------------------------------
+     Lifts off the page once you scroll away from the top, flagged by
+     HeaderScrollState.
+
+     The wordmark shrinks with a transform rather than by changing its height.
+     A sticky header that actually changes size pushes everything beneath it
+     as it goes, which is both a reflow per frame and a visible jump in the
+     content — a transform is compositor-only and moves nothing around it.
+  -------------------------------------------------------------------- */
+
+  .site-header {
+    transition: box-shadow 250ms ease-out;
+  }
+
+  .site-header-logo {
+    transform-origin: left center;
+    transition: transform 250ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  html[data-scrolled] .site-header {
+    box-shadow: 0 10px 30px -12px rgb(0 0 0 / 0.65);
+  }
+
+  html[data-scrolled] .site-header-logo {
+    transform: scale(0.86);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .site-header,
+    .site-header-logo {
+      transition: none;
+    }
+    html[data-scrolled] .site-header-logo {
+      transform: none;
+    }
+  }
+
+  /* ---- Content arriving after a skeleton -------------------------------
+     The pulsing placeholder otherwise snaps to the real thing in one frame,
+     which undoes the calm the placeholder was there to buy.
+  -------------------------------------------------------------------- */
+
+  @media (prefers-reduced-motion: no-preference) {
+    .fade-in {
+      animation: fade-in 400ms ease-out both;
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  /* ---- Join funnel steps ----------------------------------------------
+     Four steps in one panel. Moving between them used to swap the contents in
+     a single frame, which reads as four separate pages rather than one form
+     being worked through. Sliding is only 16px — enough to say "this moved"
+     without the eye having to travel.
+  -------------------------------------------------------------------- */
+
+  .step-enter {
+    --step-from: 16px;
+  }
+
+  .step-enter[data-step-dir="back"] {
+    --step-from: -16px;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .step-enter {
+      animation: step-enter 320ms cubic-bezier(0.22, 1, 0.36, 1) both;
+    }
+  }
+
+  @keyframes step-enter {
+    from {
+      opacity: 0;
+      transform: translate3d(var(--step-from), 0, 0);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes marquee {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  .animate-marquee {
+    animation: marquee 92s linear infinite;
+  }
+
+
+  /* ---- Pricing term panels -------------------------------------------
+     grid-template-rows is a layout property: every frame of the open
+     re-flows the page beneath the panel. On a desktop row the four tiers sit
+     side by side and the panel is around 300px tall, so that reflow is small
+     and the easing is worth it. Stacked on a phone the same panel is nearer
+     800px, so everything below it travels almost three times as far on every
+     frame — which is what made the open stutter there.
+
+     So the height only eases from md up. Below that it snaps, and the motion
+     comes entirely from the tiers fading and lifting in — opacity and
+     transform, which never touch layout and cannot drop a frame. The stagger
+     is what stops the snap reading as a jump: the eye follows the cascade
+     rather than the box.
+  -------------------------------------------------------------------- */
+
+  .term-panel {
+    display: grid;
+    grid-template-rows: 0fr;
+  }
+
+  .term-panel[data-open] {
+    grid-template-rows: 1fr;
+  }
+
+  @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+    .term-panel {
+      transition: grid-template-rows 300ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+  }
+
+  .term-row {
+    opacity: 0;
+    transform: translate3d(0, 10px, 0);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* This rule owns every transition on a tier, which is why the markup
+       carries no transition-* utility: one would replace this whole list
+       rather than add to it. */
+    .term-row {
+      transition:
+        opacity 260ms ease-out,
+        transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+        background-color 200ms ease-out;
+    }
+  }
+
+  .term-panel[data-open] .term-row {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* The whole tier is clickable, so the whole tier answers a press — on a
+     phone there is no hover, and a tap on the card away from the button would
+     otherwise give nothing back. Written against the open panel because the
+     rule above also sets transform, and a plain .term-row:active would lose
+     to it. Smaller than the button's own press: a card this size lurches if
+     it moves as far. */
+  .term-panel[data-open] .term-row:active {
+    transform: scale(0.995);
+  }
+
+  /* Stretches the CTA's hit area over the entire tier. The card is the
+     positioned ancestor, so this resolves against it — see TierRow.
+     One link, one focus target, the whole card as the target area. */
+  .tier-cta::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+  }
+
+  /* Cascade, in markup order. Done with nth-child rather than inline styles
+     so the tiers carry no per-element JavaScript at all. */
+  .term-panel[data-open] .term-row:nth-child(2) {
+    transition-delay: 55ms;
+  }
+  .term-panel[data-open] .term-row:nth-child(3) {
+    transition-delay: 110ms;
+  }
+  .term-panel[data-open] .term-row:nth-child(4) {
+    transition-delay: 165ms;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .term-panel,
+    .term-row,
+    .term-panel[data-open] .term-row {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+
+  /* Paper does not scroll, so nothing would ever trigger a reveal and every
+     section below the fold would print blank. */
+  @media print {
+    [data-reveal],
+    [data-photo],
+    .term-row,
+    .motion-rise {
+      opacity: 1 !important;
+      transform: none !important;
+      animation: none !important;
+      transition: none !important;
+    }
+  }
+
+  /* Motion is decoration here — every one of these elements is legible and
+     complete without it, so honouring the preference costs nothing. */
+  @media (prefers-reduced-motion: reduce) {
+    [data-reveal],
+    [data-reveal][data-revealed],
+    .motion-rise {
+      opacity: 1;
+      transform: none;
+      transition: none;
+      animation: none;
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Display type on small screens
+
+   Anybody is a WIDE face; Bebas Neue, which it replaced, is a condensed one.
+   At the same pixel size Anybody sets roughly 40% wider, so every headline
+   size in this app was chosen against a face that no longer exists here. On a
+   375px screen the hero measured 377px for the single word "STRONGEST" at
+   text-6xl — wider than the viewport, before any margin — and the headline
+   ran off the side of the page.
+
+   Two things about how this is written:
+
+   1. It is OUTSIDE @layer on purpose. Tailwind's utilities sit in the
+      `utilities` layer, and layer order beats specificity — a `.font-display
+      .text-6xl` rule inside @layer components loses to `.text-6xl` no matter
+      how specific it is. Unlayered styles outrank every layer, which is the
+      only way to retune a utility's value without editing ~150 call sites.
+
+   2. Because unlayered styles outrank everything, this MUST stay inside the
+      max-width query. Above 768px the `md:` and `lg:` size variants take over
+      (there are no `sm:` display sizes in the codebase — checked), and an
+      unscoped version of this rule would beat those too, pinning every
+      desktop headline to its mobile size.
+
+   clamp() rather than a flat value so the size tracks the viewport across the
+   mobile range instead of stepping at one breakpoint. Each upper bound is the
+   utility's original value, so nothing shrinks on a wide phone that did not
+   need to.
+--------------------------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  .font-display.text-5xl,
+  .font-heading.text-5xl {
+    font-size: clamp(2rem, 8.5vw, 3rem);
+  }
+
+  .font-display.text-6xl,
+  .font-heading.text-6xl {
+    font-size: clamp(2.25rem, 9.5vw, 3.75rem);
+  }
+
+  .font-display.text-7xl,
+  .font-heading.text-7xl {
+    font-size: clamp(2.5rem, 10.5vw, 4.5rem);
+  }
+
+  .font-display.text-display-lg,
+  .font-heading.text-display-lg {
+    font-size: clamp(2.5rem, 10.5vw, 5rem);
+  }
+
+  .font-display.text-display-md,
+  .font-heading.text-display-md {
+    font-size: clamp(2.125rem, 9vw, 3.5rem);
+  }
+}

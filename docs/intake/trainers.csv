@@ -1,0 +1,6 @@
+# One row per trainer. Pipe-separate multiple values in specialties/certifications/languages.
+# section: men | women   (which floor they coach on - rename if you classify differently)
+# pt_rate_egp_per_hour: leave blank if they do not do personal training (blank != 0)
+# photo_filename: whatever you name the image file you send me, e.g. trainer-ahmed-hassan.jpg
+name,gender,section,headline,bio,specialties,certifications,languages,years_experience,pt_rate_egp_per_hour,instagram_url,photo_filename
+Ahmed Hassan,male,men,Head of Strength,"Two sentences on who they are and who they coach.",Powerlifting|Strength programming,NASM-CPT,Arabic|English,8,400,,trainer-ahmed-hassan.jpg
