@@ -451,6 +451,74 @@
     block-size: 8px;
   }
 
+  /* ---- Button hover ---------------------------------------------------
+     Two treatments, both taken from the design brief rather than invented,
+     and neither of which changes the button's colour on hover.
+
+     The primary is already red — recolouring red on hover is the move that
+     kept looking wrong, because there is no direction to go that does not
+     either dim it or make it shout louder. The brief instead specifies a 2px
+     inset border, which reads as the button tightening rather than changing.
+
+     The outline gets the speed line: a red block that sweeps across on a
+     12-degree skew, hard-edged, no gradient. That is the "aggressive motion /
+     forward momentum" the brand asks for, and it is the one place a button can
+     express the diagonal that runs through the wordmark and the section rules.
+
+     Both animate compositor-only properties. The wipe moves `transform` on a
+     pseudo-element; the inset border is a box-shadow, which repaints but over
+     a few hundred square pixels. Neither touches layout, so neither can drop a
+     frame the way an animated width or letter-spacing would.
+  -------------------------------------------------------------------- */
+
+  .cta-inset {
+    transition: box-shadow 180ms ease-out;
+  }
+
+  .cta-inset:hover {
+    box-shadow: inset 0 0 0 2px var(--primary-foreground);
+  }
+
+  /* isolation + a negative z-index is what keeps the sweeping block behind the
+     label without needing the label wrapped in an element — ctaClasses is
+     handed arbitrary children, so there is nothing reliable to wrap. */
+  .cta-wipe {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+  }
+
+  .cta-wipe::before {
+    content: "";
+    position: absolute;
+    /* Overhangs horizontally so the skewed edge is still off-screen at rest
+       and still covers the far corner when it lands. */
+    inset: -1px -25%;
+    z-index: -1;
+    background-color: var(--primary);
+    transform: translateX(-130%) skewX(-12deg);
+    transition: transform 340ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .cta-wipe:hover::before {
+    transform: translateX(0) skewX(-12deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cta-inset,
+    .cta-wipe::before {
+      transition: none;
+    }
+    /* The sweep is decoration; the state change it signals is not. Reduced
+       motion still gets the filled result, it just arrives without travelling. */
+    .cta-wipe::before {
+      transform: translateX(-130%);
+    }
+    .cta-wipe:hover::before {
+      transform: translateX(0);
+    }
+  }
+
   /* Scroll reveal. Elements ship hidden and are un-hidden by the observer in
      reveal.tsx, which sets data-revealed once they enter the viewport. */
   [data-reveal] {

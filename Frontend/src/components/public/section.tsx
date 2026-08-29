@@ -135,19 +135,25 @@ export function PageHeader({
 // hover that brings a border in is a pure repaint rather than a 4px growth
 // that shoves the neighbouring button sideways.
 //
-// The hover itself is deliberately restrained. An earlier version followed the
-// comp literally: the fill collapsed to a very dark red and the label switched
-// to coral at the same moment, so the control appeared to change identity
-// under the cursor rather than acknowledge it. Both variants now hold their
-// label colour fixed and move exactly one property — the primary lifts its
-// fill, the outline gains a faint red wash. `:active` then darkens, so press
-// and hover move in opposite directions and the button reads as a physical
-// thing.
+// Neither variant changes colour on hover any more, and that is the point.
+// Recolouring a button that is already red has nowhere good to go: darker reads
+// as disabled on a near-black page, brighter just shouts. Two earlier attempts
+// (collapse to #690000, then lift to #ff1f1f) both looked like the control
+// changing identity rather than acknowledging the cursor.
+//
+// So the motion carries the feedback instead, and both treatments come from the
+// design brief rather than being invented. The primary tightens with a 2px
+// inset border — the brief specifies exactly this. The outline takes a red
+// speed line on a 12-degree skew, which is the "forward momentum" the brand
+// asks for and the same diagonal that runs through the wordmark.
+//
+// `:active` still darkens the primary, so press and hover remain distinct
+// gestures. See .cta-inset / .cta-wipe in globals.css.
 export function ctaClasses(variant: "primary" | "outline" = "primary", className = ""): string {
   const styles =
     variant === "primary"
-      ? "border-transparent bg-primary text-primary-foreground hover:bg-primary-hover active:bg-primary-active"
-      : "border-foreground text-foreground hover:border-primary hover:bg-primary/10 active:bg-primary/20";
+      ? "cta-inset border-transparent bg-primary text-primary-foreground active:bg-primary-active"
+      : "cta-wipe border-foreground text-foreground hover:border-primary hover:text-primary-foreground";
 
   // transition-all, not transition-colors: this carries `press`, whose scale
   // comes from a transform. A narrow colour transition would win over the
