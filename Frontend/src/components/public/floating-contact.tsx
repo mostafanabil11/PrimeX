@@ -2,31 +2,23 @@ import { BRAND } from "@/lib/brand";
 import { WhatsAppIcon, WhatsAppLink } from "./whatsapp";
 
 /**
- * The floating contact cluster: Instagram, Facebook, WhatsApp, in that order,
- * on one line at the bottom-right of every page.
+ * One floating button: WhatsApp, bottom-right, on every page.
  *
- * These used to be two separate fixtures at opposite corners — social bottom
- * left, WhatsApp bottom right. That is what a page looks like when two features
- * were added at different times rather than designed together: it framed the
- * content, and neither cluster explained the other.
+ * Instagram and Facebook used to float here too. They were removed because
+ * three persistent buttons over the content read as clutter rather than as
+ * service — and two of them were links that send people *off* the site, which
+ * is a strange thing to keep permanently in front of someone. Social now lives
+ * in the footer only, which is where people look for it anyway. See SocialLinks.
  *
- * ONE SHAPE, ONE MOTION, ONE COLOUR.
+ * What is left is the one thing that is genuinely an action. WhatsApp is how
+ * this gym is actually contacted, ahead of the phone and well ahead of email,
+ * so it earns a permanent affordance in a way a profile link does not.
  *
- * All three are the same circle at the same size with the same hover: an
- * off-white disc scales up from nothing and the glyph inverts to near-black
- * inside it. Consistent geometry and colour are what make them read as a single
- * control group rather than three unrelated widgets.
- *
- * WhatsApp used to keep its brand green here, on the argument that it is the
- * action rather than a link and that people find it by colour. That was a
- * considered call and it was overruled: one green circle in a row of neutral
- * ones read as an oversight rather than as a hierarchy, which is a fair reading
- * — a distinction only works if it looks deliberate. Hierarchy now comes from
- * position instead: WhatsApp is last, which is the rightmost slot and the
- * easiest place for a right thumb to reach.
- *
- * If it ever needs to stand out again, do it with size or an outline rather
- * than by reintroducing a second brand colour to the cluster.
+ * It wears WhatsApp's own #25D366 and does not change colour on hover. With
+ * nothing beside it there is no cluster to stay consistent with, and the green
+ * is doing the same job an app icon does: people find this button by colour
+ * before they read anything. Hover is a small scale — motion, not colour — so
+ * the mark itself never shifts.
  */
 
 type Social = { href: string; label: string; icon: React.ReactNode };
@@ -66,7 +58,7 @@ export const SOCIAL_LINKS: Social[] = [
   { href: "https://www.facebook.com", label: "Facebook", icon: facebookIcon },
 ];
 
-// The disc is off-white, not red. Red was tried and lost: these marks read as
+// Footer social hover. The disc is off-white, not red: these marks read as
 // brand logos, so a red disc behind Instagram or Facebook put two competing
 // brand colours in a 44px circle. Neutral lets each mark stay itself, and keeps
 // red reserved for the CTAs, where it means "this is the thing to click".
@@ -82,44 +74,29 @@ const discClasses =
 const baseClasses =
   "group relative flex size-11 shrink-0 items-center justify-center rounded-full transition-colors duration-300 hover:text-background focus-visible:text-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground motion-reduce:transition-none";
 
-// One treatment for all three. The dark fill is not decoration, it is
-// legibility: as bare glyphs these were unreadable the moment the cluster
-// floated over body copy or a photograph, because the strokes had nothing to
-// sit on. surface-2 is deliberately close to the page ground, so they still
-// read as bare marks where the background is plain and only resolve into discs
-// where they need to.
+// The dark fill sits a hair above the footer's own surface-1, which is what
+// gives the glyphs an edge to read against without turning them into buttons.
 const buttonClasses = `${baseClasses} bg-surface-2 text-foreground`;
 
 export function FloatingContact() {
   return (
-    <div className="fixed right-3 bottom-3 z-40 flex flex-row items-center gap-1 sm:right-5 sm:bottom-5 sm:gap-1.5">
-      {SOCIAL_LINKS.map((s) => (
-        <a
-          key={s.label}
-          href={s.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className={buttonClasses}
-        >
-          <span aria-hidden="true" className={discClasses} />
-          {s.icon}
-          <span className="sr-only">{s.label}</span>
-        </a>
-      ))}
-
-      <WhatsAppLink message={`Hi ${BRAND.name}, I have a question.`} className={buttonClasses}>
-        <span aria-hidden="true" className={discClasses} />
-        <WhatsAppIcon className="relative size-5" />
-        <span className="sr-only">Message {BRAND.name} on WhatsApp</span>
-      </WhatsAppLink>
-    </div>
+    <WhatsAppLink
+      message={`Hi ${BRAND.name}, I have a question.`}
+      className="press fixed right-4 bottom-4 z-40 flex size-13 items-center justify-center rounded-full bg-[#25D366] text-black transition-transform duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground motion-reduce:transition-none motion-reduce:hover:scale-100 sm:right-6 sm:bottom-6"
+    >
+      <WhatsAppIcon className="size-6" />
+      <span className="sr-only">Message {BRAND.name} on WhatsApp</span>
+    </WhatsAppLink>
   );
 }
 
 /**
- * The two social links, inline, for the footer. WhatsApp is not included —
- * the footer already carries the number as a labelled link, and a second
- * WhatsApp affordance a few pixels away would be noise.
+ * The two social links, in the footer. This is now the site's only social
+ * presence — the floating rail that used to carry them was removed.
+ *
+ * WhatsApp is deliberately not here. It has a permanent floating button of its
+ * own a few hundred pixels away, and a second affordance for the same action in
+ * the same viewport is noise rather than convenience.
  */
 export function SocialLinks({ className = "" }: { className?: string }) {
   return (

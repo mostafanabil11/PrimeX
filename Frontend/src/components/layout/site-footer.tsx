@@ -3,8 +3,6 @@ import { NewsletterForm } from "./newsletter-form";
 import { Wordmark } from "./wordmark";
 import { BRAND } from "@/lib/brand";
 import { FOOTER_NAV } from "@/lib/nav";
-import { formatEgyptianPhone } from "@/lib/gym-format";
-import { WhatsAppIcon, WhatsAppLink } from "@/components/public/whatsapp";
 import { SocialLinks } from "@/components/public/floating-contact";
 
 export function SiteFooter() {
@@ -16,21 +14,21 @@ export function SiteFooter() {
     <footer className="mt-stack-xl w-full border-t-2 border-primary bg-surface-1">
       <div className="mx-auto grid w-full max-w-(--spacing-container-max) grid-cols-1 gap-gutter px-margin-mobile py-stack-md md:grid-cols-4 md:px-margin-desktop">
         <div className="flex flex-col items-start">
-          {/* The full lockup with its strapline, which the header has no room
-              for — at 28px tall the tagline would set at about 6px. */}
-          <Wordmark withTagline className="mb-5 h-14 w-auto text-foreground" />
-          <WhatsAppLink
-            message={`Hi ${BRAND.name}, I have a question.`}
-            className="inline-flex items-center gap-2 font-mono text-[12px] font-bold tracking-[0.1em] text-muted-foreground uppercase transition-colors hover:text-primary-soft"
-          >
-            <WhatsAppIcon className="size-4" />
-            {formatEgyptianPhone(BRAND.whatsapp)}
-          </WhatsAppLink>
-          {/* The floating rail is hidden below md, so without this the gym's
-              social presence would simply not exist on a phone — which is where
-              most people will meet it. Nudged left so the glyphs optically line
-              up with the wordmark above rather than the padding box. */}
-          <SocialLinks className="mt-4 -ml-3" />
+          {/* An inline-flex column that shrinks to the wordmark's own width, so
+              items-center centres the social row under the lockup rather than
+              under the whole footer column. The outer div stays items-start, so
+              the block as a whole is still left-aligned with the rest of the
+              footer — only the icons are centred, and only against the mark
+              directly above them. */}
+          <div className="inline-flex flex-col items-center">
+            {/* The full lockup with its strapline, which the header has no room
+                for — at 28px tall the tagline would set at about 6px. */}
+            <Wordmark withTagline className="h-14 w-auto text-foreground" />
+            {/* Social lives here and nowhere else now. The floating rail was
+                removed for reading as clutter, so this is the site's only
+                social presence — which is the conventional home for it. */}
+            <SocialLinks className="mt-3" />
+          </div>
         </div>
 
         <div className="grid grid-cols-2 gap-8 md:col-span-2">

@@ -119,13 +119,18 @@
   --color-surface-2: var(--surface-2);
   --color-surface-3: var(--surface-3);
 
-  /* The brand red is #e60000, and against the #121414 ground it measures 3.9:1.
+  /* The brand red is #dc2430, and against the #121414 ground it measures 3.8:1.
      That clears 3:1 for large text — which is the only place the design ever
      puts it, the display headline and the button fills — but it FAILS the 4.5:1
      body threshold. Small red text (the 11–12px mono eyebrows, stat captions,
      inline links) therefore uses --primary-soft, the coral the design ships as
      its `primary`, which measures 9.4:1 and reads as the same accent.
-     Rule of thumb: red for fills and anything 24px+, soft for anything below. */
+     Rule of thumb: red for fills and anything 24px+, soft for anything below.
+
+     Do not "fix" the 3.8 by darkening. On a ground this dark a deeper red loses
+     contrast rather than gaining it — #c8102e drops to 3.14 and #b81d24 to
+     2.85, which fails even the large-text bar. If red ever needs to read
+     stronger, it has to get LIGHTER, not richer. */
   --color-primary-soft: var(--primary-soft);
   --color-primary-hover: var(--primary-hover);
   --color-primary-active: var(--primary-active);
@@ -183,14 +188,14 @@
      which is the whole reason it lands. Fills and large type only — see the
      --primary-soft note in the @theme block for why small red text uses the
      coral instead. */
-  --primary: #e60000;
+  --primary: #dc2430;
   --primary-foreground: #fff7f5;
   --primary-soft: #ffb4a8;
 
   /* Hover and pressed states for the red.
 
      The first version followed the comp literally and dropped the fill to
-     #690000 on hover — from 230 red down to 105, less than half the luminance.
+     #690000 on hover — less than half the luminance of the fill.
      On a near-black page a button that dark reads as disabled rather than as
      responding, and because the label changed colour at the same moment the
      whole control appeared to swap identity under the cursor.
@@ -199,8 +204,8 @@
      UP: on a dark ground brightening reads as energised, whereas darkening
      makes the button sink into the page. Pressed goes down, which is the
      direction people expect from something being pushed. */
-  --primary-hover: #ff1f1f;
-  --primary-active: #c40000;
+  --primary-hover: #ec3b46;
+  --primary-active: #b81d28;
 
   --secondary: #222424;
   --secondary-foreground: #ffffff;
@@ -224,9 +229,9 @@
      than it would in a shadow-based system. */
   --border: #333535;
   --input: #333535;
-  --ring: #e60000;
+  --ring: #dc2430;
 
-  --chart-1: #e60000;
+  --chart-1: #dc2430;
   --chart-2: #ffb4a8;
   --chart-3: #c8c6c5;
   --chart-4: #474746;
@@ -240,12 +245,12 @@
 
   --sidebar: #0f1111;
   --sidebar-foreground: #ffffff;
-  --sidebar-primary: #e60000;
+  --sidebar-primary: #dc2430;
   --sidebar-primary-foreground: #fff7f5;
   --sidebar-accent: #222424;
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: #333535;
-  --sidebar-ring: #e60000;
+  --sidebar-ring: #dc2430;
 }
 
 /* Kept in step with :root so any dark: variant inherited from shadcn resolves
@@ -260,11 +265,11 @@
   --card-foreground: #ffffff;
   --popover: #1a1c1c;
   --popover-foreground: #ffffff;
-  --primary: #e60000;
+  --primary: #dc2430;
   --primary-foreground: #fff7f5;
   --primary-soft: #ffb4a8;
-  --primary-hover: #ff1f1f;
-  --primary-active: #c40000;
+  --primary-hover: #ec3b46;
+  --primary-active: #b81d28;
   --secondary: #222424;
   --secondary-foreground: #ffffff;
   --muted: #1a1c1c;
@@ -278,20 +283,20 @@
   --concrete: #474746;
   --border: #333535;
   --input: #333535;
-  --ring: #e60000;
-  --chart-1: #e60000;
+  --ring: #dc2430;
+  --chart-1: #dc2430;
   --chart-2: #ffb4a8;
   --chart-3: #c8c6c5;
   --chart-4: #474746;
   --chart-5: #b08781;
   --sidebar: #0f1111;
   --sidebar-foreground: #ffffff;
-  --sidebar-primary: #e60000;
+  --sidebar-primary: #dc2430;
   --sidebar-primary-foreground: #fff7f5;
   --sidebar-accent: #222424;
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: #333535;
-  --sidebar-ring: #e60000;
+  --sidebar-ring: #dc2430;
 }
 
 /* ---------------------------------------------------------------------------
@@ -577,7 +582,7 @@
      The brief is explicit that imagery is high-contrast and near-monochrome so
      that red stays the only saturated thing on the page. It also solves a real
      problem right now: every photograph on the site was shot for the previous
-     brand and is lit acid-green, which against #e60000 is a straight
+     brand and is lit acid-green, which against #dc2430 is a straight
      red/green clash — the two most vibrating hues you can put side by side.
      Pulling the saturation out removes the fight entirely and is why the
      placeholder photos sit quietly instead of dating the page.

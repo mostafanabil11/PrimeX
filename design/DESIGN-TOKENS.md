@@ -28,7 +28,7 @@ on `<html>` is what makes them apply at all).
 | surface 3 | `--surface-3` | `#222424` | raised / hover |
 | text | `--foreground` | `#ffffff` | pure white, headings |
 | body text | `--muted-foreground` | `#c8c6c5` | running copy |
-| brand | `--primary` | `#e60000` | fills, large type, rules |
+| brand | `--primary` | `#dc2430` | fills, large type, rules |
 | on brand | `--primary-foreground` | `#fff7f5` | text on red |
 | soft brand | `--primary-soft` | `#ffb4a8` | **small** red-ish text |
 | concrete | `--concrete` | `#474746` | visible mid-grey borders |
@@ -41,11 +41,18 @@ on `<html>` is what makes them apply at all).
    warm, and cost more in crispness than it returned in family resemblance.
    `#fff7f5` is the halfway house if warmth is ever wanted back.
 
-2. **Red has a size threshold.** `#e60000` on `#121414` measures **3.9:1** — it
+2. **Red has a size threshold.** `#dc2430` on `#121414` measures **3.8:1** — it
    clears the 3:1 bar for large text and is fine for fills, but it **fails**
    4.5:1 for body text. Anything under ~24px that wants to look red uses
    `--primary-soft` (`#ffb4a8`, 9.4:1). Rule of thumb: *red for fills and 24px+,
    soft for anything smaller.*
+
+   The red is `#dc2430`, not the comp's electric `#e60000`. It was matched to
+   the gym's own Instagram creative, which runs a deeper, slightly crimson red —
+   the comp's was too bright against this much black. **Do not darken it
+   further to calm it down:** on a ground this dark, deeper means *less*
+   contrast, not more. `#c8102e` falls to 3.14 and `#b81d24` to 2.85, below the
+   large-text bar. To make red read stronger here, go lighter.
 
 ## Type
 
