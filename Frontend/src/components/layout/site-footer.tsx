@@ -5,6 +5,7 @@ import { BRAND } from "@/lib/brand";
 import { FOOTER_NAV } from "@/lib/nav";
 import { formatEgyptianPhone } from "@/lib/gym-format";
 import { WhatsAppIcon, WhatsAppLink } from "@/components/public/whatsapp";
+import { SocialLinks } from "@/components/public/social-floating-buttons";
 
 export function SiteFooter() {
   return (
@@ -25,6 +26,11 @@ export function SiteFooter() {
             <WhatsAppIcon className="size-4" />
             {formatEgyptianPhone(BRAND.whatsapp)}
           </WhatsAppLink>
+          {/* The floating rail is hidden below md, so without this the gym's
+              social presence would simply not exist on a phone — which is where
+              most people will meet it. Nudged left so the glyphs optically line
+              up with the wordmark above rather than the padding box. */}
+          <SocialLinks className="mt-4 -ml-3" />
         </div>
 
         <div className="grid grid-cols-2 gap-8 md:col-span-2">
