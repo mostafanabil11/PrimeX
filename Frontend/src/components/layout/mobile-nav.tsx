@@ -6,11 +6,11 @@ import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { InstagramIcon, FacebookIcon } from "@/components/icons/social-icons";
 import { TrackedWhatsAppLink } from "@/components/public/tracked-cta";
 import { joinEnquiry } from "@/lib/whatsapp-messages";
-import { BRAND } from "@/lib/brand";
 import { PRIMARY_NAV } from "@/lib/nav";
+import { Wordmark } from "./wordmark";
+import { SocialLinks } from "@/components/public/floating-contact";
 import { SHOP_ENABLED } from "@/lib/features";
 
 export function MobileNav() {
@@ -39,12 +39,12 @@ export function MobileNav() {
         className="flex flex-col p-0 data-[side=left]:w-[88vw] data-[side=left]:sm:w-[380px] data-[side=left]:sm:max-w-none"
       >
         <div className="border-b border-border px-margin-mobile pt-16 pb-6">
-          <Link
-            href="/"
-            onClick={() => setOpen(false)}
-            className="font-display text-2xl tracking-[-0.02em] text-foreground uppercase"
-          >
-            {BRAND.name}
+          {/* The mark, not the name set in the headline face. This panel is the
+              first thing a phone visitor sees after tapping the menu, and a
+              typographic stand-in next to a real logo everywhere else reads as
+              an oversight. */}
+          <Link href="/" onClick={() => setOpen(false)} className="inline-block">
+            <Wordmark className="h-20 w-auto" />
           </Link>
         </div>
 
@@ -74,10 +74,12 @@ export function MobileNav() {
           >
             Join Now
           </TrackedWhatsAppLink>
-          <div className="flex items-center gap-4">
-            <InstagramIcon className="size-5 text-muted-foreground" />
-            <FacebookIcon className="size-5 text-muted-foreground" />
-          </div>
+          {/* These were bare glyphs with no href — decoration that looked like
+              controls. Now the same component the footer uses, so there is one
+              definition of where "our Instagram" points. Nudged left so the
+              circles align optically with the button above rather than with
+              their own padding box. */}
+          <SocialLinks className="-ml-3" />
         </div>
       </SheetContent>
     </Sheet>

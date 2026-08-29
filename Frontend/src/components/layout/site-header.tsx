@@ -10,7 +10,7 @@ import { MobileNav } from "./mobile-nav";
 export function SiteHeader() {
   return (
     <header className="site-header sticky top-0 z-40 w-full border-b border-border bg-background">
-      <div className="mx-auto flex w-full max-w-(--spacing-container-max) items-center justify-between gap-6 px-margin-mobile py-3 md:px-margin-desktop">
+      <div className="mx-auto flex w-full max-w-(--spacing-container-max) items-center justify-between gap-6 px-margin-mobile py-2 md:px-margin-desktop">
         {/* shrink-0 on both flanks: the nav is the only part that should give
             way. Without it a long nav crushes the wordmark to zero width and
             it silently vanishes rather than the bar wrapping or scrolling. */}
