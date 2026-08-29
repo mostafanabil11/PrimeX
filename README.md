@@ -193,6 +193,42 @@ On Vercel:
 `FRONTEND_URL` and `NEXT_PUBLIC_API_URL` point at each other. Getting either
 wrong shows up as a CORS error in the browser rather than a failed build.
 
+### Moving to a custom domain
+
+Buying a domain is a configuration change, not a code change — nothing here
+hardcodes a host. Four things to update, in this order:
+
+1. **Vercel** → add the domain to the project and follow its DNS instructions.
+2. **Vercel env** → `NEXT_PUBLIC_SITE_URL` becomes the new origin. This is not
+   cosmetic: `metadataBase`, every canonical tag, the sitemap, the OG share
+   image URL and the `OrganizationSchema` JSON-LD are all derived from it. Left
+   pointing at the old `.vercel.app` host, the site publishes canonicals for a
+   domain you no longer use, which search engines will honour.
+3. **Render env** → add the new origin to `FRONTEND_URL`. It is a
+   comma-separated list, so keep the Vercel host too if anything still uses it.
+   The first entry is treated as canonical and is where OAuth redirects land.
+4. **Redeploy both.** Render picks up env changes on restart, but **Vercel does
+   not**: `NEXT_PUBLIC_*` values are inlined into the bundle at build time, so
+   editing the variable without triggering a new build changes nothing and the
+   old URL stays compiled into the JavaScript. This is the step that gets
+   missed, and it fails silently.
+
+Two things worth knowing before you pick hostnames:
+
+**Preview deployments will not authenticate.** CORS matches `FRONTEND_URL`
+entries as exact strings, and Vercel preview hosts contain a per-deploy hash, so
+no static list can cover them. Previews render fine but anything requiring a
+session fails. If that matters, the origin check in `main.ts` needs to become a
+function that pattern-matches preview hosts rather than an array.
+
+**Putting the API on a subdomain is worth it.** With the site on `example.com`
+and the API on `api.example.com`, the two share a registrable domain and the
+session cookie stops being third-party. `cookieOptions` in `auth.controller.ts`
+currently forces `sameSite: 'none'` in production because today they sit on
+unrelated hosts; same-site would let that become `'lax'`, which restores a layer
+of CSRF protection the current setup gives up. Nothing breaks if you skip this —
+it is a security improvement, not a fix.
+
 ### Email in production
 
 Gmail over SMTP is fine locally and does not work on a managed host: free Render

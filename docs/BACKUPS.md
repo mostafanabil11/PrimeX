@@ -78,11 +78,13 @@ visibly does not.
 **Backblaze B2** and **Cloudflare R2** both give 10 GB free permanently — far
 beyond what this database will need for years.
 
-> **This repository is public.** That is why the workflow uploads to B2 instead
-> of using `actions/upload-artifact`, which would be the simpler choice.
-> Artifacts on a public repo are downloadable by anyone, and a dump contains
-> every member's phone number and every invoice. Do not swap it for artifacts
-> unless the repo is made private first.
+> **The repository is private now** — but keep the B2 upload anyway. Two
+> reasons. A CI artifact lives inside the same GitHub account it is protecting,
+> so it does not survive that account being compromised, which is the whole
+> point of an off-site copy. And artifacts expire on a retention clock measured
+> in days, whereas the backup you need is often the one from before a mistake
+> nobody has noticed yet. If the repo is ever made public, artifacts become
+> flatly unsafe: a dump holds every member's phone number and every invoice.
 
 The property that matters is one people skip: create an application key that
 can **write but not delete**. If the server is ever compromised, an attacker can
@@ -122,7 +124,7 @@ scheduled backups at all.
 
 ```bash
 # Point at a scratch database, never the live one
-MONGODB_URI="mongodb+srv://.../gym1-restoretest?..." \
+MONGODB_URI="mongodb+srv://.../primex-restoretest?..." \
   node scripts/restore-db.js backups/<file>.json.gz --confirm
 ```
 
@@ -172,7 +174,7 @@ Free, and worth doing before real members exist.
    attempt a TLS handshake and then must authenticate", which is why items 1
    and 3 carry the real weight.
 
-3. **Check the database user's role.** It should be `readWrite` on `gym1` only
+3. **Check the database user's role.** It should be `readWrite` on `primex` only
    — not `atlasAdmin`. A leaked application password should not be able to drop
    databases or read other clusters.
 
