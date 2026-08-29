@@ -21,7 +21,7 @@ export function SiteHeader() {
               the topmost element on every page and therefore no empty gap in
               the header while it loads. */}
           <Link href="/" className="flex items-center transition-opacity hover:opacity-80">
-            <Wordmark className="site-header-logo h-10 w-auto text-foreground md:h-14" />
+            <Wordmark className="site-header-logo h-14 w-auto text-foreground md:h-20" />
           </Link>
         </div>
 

@@ -7,7 +7,7 @@ export const BRAND = {
   // Straight off the logo lockup. Kept in that sentence case deliberately —
   // it is set uppercase wherever the design calls for caps, but the canonical
   // string stays readable for page titles, share cards and email subjects.
-  tagline: "Commit To Be Fit",
+  tagline: "Commit to be fit",
   description:
     "Industrial strength discipline in Cairo. Strength, conditioning and coaching for people who refuse to settle.",
 

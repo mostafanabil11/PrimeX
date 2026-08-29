@@ -17,8 +17,8 @@ export class Settings {
   @Prop({ default: 'PrimeX' })
   brandName: string = 'PrimeX';
 
-  @Prop({ default: 'Commit To Be Fit' })
-  tagline: string = 'Commit To Be Fit';
+  @Prop({ default: 'Commit to be fit' })
+  tagline: string = 'Commit to be fit';
 
   @Prop({ type: String, default: null })
   supportEmail: string | null = null;
