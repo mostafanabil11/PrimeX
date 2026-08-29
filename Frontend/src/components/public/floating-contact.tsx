@@ -10,28 +10,23 @@ import { WhatsAppIcon, WhatsAppLink } from "./whatsapp";
  * were added at different times rather than designed together: it framed the
  * content, and neither cluster explained the other.
  *
- * ONE SHAPE, ONE MOTION, ONE EXCEPTION.
+ * ONE SHAPE, ONE MOTION, ONE COLOUR.
  *
  * All three are the same circle at the same size with the same hover: an
  * off-white disc scales up from nothing and the glyph inverts to near-black
- * inside it. Consistent geometry is what makes them read as a single control
- * group rather than three unrelated widgets.
+ * inside it. Consistent geometry and colour are what make them read as a single
+ * control group rather than three unrelated widgets.
  *
- * The exception is the resting fill, and it is carrying the hierarchy. The two
- * social marks are bare glyphs; WhatsApp keeps its green. That is deliberate
- * and it is the one thing not to "tidy up" later:
+ * WhatsApp used to keep its brand green here, on the argument that it is the
+ * action rather than a link and that people find it by colour. That was a
+ * considered call and it was overruled: one green circle in a row of neutral
+ * ones read as an oversight rather than as a hierarchy, which is a fair reading
+ * — a distinction only works if it looks deliberate. Hierarchy now comes from
+ * position instead: WhatsApp is last, which is the rightmost slot and the
+ * easiest place for a right thumb to reach.
  *
- *   - WhatsApp is the action. It is how this gym is actually contacted, ahead
- *     of the phone and well ahead of email. The other two are links that send
- *     people away from the site.
- *   - #25D366 is WhatsApp's own recognition colour, doing the job an app icon
- *     does. People find that button by colour before they read anything.
- *
- * So the shape says "these belong together" and the colour says "this one is
- * the thing to press".
- *
- * WhatsApp is last because it is the rightmost position, which on a phone is
- * the easiest place for a right thumb to reach.
+ * If it ever needs to stand out again, do it with size or an outline rather
+ * than by reintroducing a second brand colour to the cluster.
  */
 
 type Social = { href: string; label: string; icon: React.ReactNode };
@@ -74,8 +69,7 @@ export const SOCIAL_LINKS: Social[] = [
 // The disc is off-white, not red. Red was tried and lost: these marks read as
 // brand logos, so a red disc behind Instagram or Facebook put two competing
 // brand colours in a 44px circle. Neutral lets each mark stay itself, and keeps
-// red meaning "this is the thing to click" — which here is nothing, since the
-// action in this cluster is green.
+// red reserved for the CTAs, where it means "this is the thing to click".
 //
 // scale, not width/height: transform is compositor-only, so the disc cannot
 // reflow its neighbours. Tailwind v4's scale-* writes to the standalone `scale`
@@ -88,16 +82,13 @@ const discClasses =
 const baseClasses =
   "group relative flex size-11 shrink-0 items-center justify-center rounded-full transition-colors duration-300 hover:text-background focus-visible:text-background focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground motion-reduce:transition-none";
 
-// The dark fill is not decoration, it is legibility. As bare glyphs these were
-// unreadable the moment the cluster floated over body copy or a photograph —
-// the strokes competed with whatever was behind them. On the page ground
-// (#121414) a #1a1c1c disc is almost invisible, so they still read as bare
-// marks where the background is plain; over content it gives them something to
-// sit on. That is the whole reason it is surface-2 and not something lighter.
-const socialClasses = `${baseClasses} bg-surface-2 text-foreground`;
-// text-black rather than the page near-black: this glyph sits on #25D366, not
-// on the page, and WhatsApp's own mark is drawn dark on green.
-const whatsappClasses = `${baseClasses} bg-[#25D366] text-black`;
+// One treatment for all three. The dark fill is not decoration, it is
+// legibility: as bare glyphs these were unreadable the moment the cluster
+// floated over body copy or a photograph, because the strokes had nothing to
+// sit on. surface-2 is deliberately close to the page ground, so they still
+// read as bare marks where the background is plain and only resolve into discs
+// where they need to.
+const buttonClasses = `${baseClasses} bg-surface-2 text-foreground`;
 
 export function FloatingContact() {
   return (
@@ -108,7 +99,7 @@ export function FloatingContact() {
           href={s.href}
           target="_blank"
           rel="noopener noreferrer"
-          className={socialClasses}
+          className={buttonClasses}
         >
           <span aria-hidden="true" className={discClasses} />
           {s.icon}
@@ -116,7 +107,7 @@ export function FloatingContact() {
         </a>
       ))}
 
-      <WhatsAppLink message={`Hi ${BRAND.name}, I have a question.`} className={whatsappClasses}>
+      <WhatsAppLink message={`Hi ${BRAND.name}, I have a question.`} className={buttonClasses}>
         <span aria-hidden="true" className={discClasses} />
         <WhatsAppIcon className="relative size-5" />
         <span className="sr-only">Message {BRAND.name} on WhatsApp</span>
@@ -139,7 +130,7 @@ export function SocialLinks({ className = "" }: { className?: string }) {
           href={s.href}
           target="_blank"
           rel="noopener noreferrer"
-          className={socialClasses}
+          className={buttonClasses}
         >
           <span aria-hidden="true" className={discClasses} />
           {s.icon}
