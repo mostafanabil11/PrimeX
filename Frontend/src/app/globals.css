@@ -400,8 +400,25 @@
 
      Inline SVG turbulence, so it costs one small data URI and no network
      request. Opacity is deliberately tiny — at 0.05 it is felt, not seen. */
+  /* SIZE IS LOAD-BEARING. The first version declared only a viewBox and no
+     width/height, so the browser fell back to a 150x150 intrinsic size and
+     tiled it — 9.6 repeats across a 1440px screen, about 58 tiles a viewport.
+     Noise that repeats every 150px stops being noise and becomes a pattern:
+     you cannot name what you are looking at, but the eye picks up the rhythm
+     and the background stops reading as flat.
+
+     Explicit 600x600 fixes it, and costs nothing — feTurbulence is procedural,
+     so the data URI is the same length whatever size it renders at. That is
+     2.4 repeats across the same screen, and with stitchTiles the seams match,
+     so there is no edge to find.
+
+     Opacity is 0.04 rather than 0.05 for the same reason the size changed: the
+     grain is meant to stop large flat areas of near-black banding on cheap
+     panels, not to be visible as texture. If you can see it, it is too strong.
+     To remove the effect entirely, drop `industrial-grain` from <body> in
+     app/layout.tsx — nothing else references it. */
   .industrial-grain {
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.05'/%3E%3C/svg%3E");
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
   }
 
   /* The bolt motif, as a corner. A 45-degree cut off the bottom-right of a
