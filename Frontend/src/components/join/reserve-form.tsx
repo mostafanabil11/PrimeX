@@ -6,11 +6,12 @@ import { Check, Copy } from "lucide-react";
 import { previewJoin, reserveMembership, type ReserveResult } from "@/lib/api/membership";
 import { apiErrorMessage } from "@/lib/api-error";
 import { formatPrice } from "@/lib/format";
-import { formatDuration } from "@/lib/gym-format";
+import { formatDuration, whatsappHref } from "@/lib/gym-format";
 import { CtaButton } from "@/components/public/section";
 import { WhatsAppCta } from "@/components/public/whatsapp";
 import { reservationMessage, joinEnquiry } from "@/lib/whatsapp-messages";
 import type { Plan } from "@/types/gym";
+import { BRAND } from "@/lib/brand";
 
 /**
  * Reserve a membership, pay at the gym.
@@ -87,6 +88,10 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
     enabled: Boolean(planId),
   });
 
+  // Holds the tab opened during the submit click so onSuccess can point it at
+  // WhatsApp once the reference code exists. See the note in onSuccess.
+  const waTab = useRef<Window | null>(null);
+
   const reserve = useMutation({
     mutationFn: () =>
       reserveMembership({
@@ -108,6 +113,38 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
       if (data.status === "reserved" && data.referenceCode) {
         window.history.replaceState(null, "", `?ref=${data.referenceCode}`);
       }
+
+      // Hand off to WhatsApp automatically. Reserving and messaging are one
+      // intention here — the reservation is not finished until staff confirm
+      // it in chat — so making the member find and press a second button was
+      // an invented step, and any of them who did not press it became a
+      // pending invoice nobody was chasing.
+      //
+      // The tab was opened during the click (see onSubmit). It cannot be
+      // opened here: this runs after the network round-trip, outside the user
+      // gesture, and every browser treats that as a popup and blocks it.
+      const pending = waTab.current;
+      waTab.current = null;
+
+      if (data.status !== "reserved") {
+        pending?.close();
+        return;
+      }
+
+      const href = whatsappHref(BRAND.whatsapp, reservationMessage(data));
+      if (pending && !pending.closed) {
+        pending.location.href = href;
+      } else {
+        // Blocked, or the browser never gave us the handle. The panel behind
+        // this still carries the same link as its primary button, so the
+        // member is not stranded — they just press it themselves.
+        window.open(href, "_blank", "noopener,noreferrer");
+      }
+    },
+    onError: () => {
+      // Nothing was reserved, so a blank tab would just be litter.
+      waTab.current?.close();
+      waTab.current = null;
     },
   });
 
@@ -126,6 +163,11 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
       className="mx-auto flex w-full max-w-xl flex-col gap-6"
       onSubmit={(e) => {
         e.preventDefault();
+        // Opened here, synchronously inside the click, purely so the browser
+        // counts it as user-initiated. It is a blank tab for the moment; the
+        // mutation points it at WhatsApp when the reference code comes back.
+        // Doing this after the await instead is what gets it popup-blocked.
+        waTab.current = window.open("", "_blank");
         reserve.mutate();
       }}
     >
@@ -324,9 +366,19 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
 /**
  * The reservation, done.
  *
- * Deliberately does not bounce straight to WhatsApp. The reference is the one
- * thing the member can quote back if the chat goes sideways, and navigating
- * away the instant it is issued is how they lose it.
+ * WhatsApp opens automatically in a second tab the moment this renders — see
+ * the handoff in onSuccess. This panel is what stays behind in the original
+ * tab, and it exists for two reasons.
+ *
+ * The first is the reference code. It is the one thing the member can quote
+ * back if the chat goes sideways, so it must survive the handoff: navigating
+ * this tab away to WhatsApp instead of opening a new one would take it with
+ * them. The URL also carries ?ref=, so a refresh does not lose it either.
+ *
+ * The second is that the handoff can fail — a blocked popup, a browser with no
+ * WhatsApp, a member who closes the tab by reflex. So the same link is the
+ * primary button here too. Nothing about the reservation depends on the
+ * message being sent; staff match on the phone number regardless.
  */
 function ReservedPanel({ result }: { result: Extract<ReserveResult, { status: "reserved" }> }) {
   const [copied, setCopied] = useState(false);
@@ -375,10 +427,14 @@ function ReservedPanel({ result }: { result: Extract<ReserveResult, { status: "r
       )}
 
       <div className="flex flex-col gap-2 border-t border-border pt-6">
+        {/* Worded for the common case — WhatsApp has already opened in another
+            tab — while still making sense if the popup was blocked and this
+            button is the member's first sight of it. */}
         <p className="mb-2 text-[13px] text-muted-foreground">
-          Send us a message and we will confirm everything and take payment.
+          We have opened WhatsApp with your details ready to send. Send the message and we
+          will confirm everything and take payment.
         </p>
-        <WhatsAppCta message={reservationMessage(result)}>Message us on WhatsApp</WhatsAppCta>
+        <WhatsAppCta message={reservationMessage(result)}>Open WhatsApp again</WhatsAppCta>
         <CtaButton href="/contact" variant="outline">
           Or find us
         </CtaButton>
