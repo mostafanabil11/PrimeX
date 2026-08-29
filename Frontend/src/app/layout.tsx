@@ -5,8 +5,7 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { HeaderScrollState } from "@/components/layout/header-scroll-state";
 import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { SiteFooter } from "@/components/layout/site-footer";
-import { WhatsAppSupportButton } from "@/components/public/whatsapp-support-button";
-import { SocialFloatingButtons } from "@/components/public/social-floating-buttons";
+import { FloatingContact } from "@/components/public/floating-contact";
 import { getContentServer } from "@/lib/api/gym-server";
 import { contentList } from "@/types/gym";
 import { BRAND } from "@/lib/brand";
@@ -136,8 +135,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
             {children}
           </main>
           <SiteFooter />
-          <WhatsAppSupportButton />
-          <SocialFloatingButtons />
+          <FloatingContact />
         </Providers>
       </body>
     </html>

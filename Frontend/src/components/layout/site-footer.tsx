@@ -5,7 +5,7 @@ import { BRAND } from "@/lib/brand";
 import { FOOTER_NAV } from "@/lib/nav";
 import { formatEgyptianPhone } from "@/lib/gym-format";
 import { WhatsAppIcon, WhatsAppLink } from "@/components/public/whatsapp";
-import { SocialLinks } from "@/components/public/social-floating-buttons";
+import { SocialLinks } from "@/components/public/floating-contact";
 
 export function SiteFooter() {
   return (
