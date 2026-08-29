@@ -47,6 +47,11 @@ export function Wordmark({
       // height utility in className, with width following the ratio.
       width={942}
       height={488}
+      // Without this Next has no idea how wide the logo actually renders and
+      // fetches a variant sized for the viewport — it was pulling 1080px for a
+      // mark that is never more than 216 CSS pixels across. These are the real
+      // rendered widths at the two header sizes; update them if those change.
+      sizes="(min-width: 768px) 224px, 144px"
       priority={priority}
       quality={90}
       className={className}

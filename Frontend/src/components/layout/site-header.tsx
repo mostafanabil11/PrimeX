@@ -10,7 +10,7 @@ import { MobileNav } from "./mobile-nav";
 export function SiteHeader() {
   return (
     <header className="site-header sticky top-0 z-40 w-full border-b border-border bg-background">
-      <div className="mx-auto flex w-full max-w-(--spacing-container-max) items-center justify-between gap-6 px-margin-mobile py-4 md:px-margin-desktop">
+      <div className="mx-auto flex w-full max-w-(--spacing-container-max) items-center justify-between gap-6 px-margin-mobile py-3 md:px-margin-desktop">
         {/* shrink-0 on both flanks: the nav is the only part that should give
             way. Without it a long nav crushes the wordmark to zero width and
             it silently vanishes rather than the bar wrapping or scrolling. */}
@@ -21,7 +21,7 @@ export function SiteHeader() {
               the topmost element on every page and therefore no empty gap in
               the header while it loads. */}
           <Link href="/" className="flex items-center transition-opacity hover:opacity-80">
-            <Wordmark priority className="site-header-logo h-14 w-auto md:h-20" />
+            <Wordmark priority className="site-header-logo h-18 w-auto md:h-28" />
           </Link>
         </div>
 
