@@ -53,10 +53,46 @@ const facebookIcon = (
   </svg>
 );
 
+const tiktokIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    className="relative size-5"
+    aria-hidden="true"
+  >
+    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+  </svg>
+);
+
+/**
+ * The gym's own profiles, from the environment.
+ *
+ * These were `https://www.instagram.com` and `https://www.facebook.com` — the
+ * bare platform homepages. They are rendered in the footer of every page and in
+ * the mobile menu, so every visitor who tapped one was dropped onto a generic
+ * feed with no connection to PrimeX at all. A social link that goes nowhere is
+ * worse than no social link, because it looks maintained.
+ *
+ * Read from env rather than hardcoded, matching how the WhatsApp and InstaPay
+ * numbers are handled in lib/brand.ts: a new handle is a deploy variable, not a
+ * code change. The defaults are the gym's real handles; set
+ * NEXT_PUBLIC_INSTAGRAM_URL / NEXT_PUBLIC_FACEBOOK_URL / NEXT_PUBLIC_TIKTOK_URL to override.
+ *
+ * A link is dropped entirely rather than rendered as a dead end if its variable
+ * is explicitly blanked — see the filter below.
+ */
+const SOCIAL_URLS = {
+  instagram: process.env.NEXT_PUBLIC_INSTAGRAM_URL ?? "https://www.instagram.com/primex.fa?igsi=aDg5enljNDVrYmFx",
+  facebook: process.env.NEXT_PUBLIC_FACEBOOK_URL ?? "https://www.facebook.com/share/1EPXSPzjhL/?mibextid=wwXIfr",
+  tiktok: process.env.NEXT_PUBLIC_TIKTOK_URL ?? "https://www.tiktok.com/@primex.fa?_r=1&_t=ZS-99LNCv8sxvU",
+};
+
 export const SOCIAL_LINKS: Social[] = [
-  { href: "https://www.instagram.com", label: "Instagram", icon: instagramIcon },
-  { href: "https://www.facebook.com", label: "Facebook", icon: facebookIcon },
-];
+  { href: SOCIAL_URLS.instagram, label: "Instagram", icon: instagramIcon },
+  { href: SOCIAL_URLS.facebook, label: "Facebook", icon: facebookIcon },
+  { href: SOCIAL_URLS.tiktok, label: "TikTok", icon: tiktokIcon },
+].filter((s) => s.href.trim().length > 0);
 
 // Footer social hover. The disc is off-white, not red: these marks read as
 // brand logos, so a red disc behind Instagram or Facebook put two competing
@@ -82,7 +118,24 @@ export function FloatingContact() {
   return (
     <WhatsAppLink
       message={`Hi ${BRAND.name}, I have a question.`}
-      className="press fixed right-4 bottom-4 z-40 flex size-13 items-center justify-center rounded-full bg-[#25D366] text-black transition-transform duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground motion-reduce:transition-none motion-reduce:hover:scale-100 sm:right-6 sm:bottom-6"
+      // The offsets are max() against the safe-area inset rather than flat
+      // rem values, and both halves of that matter on a phone.
+      //
+      // bottom: on any iPhone with a home indicator, `bottom: 1rem` puts this
+      // button inside the gesture strip — a swipe meant to leave the app lands
+      // on it, and a tap meant for it sometimes goes to the OS instead.
+      // env(safe-area-inset-bottom) is 34px there and 0 everywhere else, so
+      // max() lifts it clear on the devices that need it and changes nothing
+      // on the ones that do not. Requires viewportFit: "cover" in layout.tsx,
+      // without which the env() values are all reported as zero.
+      //
+      // right: the same insets are non-zero in landscape on a notched device,
+      // where the button would otherwise sit under the rounded corner.
+      //
+      // The footer reserves matching room at the bottom of every page (see
+      // site-footer.tsx), so this never covers the copyright or the nav links
+      // the way it used to.
+      className="press fixed right-[max(1rem,env(safe-area-inset-right))] bottom-[max(1rem,env(safe-area-inset-bottom))] z-40 flex size-13 items-center justify-center rounded-full bg-[#25D366] text-black transition-transform duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground motion-reduce:transition-none motion-reduce:hover:scale-100 sm:right-[max(1.5rem,env(safe-area-inset-right))] sm:bottom-[max(1.5rem,env(safe-area-inset-bottom))]"
     >
       <WhatsAppIcon className="size-6" />
       <span className="sr-only">Message {BRAND.name} on WhatsApp</span>
