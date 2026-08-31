@@ -74,7 +74,13 @@ export function PricingGrid({ plans }: { plans: Plan[] }) {
                   open ? "bg-surface-2" : "hover:bg-surface-2"
                 }`}
               >
-                <span className="flex min-w-0 flex-wrap items-baseline gap-x-3 gap-y-1">
+                {/* Stacked below sm, on one baseline above it.
+                    "1 YEAR — from EGP 15,800 — SAVE 27% — chevron" is four
+                    things, and at 375px they sat shoulder to shoulder with the
+                    display-weight term name almost touching the price. Letting
+                    the price drop under the term name costs one line and gives
+                    every part of the row room to be read. */}
+                <span className="flex min-w-0 flex-col items-start gap-x-3 gap-y-0.5 sm:flex-row sm:flex-wrap sm:items-baseline">
                   <span className="font-display text-2xl leading-none tracking-[-0.02em] text-foreground uppercase md:text-3xl">
                     {term.label}
                   </span>
@@ -85,7 +91,10 @@ export function PricingGrid({ plans }: { plans: Plan[] }) {
 
                 <span className="flex shrink-0 items-center gap-3">
                   {term.hasOffer && (
-                    <span className="hidden bg-primary px-2 py-1 font-mono text-[10px] font-semibold tracking-[0.1em] text-primary-foreground uppercase sm:inline">
+                    // 11px, not 10px. Uppercase mono with 0.1em tracking needs
+                    // the extra pixel to stay a word rather than a row of
+                    // letters; the tracking is eased off to match.
+                    <span className="hidden bg-primary px-2 py-1 font-mono text-[11px] font-semibold tracking-[0.06em] text-primary-foreground uppercase sm:inline">
                       Offer on
                     </span>
                   )}
@@ -108,9 +117,6 @@ export function PricingGrid({ plans }: { plans: Plan[] }) {
                 to the content's real height — transitioning max-height instead
                 needs a guessed ceiling, and the guess either clips the tallest
                 tier or spends the tail easing through empty space.
-
-                That easing is desktop-only, and the tiers carry the motion on a
-                phone. See .term-panel in globals.css for why.
 
                 The panel stays mounted so there is something to transition;
                 `inert` is what keeps that honest, taking the collapsed links
@@ -142,8 +148,8 @@ export function PricingGrid({ plans }: { plans: Plan[] }) {
               <div className="min-h-0 overflow-hidden [contain:layout_paint]">
                 {mounted && (
                   <div className="grid gap-px border-t border-border bg-border md:grid-cols-2 xl:grid-cols-4">
-                    {term.tiers.map(({ plan, monthlyPlan }) => (
-                      <TierRow key={plan._id} plan={plan} monthlyPlan={monthlyPlan} />
+                    {term.tiers.map(({ plan, monthlyPlan }, i) => (
+                      <TierRow key={plan._id} plan={plan} monthlyPlan={monthlyPlan} index={i} />
                     ))}
                   </div>
                 )}
@@ -165,7 +171,7 @@ export function PricingGrid({ plans }: { plans: Plan[] }) {
  * actually differs between tiers: the price, the allowance, and the extras —
  * with the prose kept for the tier's own description line.
  */
-function TierRow({ plan, monthlyPlan }: { plan: Plan; monthlyPlan: Plan | null }) {
+function TierRow({ plan, monthlyPlan, index }: { plan: Plan; monthlyPlan: Plan | null; index: number }) {
   const price = plan.pricing?.effectivePriceMinorUnits ?? plan.priceMinorUnits;
   const listPrice = plan.pricing?.listPriceMinorUnits ?? plan.priceMinorUnits;
   const offer = plan.pricing?.appliedOffer ?? null;
@@ -200,6 +206,7 @@ function TierRow({ plan, monthlyPlan }: { plan: Plan; monthlyPlan: Plan | null }
       className={`term-row group/tier relative flex cursor-pointer flex-col gap-3 p-5 md:p-6 ${
         plan.isFeatured ? "bg-surface-2 hover:bg-surface-3" : "bg-surface-1 hover:bg-surface-2"
       }`}
+      style={{ transitionDelay: `${index * 25}ms` }}
     >
       <div className="flex items-start justify-between gap-3">
         <span className="min-w-0">
@@ -208,7 +215,14 @@ function TierRow({ plan, monthlyPlan }: { plan: Plan; monthlyPlan: Plan | null }
               {plan.tier ?? plan.name}
             </span>
             {plan.isFeatured && (
-              <span className="bg-primary px-1.5 py-0.5 text-[9px] font-semibold tracking-[0.1em] text-primary-foreground uppercase">
+              // 11px, not 9px. This is the flag on the tier the gym most wants
+              // sold, and at 9px uppercase with 0.1em tracking it stopped being
+              // a word and became a row of loose letters sitting next to a 20px
+              // display heading. 11px is the floor for caps labels in this app;
+              // the tracking comes down to match, because open tracking is what
+              // makes small caps legible at 12px and what pulls them apart
+              // below it.
+              <span className="bg-primary px-2 py-0.5 font-mono text-[11px] font-semibold tracking-[0.06em] text-primary-foreground uppercase">
                 Popular
               </span>
             )}
@@ -231,7 +245,7 @@ function TierRow({ plan, monthlyPlan }: { plan: Plan; monthlyPlan: Plan | null }
       </div>
 
       {offer && (
-        <span className="w-fit bg-primary px-2 py-1 font-mono text-[10px] font-semibold tracking-[0.1em] text-primary-foreground uppercase">
+        <span className="w-fit bg-primary px-2 py-1 font-mono text-[11px] font-semibold tracking-[0.06em] text-primary-foreground uppercase">
           {offer.name}
         </span>
       )}
@@ -250,7 +264,9 @@ function TierRow({ plan, monthlyPlan }: { plan: Plan; monthlyPlan: Plan | null }
         <p className="text-[12px] text-muted-foreground">
           {formatPrice(perMonth)} a month
           {saving !== null && saving > 0 && (
-            <span className="text-primary"> · Save {saving}%</span>
+            // --primary-soft, not --primary: #d12028 measures 3.48:1 and this
+            // is 12px text. See the note on HoursTable in cards.tsx.
+            <span className="text-primary-soft"> · Save {saving}%</span>
           )}
         </p>
       )}
@@ -271,7 +287,7 @@ function TierRow({ plan, monthlyPlan }: { plan: Plan; monthlyPlan: Plan | null }
       <TrackedPlanLink
         planId={plan._id}
         href={`/join?plan=${plan.slug}`}
-        className={`tier-cta mt-auto block px-5 py-3 text-center font-mono text-[12px] font-semibold tracking-[0.1em] uppercase transition-all ${
+        className={`tier-cta mt-auto flex min-h-11 items-center justify-center px-5 py-3.5 text-center font-mono text-[12px] font-semibold tracking-[0.1em] uppercase transition-all ${
           plan.isFeatured
             ? "bg-primary text-primary-foreground group-hover/tier:opacity-90"
             : "border border-foreground text-foreground group-hover/tier:border-primary group-hover/tier:bg-primary group-hover/tier:text-primary-foreground"
@@ -301,72 +317,93 @@ export function PriceMatrix({ plans }: { plans: Plan[] }) {
   if (terms.length === 0 || tiers.length === 0) return null;
 
   return (
-    <div className="-mx-margin-mobile overflow-x-auto px-margin-mobile md:mx-0 md:px-0">
-      <table className="w-full min-w-[38rem] border-collapse text-[13px]">
-        <caption className="sr-only">Membership price by tier and length</caption>
-        <thead>
-          <tr className="border-b border-border">
-            <th
-              scope="col"
-              className="py-3 pr-4 text-left font-mono text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase"
-            >
-              Tier
-            </th>
-            {terms.map((term) => (
+    // Hidden below md, and sticky-headed above it.
+    //
+    // On a phone this was a 608px table inside a 335px window with nothing
+    // saying it scrolled — no fade, no shadow, no scrollbar, just a table that
+    // stopped at the screen edge — and once you did swipe, the tier names
+    // scrolled away with everything else, leaving a grid of prices with nothing
+    // to say which tier each belonged to.
+    //
+    // It is also a straight duplicate of the accordion above, which already
+    // answers the same question in a shape built for one column. So rather than
+    // patch a comparison table into working on a 375px screen, it stops being
+    // shown there: side-by-side comparison is what a wide screen is genuinely
+    // good for, and on a narrow one the accordion is the better answer anyway.
+    //
+    // From md up it can still scroll on a small laptop, so the row headers are
+    // pinned to the left edge on their own opaque ground — the fix for problem
+    // two, which applied at every width.
+    <div className="hidden md:block">
+      <div className="overflow-x-auto">
+        <table className="w-full min-w-[38rem] border-collapse text-[13px]">
+          <caption className="sr-only">Membership price by tier and length</caption>
+          <thead>
+            <tr className="border-b border-border">
               <th
-                key={term.months}
                 scope="col"
-                className="px-3 py-3 text-left font-mono text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase"
+                className="sticky left-0 z-10 bg-background py-3 pr-4 text-left font-mono text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase"
               >
-                {term.label}
+                Tier
               </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {tiers.map((tier) => (
-            <tr key={tier} className="border-b border-border last:border-0">
-              <th
-                scope="row"
-                className="py-4 pr-4 text-left align-top font-display text-lg tracking-[-0.02em] text-foreground uppercase"
-              >
-                {tier}
-              </th>
-              {terms.map((term) => {
-                const plan = cell(tier, term.months);
-                if (!plan) {
+              {terms.map((term) => (
+                <th
+                  key={term.months}
+                  scope="col"
+                  className="px-3 py-3 text-left font-mono text-[11px] font-semibold tracking-[0.1em] text-muted-foreground uppercase"
+                >
+                  {term.label}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {tiers.map((tier) => (
+              <tr key={tier} className="border-b border-border last:border-0">
+                {/* sticky + an opaque ground. Without the background the price
+                  cells slide underneath and print through the tier name. */}
+                <th
+                  scope="row"
+                  className="sticky left-0 z-10 bg-background py-4 pr-4 text-left align-top font-display text-lg tracking-[-0.02em] text-foreground uppercase"
+                >
+                  {tier}
+                </th>
+                {terms.map((term) => {
+                  const plan = cell(tier, term.months);
+                  if (!plan) {
+                    return (
+                      <td key={term.months} className="px-3 py-4 align-top text-muted-foreground">
+                        <span aria-label="Not available">—</span>
+                      </td>
+                    );
+                  }
+
+                  const price = plan.pricing?.effectivePriceMinorUnits ?? plan.priceMinorUnits;
+                  const list = plan.pricing?.listPriceMinorUnits ?? plan.priceMinorUnits;
+
                   return (
-                    <td key={term.months} className="px-3 py-4 align-top text-muted-foreground">
-                      <span aria-label="Not available">—</span>
+                    <td key={term.months} className="px-3 py-4 align-top">
+                      <span className="block font-semibold text-foreground tabular-nums">
+                        {formatPrice(price)}
+                      </span>
+                      {price < list && (
+                        <span className="block text-[12px] text-muted-foreground line-through tabular-nums">
+                          {formatPrice(list)}
+                        </span>
+                      )}
+                      <span className="mt-0.5 block text-[12px] text-muted-foreground">
+                        {plan.sessionsIncluded === null
+                          ? "Unlimited"
+                          : `${plan.sessionsIncluded} sessions`}
+                      </span>
                     </td>
                   );
-                }
-
-                const price = plan.pricing?.effectivePriceMinorUnits ?? plan.priceMinorUnits;
-                const list = plan.pricing?.listPriceMinorUnits ?? plan.priceMinorUnits;
-
-                return (
-                  <td key={term.months} className="px-3 py-4 align-top">
-                    <span className="block font-semibold text-foreground tabular-nums">
-                      {formatPrice(price)}
-                    </span>
-                    {price < list && (
-                      <span className="block text-[12px] text-muted-foreground line-through tabular-nums">
-                        {formatPrice(list)}
-                      </span>
-                    )}
-                    <span className="mt-0.5 block text-[12px] text-muted-foreground">
-                      {plan.sessionsIncluded === null
-                        ? "Unlimited"
-                        : `${plan.sessionsIncluded} sessions`}
-                    </span>
-                  </td>
-                );
-              })}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }

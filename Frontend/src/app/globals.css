@@ -232,9 +232,30 @@
 
   /* Borders are structural here, not hairlines to be hidden — the design
      replaces shadows with visible 1px outlines, so this sits a step brighter
-     than it would in a shadow-based system. */
+     than it would in a shadow-based system.
+
+     TWO TOKENS, NOT ONE, AND THE SPLIT IS THE POINT.
+
+     --border is a divider. It separates a card from the ground and one row
+     from the next, and at 1.50:1 against #121414 it does that job well: on a
+     calibrated panel it reads as a drawn line without ever competing with the
+     content inside it. That is the right value for decoration.
+
+     --input is not decoration. It is the only thing telling somebody where a
+     text field begins, and 1.50:1 is well under the 3:1 WCAG asks of any
+     control boundary. On a phone at half brightness in daylight the contact
+     form rendered as four empty rectangles — you could not see where to tap.
+     So fields get their own value at 3.14:1, which is visible outdoors and
+     still quiet enough that a stack of them does not turn into a ladder.
+
+     Anything a finger has to find takes --input. Anything that is only
+     separating one block from another takes --border.
+
+     #616564 measures 3.13:1 — over the 3:1 line with a little headroom rather
+     than sitting on it. It keeps the palette's slight green bias (r below g)
+     so it reads as part of this neutral ramp and not as a foreign grey. */
   --border: #333535;
-  --input: #333535;
+  --input: #616564;
   --ring: #d12028;
 
   --chart-1: #d12028;
@@ -288,7 +309,7 @@
   --warning: #e5b769;
   --concrete: #474746;
   --border: #333535;
-  --input: #333535;
+  --input: #616564;
   --ring: #d12028;
   --chart-1: #d12028;
   --chart-2: #ffb4a8;
@@ -350,6 +371,17 @@
        is then a translation job rather than a re-layout — direction is the
        expensive half of that port, and it costs nothing to avoid now. */
     color-scheme: dark;
+
+    /* A floor, not a fix. One element wider than the viewport used to make
+       the ENTIRE site scroll sideways on every route — the header did exactly
+       that below 373px, and the symptom (a page that drifts under the thumb,
+       a clipped Join button) was far worse than the cause. `clip` rather than
+       `hidden` because `hidden` on the scrolling element silently kills
+       `position: sticky` for everything inside it, which would take the
+       header down with it. The real overflows are still fixed at source; this
+       only guarantees the next one is a cosmetic bug rather than a broken
+       page. */
+    overflow-x: clip;
   }
   /* The headline voice, in one place.
 
@@ -538,12 +570,19 @@
 
   /* Scroll reveal. Elements ship hidden and are un-hidden by the observer in
      reveal.tsx, which sets data-revealed once they enter the viewport. */
+  /* 360ms, not the 620ms this used to run at. The number was chosen against a
+     desktop scroll, where a section enters slowly and a long fade reads as
+     grace. A thumb flick moves several times faster: by the time a 620ms fade
+     was a third through, the section was already leaving the top of the
+     screen, so a phone visitor scrolling at any speed saw a page of grey
+     rectangles filling in behind them. Short enough now that the content is
+     there when the eye arrives, long enough to still read as an entrance. */
   [data-reveal] {
     opacity: 0;
     transform: translate3d(0, 14px, 0);
     transition:
-      opacity 620ms cubic-bezier(0.22, 1, 0.36, 1),
-      transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+      opacity 360ms cubic-bezier(0.22, 1, 0.36, 1),
+      transform 360ms cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   [data-reveal][data-revealed] {
@@ -575,11 +614,28 @@
      out is what stops it reading as a plain opacity ramp.
   -------------------------------------------------------------------- */
 
-  [data-photo] {
+  /* THE FADE AND THE TREATMENT ARE TWO DIFFERENT THINGS, and they used to
+     share one attribute.
+
+     `data-photo` was written by Photo only when the image was NOT `priority`,
+     because a priority image must not fade (an element at opacity 0 does not
+     count as painted and would push LCP out by the fade duration). But the
+     grayscale treatment below is keyed off the same attribute — so every
+     priority image silently opted out of the brand's photography look as well
+     as out of the fade. The homepage hero papered over this by duplicating the
+     filter by hand in its className; the class and trainer heroes did not, and
+     rendered in full colour. The acid-green neon in the strength-foundations
+     shot fighting the brand red, which the note below predicts, was exactly
+     that bug.
+
+     So: `data-photo` now means "this is a photograph on this site" and is on
+     every one of them. `data-fade` means "and it may fade in on load", and is
+     the one Photo withholds from priority images. */
+  [data-fade] {
     opacity: 0;
   }
 
-  [data-photo][data-loaded] {
+  [data-fade][data-loaded] {
     opacity: 1;
   }
 
@@ -608,7 +664,7 @@
   }
 
   @media (prefers-reduced-motion: no-preference) {
-    [data-photo] {
+    [data-fade] {
       transform: scale(1.02);
       transition:
         opacity 500ms ease-out,
@@ -623,7 +679,7 @@
         translate 500ms cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    [data-photo][data-loaded] {
+    [data-fade][data-loaded] {
       transform: none;
     }
   }
@@ -760,20 +816,24 @@
     animation: marquee 92s linear infinite;
   }
 
+  /* The bar carries a real pause button (announcement-bar.tsx) and this is
+     what it drives. Hover was the only pause before, which meant that on a
+     phone — where there is no hover — a strip of text moved continuously and
+     forever with no way to stop it. That is WCAG 2.2.2 ("Pause, Stop, Hide")
+     failing on every page of the site.
+
+     Driven by a data attribute on the parent rather than a class on the
+     animated element, so React only writes one attribute and the animation
+     itself is never re-created mid-cycle. */
+  [data-marquee-paused="true"] .animate-marquee {
+    animation-play-state: paused;
+  }
+
 
   /* ---- Pricing term panels -------------------------------------------
      grid-template-rows is a layout property: every frame of the open
-     re-flows the page beneath the panel. On a desktop row the four tiers sit
-     side by side and the panel is around 300px tall, so that reflow is small
-     and the easing is worth it. Stacked on a phone the same panel is nearer
-     800px, so everything below it travels almost three times as far on every
-     frame — which is what made the open stutter there.
-
-     So the height only eases from md up. Below that it snaps, and the motion
-     comes entirely from the tiers fading and lifting in — opacity and
-     transform, which never touch layout and cannot drop a frame. The stagger
-     is what stops the snap reading as a jump: the eye follows the cascade
-     rather than the box.
+     re-flows the page beneath the panel. We use it to animate the panel
+     height smoothly on all devices.
   -------------------------------------------------------------------- */
 
   .term-panel {
@@ -785,9 +845,9 @@
     grid-template-rows: 1fr;
   }
 
-  @media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  @media (prefers-reduced-motion: no-preference) {
     .term-panel {
-      transition: grid-template-rows 300ms cubic-bezier(0.22, 1, 0.36, 1);
+      transition: grid-template-rows 300ms ease-out;
     }
   }
 
@@ -802,8 +862,8 @@
        rather than add to it. */
     .term-row {
       transition:
-        opacity 260ms ease-out,
-        transform 260ms cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 250ms ease-out,
+        transform 250ms ease-out,
         background-color 200ms ease-out;
     }
   }
@@ -858,7 +918,7 @@
      section below the fold would print blank. */
   @media print {
     [data-reveal],
-    [data-photo],
+    [data-fade],
     .term-row,
     .motion-rise {
       opacity: 1 !important;
@@ -869,10 +929,17 @@
   }
 
   /* Motion is decoration here — every one of these elements is legible and
-     complete without it, so honouring the preference costs nothing. */
+     complete without it, so honouring the preference costs nothing.
+
+     .animate-marquee belongs in this list and was missing from it. Every
+     other animation on the site stopped for a reduced-motion visitor while
+     the one piece of CONTINUOUS motion — the only kind the preference
+     genuinely exists to stop — kept running. Stopped rather than hidden, so
+     the four claims are still readable, just still. */
   @media (prefers-reduced-motion: reduce) {
     [data-reveal],
     [data-reveal][data-revealed],
+    .animate-marquee,
     .motion-rise {
       opacity: 1;
       transform: none;
@@ -911,6 +978,90 @@
    utility's original value, so nothing shrinks on a wide phone that did not
    need to.
 --------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+   Vertical rhythm on small screens
+
+   The stack scale was cut against a wide canvas, where 80px between sections
+   is a considered pause and the 120px above the footer is a full stop. Neither
+   number was ever re-cut for one column on a 812px screen, where 80px is a
+   tenth of the viewport and the footer's 120px — landing on top of the last
+   section's own 80px — left roughly 200px of empty ground at the bottom of
+   every page. On /contact and /join that read as a page that had failed to
+   load rather than as breathing room.
+
+   Retuned here rather than by adding `md:` variants at ~55 call sites, and
+   written as utility overrides rather than by redefining the tokens.
+
+   REDEFINING THE TOKENS DOES NOTHING, and it is worth writing down why. The
+   scale lives in `@theme inline`, and `inline` means Tailwind resolves each
+   value at build time rather than emitting a var() reference — `py-stack-lg`
+   compiles to `padding-block:80px`, full stop. A `--spacing-stack-lg` set
+   inside a media query is therefore read by nothing. (Verified in the emitted
+   CSS, not assumed.)
+
+   So this uses the same mechanism as the display-size block below it, for the
+   same reason: unlayered rules outrank every layer, which is the only way to
+   retune a utility's value without editing every call site — and it MUST stay
+   inside the max-width query, or it would beat the `md:` variants too and pin
+   desktop to the phone's spacing.
+
+   Roughly a 40% cut, keeping the proportions between the four steps intact:
+   the rhythm is the same piece of music, played tighter.
+--------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------------------
+   The small-caps floor, on phones
+
+   The mono "spec sheet" voice — eyebrows, stat captions, status pills, button
+   text — is one of the best things about this design, and at 12px on a monitor
+   it works exactly as intended. Below that it stops working, and the app had
+   127 hardcoded sizes at 11px or under, including a 9px "POPULAR" flag on the
+   tier the gym most wants sold.
+
+   Two things make small caps worse on a phone than the pixel count suggests:
+   the type is set in a MONOSPACE with 0.1–0.16em of extra tracking (which is
+   what makes it legible at 12px and what pulls it into separate letters below
+   that), and it is almost always --muted-foreground rather than white. A phone
+   is also held further from the eye than a monitor, in worse light.
+
+   Rather than edit ~130 call sites — every one of which spells its size out as
+   a literal, which is the underlying problem — the floor is raised here, once.
+   Same mechanism and same constraints as the display-size block further down:
+   unlayered so it outranks the utilities layer, and inside the max-width query
+   so desktop keeps the tighter sizes the design was drawn at.
+
+   This is a floor, not a redesign: 12px is still small, still quiet, still
+   clearly a caption rather than body copy.
+--------------------------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  .text-\[9px\],
+  .text-\[10px\],
+  .text-\[11px\] {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 767px) {
+  /* 32 → 24 */
+  .pt-stack-sm { padding-top: 24px; }
+  .pb-stack-sm { padding-bottom: 24px; }
+  .mb-stack-sm { margin-bottom: 24px; }
+  .gap-stack-sm { gap: 24px; }
+
+  /* 48 → 32 */
+  .py-stack-md { padding-block: 32px; }
+  .pt-stack-md { padding-top: 32px; }
+
+  /* 80 → 48 */
+  .py-stack-lg { padding-block: 48px; }
+  .pb-stack-lg { padding-bottom: 48px; }
+
+  /* 120 → 64 */
+  .py-stack-xl { padding-block: 64px; }
+  .mt-stack-xl { margin-top: 64px; }
+}
 
 @media (max-width: 767px) {
   .font-display.text-5xl,
