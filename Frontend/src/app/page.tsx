@@ -11,16 +11,16 @@ import {
 import { contentText, contentList } from "@/types/gym";
 import { BRAND, siteUrl } from "@/lib/brand";
 import { OrganizationSchema } from "@/components/public/structured-data";
-import { Section, SectionHeader, CtaButton, Eyebrow } from "@/components/public/section";
+import { Section, SectionHeader, CtaButton } from "@/components/public/section";
+import { Rail } from "@/components/public/rail";
 import { WhatsAppCta } from "@/components/public/whatsapp";
 import { joinEnquiry } from "@/lib/whatsapp-messages";
 import { PricingGrid } from "@/components/public/pricing-grid";
 import { Reveal } from "@/components/public/reveal";
-import {
-  TrainerCard,
-  ClassTypeCard,
-  TestimonialCard,
-} from "@/components/public/cards";
+import { TrainerCard, ClassTypeCard, TestimonialCard } from "@/components/public/cards";
+import { formatPrice } from "@/lib/format";
+import { fullAddress, mapsUrl } from "@/lib/gym-format";
+import { MapPin, ChevronRight } from "lucide-react";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -44,6 +44,27 @@ export default async function Home() {
   // Show the highlighted plans if any are marked, otherwise the first three, so
   // the section is never empty just because nobody set the flag.
   const whyUs = contentList(content, "about.whyUs.items");
+  const branch = branches[0] ?? null;
+
+  // The cheapest way in, for the hero's second button.
+  //
+  // Month-to-month rather than the lowest number on the price list: the annual
+  // tiers are cheaper PER MONTH but cost more to walk in with, and a button
+  // reading "from EGP 1,025" that turns into a 12,300 charge is a bait. The
+  // effective price, not the list price, so a live offer is reflected the
+  // moment it is switched on.
+  //
+  // Falls back to the cheapest plan at any term if the gym ever stops selling
+  // a monthly, and the button falls back to its old label if there are no
+  // plans at all — see the hero.
+  const monthly = plans.filter((p) => p.durationUnit === "month" && p.durationValue === 1);
+  const entryPool = monthly.length > 0 ? monthly : plans;
+  const entryPrice =
+    entryPool.length > 0
+      ? Math.min(
+          ...entryPool.map((p) => p.pricing?.effectivePriceMinorUnits ?? p.priceMinorUnits),
+        )
+      : null;
 
   return (
     <>
@@ -56,37 +77,32 @@ export default async function Home() {
       />
 
       {/* Hero
-          Copy sits beside the photograph rather than on top of it. Laying it
-          over was tried and cannot work here: the frame carries hard specular
+          ------------------------------------------------------------------
+          TWO LAYOUTS, AND THE PHONE ONE IS NOT THE DESKTOP ONE STACKED.
+
+          Above lg the copy sits beside the photograph and always has. Laying
+          it over cannot work at that size: the frame carries hard specular
           highlights, so holding 4.5:1 for the muted subheading needs a scrim
           around 85% — and this photograph averages only 33/255 against a
-          22/255 page, so a scrim that heavy erases it completely. Splitting
-          the two gives the copy solid ground and the photograph full strength,
-          instead of compromising both. */}
+          22/255 page, so a scrim that heavy erases it completely.
+
+          Below lg the redesign solves the same problem a third way, and it is
+          better than either: a short photo BAND with the copy on a solid panel
+          overlapping its bottom edge by 24px. The photograph keeps full
+          strength because nothing is written on it, the copy keeps a real
+          ground because it is on the page colour, and the overlap is what
+          stops the two reading as a picture with a caption underneath.
+
+          The band is 206px. The old value was 320 and the picture won
+          outright: the eyebrow started around 535px and the two CTAs at 779
+          and 842, both past the fold on a 375x812 phone before the browser's
+          own chrome was counted. With the utility strip and the marquee now
+          gone from the header as well, the headline and BOTH buttons land
+          inside the first screen — which is the entire point of the exercise.
+      */}
       <section className="w-full border-b border-border">
         <div className="mx-auto grid w-full max-w-(--spacing-container-max) grid-cols-1 items-stretch lg:grid-cols-2">
-          {/* Leads on mobile, where an image is the hook, and moves alongside
-              the copy once there is width for both. Decorative: the headline
-              carries the meaning, so an empty alt keeps a screen reader from
-              narrating scenery. */}
-          <div className="relative order-first min-h-96 w-full overflow-hidden sm:min-h-[400px] lg:order-last lg:min-h-[38rem]">
-            {/* Was a looping background video. Now a still, and deliberately
-                so — the footage was of the old gym. This is a placeholder
-                holding the frame until PrimeX photography is shot, which is
-                why it keeps the old file name.
-
-                `priority` because this is the LCP element: it is the largest
-                thing above the fold, so it must not be lazy-loaded and must
-                not fade (see Photo — a faded element does not count as
-                painted and would push the metric out by the fade duration).
-
-                The treatment is the design's, not an accident: photography in
-                this brand is high-contrast and desaturated so that red stays
-                the only saturated thing on the page. The values duplicate the
-                shared [data-photo] rule in globals.css by hand, because
-                `priority` is exactly what stops Photo tagging this element
-                data-photo — so the shared rule never reaches it. Keep the two
-                in step. */}
+          <div className="relative order-first h-[320px] w-full overflow-hidden sm:h-[400px] lg:order-last lg:h-auto lg:min-h-[38rem]">
             <Photo
               src="/images/hero-home.jpg"
               alt=""
@@ -94,8 +110,18 @@ export default async function Home() {
               priority
               quality={90}
               sizes="(min-width: 1024px) 50vw, 100vw"
-              className="object-cover object-center brightness-[0.75] contrast-110 grayscale-[0.85]"
+              className="object-cover object-[center_38%] [filter:grayscale(0.85)_contrast(1.15)_brightness(0.62)] lg:object-center lg:[filter:grayscale(0.85)_contrast(1.1)_brightness(0.75)]"
             />
+
+            {/* Grades the band into the panel below it, so the overlap reads
+                as the copy emerging from the photograph rather than as a
+                rectangle parked on top of one. Below lg only — beside the
+                copy there is no seam to hide. */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,rgba(18,20,20,0.15)_0%,rgba(18,20,20,0)_45%,rgba(18,20,20,0.95)_100%)] lg:hidden"
+            />
+
             {/* Bolt motif, bled off the left edge where the image meets the
                 copy. Pointer-events-none so it never eats a click meant for
                 the buttons sitting beside it. */}
@@ -105,98 +131,109 @@ export default async function Home() {
             />
           </div>
 
-          {/* Entrance staggered top to bottom, so the eye is led down to the
-              two buttons rather than arriving everywhere at once. Keyframes
-              rather than the scroll observer: this is on screen the moment the
-              page is, so there is nothing to wait for. */}
-          <div className="flex flex-col items-start justify-center gap-6 px-margin-mobile py-stack-lg md:px-margin-desktop lg:py-stack-xl">
-            <Eyebrow className="motion-rise">
+          {/* -mt-6 is the 24px overlap, and `relative` is what makes it land
+              above the photograph rather than under it — without a stacking
+              context the negative margin moves the box and the image still
+              paints last. Cancelled at lg, where the two sit side by side and
+              there is nothing to overlap. */}
+          <div className="relative z-10 -mt-6 flex flex-col items-start justify-center gap-0 bg-background px-margin-mobile pb-7 md:px-margin-desktop lg:mt-0 lg:gap-6 lg:py-stack-xl">
+            {/* The hero takes a rule ABOVE its eyebrow rather than the inline
+                bar every other Eyebrow on the site carries. It is the one
+                place on the page with no section heading over it, so the rule
+                is doing structural work — marking where the copy starts under
+                the photograph — rather than punctuating a label. */}
+            <span
+              aria-hidden
+              className="motion-rise mb-4 block h-[3px] w-14 bg-primary lg:hidden"
+            />
+            <p className="motion-rise mb-3 flex items-center gap-3 font-mono text-[12px] font-medium tracking-[0.16em] text-primary-soft uppercase lg:mb-0">
+              <span aria-hidden className="hidden h-0.5 w-6 shrink-0 bg-primary lg:inline-block" />
               {contentText(content, "home.hero.eyebrow", "Industrial strength discipline")}
-            </Eyebrow>
+            </p>
             <h1
-              className="motion-rise font-display text-6xl leading-[0.88] tracking-[-0.02em] text-balance text-foreground uppercase md:text-7xl"
+              className="motion-rise mb-3 font-display text-[46px] leading-[0.86] tracking-[-0.035em] text-balance text-foreground uppercase lg:mb-0 lg:text-7xl lg:leading-[0.88] lg:tracking-[-0.02em]"
               style={{ animationDelay: "90ms" }}
             >
               {contentText(content, "home.hero.heading", BRAND.tagline)}
             </h1>
             <p
-              className="motion-rise max-w-2xl text-body-lg text-muted-foreground"
+              className="motion-rise mb-5 max-w-2xl text-body-md text-muted-foreground lg:mb-0 lg:text-body-lg"
               style={{ animationDelay: "180ms" }}
             >
               {contentText(content, "home.hero.subheading", BRAND.description)}
             </p>
+            {/* Stacked and full-width on a phone, side by side once there is
+                room. Two 52px targets one under the other is the shape a thumb
+                expects at the bottom of a first screen; the same pair wrapping
+                mid-row, which is what flex-wrap gave at 375px, is not. */}
             <div
-              className="motion-rise mt-2 flex flex-wrap gap-3"
+              className="motion-rise flex w-full flex-col gap-2.5 lg:mt-2 lg:w-auto lg:flex-row lg:flex-wrap lg:gap-3"
               style={{ animationDelay: "270ms" }}
             >
-              <WhatsAppCta message={joinEnquiry()}>Join on WhatsApp</WhatsAppCta>
-              <CtaButton href="/membership" variant="outline">
-                See plans and prices
+              <WhatsAppCta message={joinEnquiry()} className="max-lg:w-full max-lg:py-4">
+                Join on WhatsApp
+              </WhatsAppCta>
+              {/* The second button carries the entry price rather than "See
+                  plans and prices". A label that answers the question is worth
+                  more than one promising an answer — and "from EGP 1,400" is
+                  the fact that decides whether the next tap happens at all.
+                  The old label survives at lg, where the button sits beside a
+                  headline rather than under one. */}
+              <CtaButton href="/membership" variant="outline" className="max-lg:w-full max-lg:py-4">
+                <span className="lg:hidden">
+                  {entryPrice !== null ? `Plans from ${formatPrice(entryPrice)}` : "See plans"}
+                </span>
+                <span className="max-lg:hidden">See plans and prices</span>
               </CtaButton>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Introduction */}
-      <Section className="border-b border-border">
-        <Reveal className="flex flex-col items-center gap-5 text-center">
-          <h2 className="max-w-3xl font-display text-4xl leading-[0.95] tracking-[-0.02em] text-balance text-primary uppercase md:text-5xl">
-            {contentText(content, "home.intro.heading", "Discipline Is The Ultimate Luxury")}
-          </h2>
-          <p className="max-w-2xl text-body-md text-muted-foreground">
-            {contentText(content, "home.intro.body", "")}
-          </p>
-        </Reveal>
+      {/* Proof strip
+          Three facts in one band, and it replaces nothing — the page carried
+          no trust signal above the pricing at all. Two of the three are
+          counted from the data rather than written down, so they cannot go
+          stale the way a hand-typed "10 classes" does the moment somebody adds
+          the eleventh.
 
-        {/* Three frames, no gap — a hairline grid rather than a soft gallery,
-            matching the bg-border/gap-px treatment the facilities list below
-            uses. One full-width photo per row on a phone, side by side from
-            sm up — never three squeezed thumbnails on a narrow screen. */}
-        <div className="mt-10 grid gap-px bg-border sm:grid-cols-3">
+          gap-px over a border-coloured ground is how every seam in this design
+          is drawn: the dividers are the background showing through, so there
+          is no border to double up where two cells meet. */}
+      <section className="w-full border-b border-border bg-border">
+        <div className="mx-auto grid w-full max-w-(--spacing-container-max) grid-cols-3 gap-px">
           {[
-            { src: "/images/home-intro-1.jpg", alt: "Chalked hands on a barbell" },
-            { src: "/images/home-intro-2.jpg", alt: "An athlete mid-lift" },
-            { src: "/images/home-intro-3.jpg", alt: "Training alone at dawn" },
-          ].map((img, i) => (
-            <Reveal
-              key={img.src}
-              delay={i * 90}
-              className="relative aspect-[3/4] overflow-hidden bg-background"
-            >
-              <Photo
-                src={img.src}
-                alt={img.alt}
-                fill
-                quality={100}
-                unoptimized={true}
-                sizes="(min-width: 640px) 34vw, 100vw"
-                className="object-cover"
-              />
-            </Reveal>
+            { value: "24/7", label: "Open" },
+            { value: String(trainers.length), label: trainers.length === 1 ? "Coach" : "Coaches" },
+            {
+              value: String(classTypes.length),
+              label: classTypes.length === 1 ? "Class" : "Classes",
+            },
+          ].map((stat) => (
+            <div key={stat.label} className="bg-surface-1 px-3 py-4 text-center md:py-6">
+              <p className="font-display text-[26px] leading-none text-foreground md:text-4xl">
+                {stat.value}
+              </p>
+              <p className="mt-1.5 font-mono text-[12px] font-medium tracking-[0.1em] text-muted-foreground uppercase">
+                {stat.label}
+              </p>
+            </div>
           ))}
         </div>
-      </Section>
+      </section>
 
-      {/* Facilities / why us */}
-      {whyUs.length > 0 && (
-        <Section className="border-b border-border">
-          <SectionHeader
-            eyebrow="What you get"
-            title={contentText(content, "home.facilities.heading", "The Experience")}
-            body={contentText(content, "home.facilities.body", "")}
-          />
-          <ul className="grid gap-px bg-border sm:grid-cols-2 lg:grid-cols-4">
-            {whyUs.map((item) => (
-              <li key={item} className="bg-background p-6 text-[14px] text-foreground">
-                <span aria-hidden className="mb-4 block h-0.5 w-8 bg-primary" />
-                {item}
-              </li>
-            ))}
-          </ul>
-        </Section>
-      )}
+      {/* PRICES BEFORE FACILITIES, and the order is deliberate.
 
+          The page used to run hero → intro → facilities → plans, which is the
+          order a brochure is written in: earn the right to ask, then ask. On a
+          phone that ordering has a cost the print version never had — the
+          plans started 3,900px down, so the one section the page exists to
+          sell was four screens past the point most people stop scrolling.
+
+          "What does it cost" is also simply the question visitors arrive with.
+          The facilities list is what confirms the decision rather than what
+          prompts it, so it now sits underneath, where somebody who has seen a
+          price they like goes looking for the reason to say yes. */}
       {/* Membership preview */}
       {plans.length > 0 && (
         <Section className="border-b border-border">
@@ -204,9 +241,38 @@ export default async function Home() {
             eyebrow="Membership"
             title="Choose your path"
             body="Four tiers, each sold over four terms. Pick how often you intend to train and how long you want to commit for."
-            action={{ href: "/membership", label: "Compare all plans" }}
+            action={{ href: "/membership", label: "Compare all plans", shortLabel: "All plans" }}
           />
           <PricingGrid plans={plans} />
+        </Section>
+      )}
+
+      {/* Facilities / why us */}
+      {whyUs.length > 0 && (
+        <Section className="border-b border-border">
+          <SectionHeader
+            eyebrow="What you get"
+            title={contentText(content, "home.facilities.heading", "The Experience")}
+            body="Everything you need to get stronger, from elite machines to premium free weights."
+          />
+          {/* 2x2 on a phone, not a single column.
+              These are four short noun phrases — "sauna, showers and lockers
+              included" — and a phrase that short in a full-width row wastes
+              most of the line it is given while still costing a full row of
+              height. Two columns halves the block and reads better, because
+              four items in a square read as a set where four stacked rows read
+              as a list you have to finish. */}
+          <ul className="grid grid-cols-2 gap-px border border-border bg-border lg:grid-cols-4">
+            {whyUs.map((item) => (
+              <li
+                key={item}
+                className="bg-background p-3.5 text-[14px] leading-[1.4] text-foreground md:p-6"
+              >
+                <span aria-hidden className="mb-3 block h-0.5 w-6 bg-primary md:mb-4 md:w-8" />
+                {item}
+              </li>
+            ))}
+          </ul>
         </Section>
       )}
 
@@ -217,15 +283,35 @@ export default async function Home() {
             eyebrow="Classes"
             title="Train with a coach"
             body="Capped numbers, so you get corrected rather than counted."
-            action={{ href: "/classes", label: "All classes" }}
+            action={{
+              href: "/classes",
+              label: "All classes",
+              shortLabel: `All ${classTypes.length}`,
+            }}
           />
-          <div className="grid gap-gutter sm:grid-cols-2 lg:grid-cols-4">
+          {/* A rail on a phone, the grid it always was at lg. See
+              components/public/rail.tsx.
+
+              What this replaces was four cards CSS-clipped to two below sm —
+              which is not a preview, it is a truncated index, and stacked
+              full-width it was a large part of why this page ran to nearly
+              twelve thousand pixels on a phone. Three cards side by side show
+              more of the catalogue in a quarter of the height, and the fourth
+              cut off by the edge of the screen says "there is more" better
+              than the link does.
+
+              Still sliced to four rather than mapping the lot: the hidden
+              cards used to cost nothing because a next/image inside a
+              display:none element never intersects and so is never fetched.
+              In a rail they are merely off to the right, which DOES intersect
+              — so the limit has to be real now, not a CSS trick. */}
+          <Rail seeAll={{ href: "/classes" }}>
             {classTypes.slice(0, 4).map((classType, i) => (
-              <Reveal key={classType._id} delay={i * 80}>
-                <ClassTypeCard classType={classType} />
+              <Reveal key={classType._id} delay={i * 80} className="w-full">
+                <ClassTypeCard classType={classType} preview />
               </Reveal>
             ))}
-          </div>
+          </Rail>
         </Section>
       )}
 
@@ -233,50 +319,94 @@ export default async function Home() {
       {trainers.length > 0 && (
         <Section className="border-b border-border">
           <SectionHeader
-            eyebrow="Coaching"
-            title="The people you will train with"
-            action={{ href: "/trainers", label: "Meet the team" }}
+            eyebrow="Personal training"
+            title="The team"
+            body="Coached floor most of the day, and one-to-one when you want it."
+            action={{
+              href: "/trainers",
+              label: "Meet the team",
+              shortLabel: `All ${trainers.length}`,
+            }}
           />
-          <div className="grid gap-gutter sm:grid-cols-2 lg:grid-cols-4">
+          {/* Narrower cards than the classes rail — these are portrait crops,
+              so the same 232px would make them nearly 300px tall and only two
+              would fit on screen. See the note on the classes rail above. */}
+          <Rail item="trainer" seeAll={{ href: "/trainers" }}>
             {trainers.slice(0, 4).map((trainer, i) => (
-              <Reveal key={trainer._id} delay={i * 80}>
-                <TrainerCard trainer={trainer} />
+              <Reveal key={trainer._id} delay={i * 80} className="w-full">
+                <TrainerCard trainer={trainer} preview />
               </Reveal>
             ))}
-          </div>
+          </Rail>
         </Section>
       )}
 
-      {/* Testimonials */}
-      {testimonials.length > 0 && (
-        <Section className="border-b border-border">
-          <SectionHeader eyebrow="Members" title="In their words" align="center" />
-          <div className="grid gap-gutter md:grid-cols-2 lg:grid-cols-3">
-            {testimonials.slice(0, 3).map((testimonial, i) => (
-              <Reveal key={testimonial._id} delay={i * 80}>
-                <TestimonialCard testimonial={testimonial} />
-              </Reveal>
-            ))}
-          </div>
-        </Section>
-      )}
+      {/* Closing CTA
+          Left-aligned and tightened on a phone, centred as it was from md.
 
-      {/* Closing CTA */}
+          A centred block is a poster shape: it wants width either side of it
+          to read as deliberate, and at 375px there is none, so every line
+          broke somewhere different and the whole thing read as ragged rather
+          than composed. It also loses the one thing this block should end on —
+          the address — which the design adds here as a row rather than leaving
+          it to the footer, because "come and see the place" followed by no
+          indication of where the place is was an instruction with no next
+          step. */}
       <Section>
-        <div className="flex flex-col items-center gap-6 bg-surface-1 px-6 py-stack-md text-center">
-          <h2 className="max-w-2xl font-display text-4xl leading-[0.95] tracking-[-0.02em] text-balance text-foreground uppercase md:text-5xl">
+        <div className="flex flex-col items-start gap-4 border-t-2 border-primary bg-surface-1 px-5 py-7 md:items-center md:gap-6 md:px-6 md:py-stack-md md:text-center">
+          <h2 className="max-w-2xl font-display text-[34px] leading-[0.88] tracking-[-0.035em] text-balance text-foreground uppercase md:text-5xl md:leading-[0.95] md:tracking-[-0.02em]">
             No excuses
           </h2>
-          <p className="max-w-xl text-body-md text-muted-foreground">
-            Come and see the place before you decide. Four tiers, four term lengths, and
-            somebody at the desk who will tell you honestly which one fits.
+          <p className="max-w-xl text-[15px] leading-[1.5] text-muted-foreground md:text-body-md">
+            Come and see the place before you decide. Somebody at the desk will tell you honestly
+            which tier fits.
           </p>
-          <div className="flex flex-wrap justify-center gap-3">
-            <CtaButton href="/membership">See plans and prices</CtaButton>
-            <WhatsAppCta message={joinEnquiry()} variant="outline">
+          <div className="flex w-full flex-col gap-2.5 md:w-auto md:flex-row md:flex-wrap md:justify-center md:gap-3">
+            <CtaButton href="/membership" className="max-md:w-full max-md:py-4">
+              See plans and prices
+            </CtaButton>
+            <WhatsAppCta
+              message={joinEnquiry()}
+              variant="outline"
+              className="max-md:w-full max-md:py-4"
+            >
               Talk to us
             </WhatsAppCta>
           </div>
+
+          {/* The address as a row rather than a paragraph: it is a
+              destination, so it gets a chevron and a 48px hit box and opens
+              the map. Dropped entirely if the API is unreachable — the footer
+              still carries the same address, so nothing is lost, and a row
+              that says "15 Street 270" with nothing behind it is worse than
+              no row. */}
+          {branch && (
+            <a
+              href={mapsUrl(branch)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="press flex min-h-12 w-full items-center justify-between gap-3 border border-border bg-background px-4 transition-colors hover:border-foreground md:max-w-md md:text-left"
+            >
+              <span className="flex items-start gap-2.5">
+                <MapPin
+                  aria-hidden
+                  className="mt-0.5 size-4 shrink-0 text-primary"
+                  strokeWidth={1.8}
+                />
+                <span className="text-[14px] leading-[1.35] text-foreground">
+                  {fullAddress(branch)}
+                  <span className="block font-mono text-[12px] tracking-[0.08em] text-muted-foreground uppercase">
+                    Open now &middot; directions
+                  </span>
+                </span>
+              </span>
+              <ChevronRight
+                aria-hidden
+                className="size-4 shrink-0 text-muted-foreground"
+                strokeWidth={2}
+              />
+            </a>
+          )}
         </div>
       </Section>
     </>
