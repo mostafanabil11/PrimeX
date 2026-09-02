@@ -5,7 +5,8 @@ import { usePathname } from "next/navigation";
 import { PRIMARY_NAV } from "@/lib/nav";
 import { SHOP_ENABLED } from "@/lib/features";
 import { stripLocalePrefix } from "@/i18n/config";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
+import styles from "./desktop-header.module.css";
 
 /**
  * The centre nav of the site header.
@@ -15,14 +16,13 @@ import { useTranslations } from "next-intl";
  * thing that knows which section that is, is the pathname. The header itself
  * stays a server component and hands this nothing — the link list is static.
  *
- * Hover is a COLOUR change, not the growing underline this bar used to have.
- * With the active route now permanently underlined, an animated underline on
- * hover made every link look momentarily current, which is the one thing the
- * underline is supposed to tell you.
+ * Hover raises the neutral surface; the red rule belongs only to the current
+ * section. Every destination keeps a full 44px hit area and a keyboard ring.
  */
 export function HeaderNav() {
   const pathname = stripLocalePrefix(usePathname());
   const t = useTranslations("Navigation");
+  const isArabic = useLocale() === "ar";
 
   const links = SHOP_ENABLED
     ? [...PRIMARY_NAV, { label: "Shop", href: "/products" } as const]
@@ -32,7 +32,7 @@ export function HeaderNav() {
     // xl, not lg — unchanged from before the redesign. At 1024 the bar cannot
     // hold six or seven links beside the lockup and the right-hand cluster;
     // below xl the same links are in the sheet MobileNav opens.
-    <nav className="hidden items-center gap-5 xl:flex 2xl:gap-[30px]">
+    <nav aria-label={isArabic ? "التنقل الرئيسي" : "Primary navigation"} className={styles.nav}>
       {links.map((item) => {
         // "/" would otherwise prefix-match every route on the site.
         const isActive =
@@ -45,17 +45,9 @@ export function HeaderNav() {
             key={item.href}
             href={item.href}
             aria-current={isActive ? "page" : undefined}
-            // -my-3/py-3 keeps the 44px tap target the bar has always had
-            // while the text itself still sits on the design's 12px line, and
-            // lets the rule below hug the word rather than the hit box.
-            className={`relative -my-3 inline-flex min-h-11 items-center py-3 font-mono text-[12px] font-medium tracking-[0.142em] whitespace-nowrap uppercase transition-colors duration-150 ${
-              isActive ? "text-foreground" : "text-muted-foreground hover:text-primary-soft"
-            }`}
+            className={`${styles.navLink} font-mono font-semibold uppercase`}
           >
             {item.href === "/" ? t("home") : item.href === "/about" ? t("about") : item.href === "/membership" ? t("membership") : item.href === "/classes" ? t("classes") : item.href === "/trainers" ? t("trainers") : item.href === "/contact" ? t("contact") : item.label}
-            {isActive && (
-              <span aria-hidden className="absolute bottom-1.5 start-0 h-0.5 w-full bg-primary" />
-            )}
           </Link>
         );
       })}

@@ -1,0 +1,59 @@
+/* Isolated mobile-header trial. Desktop styling remains independent. */
+@media (width < 1280px) {
+  .header { background: #111; border-color: #ffffff12; }
+  .mainRow {
+    height: 104px;
+    gap: 8px;
+    padding-inline: max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right));
+  }
+  .brand { flex: 1 1 auto; min-width: 0; gap: 8px; height: 100%; }
+  .brand > :global([data-slot="sheet-trigger"]) {
+    border: 1px solid #ffffff12;
+    border-radius: 8px;
+    background: #191919;
+  }
+  .logoLink {
+    flex: 1 1 auto;
+    min-width: 0;
+    max-width: 193px;
+    height: 100%;
+    margin: 0;
+    justify-content: center;
+  }
+  .logoImage {
+    width: 100%;
+    height: auto;
+    max-height: 100px;
+    object-fit: contain;
+    transform: none;
+  }
+  .logoLink:hover { opacity: 1; }
+  .logoLink:focus-visible { outline: 2px solid #fff; outline-offset: -2px; border-radius: 6px; }
+  .actions { flex-shrink: 0; gap: 8px; }
+  .actions .join {
+    height: 44px;
+    padding-inline: 12px;
+    font-size: 12px;
+    letter-spacing: .06em;
+  }
+}
+
+@media (width < 640px) {
+  /* Two 44px controls fit beside the logo without adding another header row. */
+  .actions { flex-direction: column; align-items: stretch; gap: 4px; }
+  .actions .join { justify-content: center; }
+}
+
+@media (width < 360px) {
+  .mainRow { gap: 6px; padding-inline: max(8px, env(safe-area-inset-left)) max(8px, env(safe-area-inset-right)); }
+  .brand { gap: 4px; }
+  .actions .join { padding-inline: 10px; font-size: 11px; }
+}
+
+@media (640px <= width < 1280px) {
+  .mainRow { height: 108px; padding-inline: 24px; gap: 20px; }
+  .brand { gap: 16px; }
+  .logoLink { max-width: 201px; }
+  .logoImage { max-height: 104px; }
+  .actions .join { padding-inline: 20px; font-size: 13px; }
+}

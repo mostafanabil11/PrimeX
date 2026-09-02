@@ -1,24 +1,24 @@
-.page { color: var(--foreground); }
+.page { --muted-foreground: #b5b5b5; color: var(--foreground); background: #101010; }
 .container { width: calc(100% - 40px); max-width: 1240px; margin-inline: auto; }
-.hero { padding-block: 36px 28px; border-bottom: 1px solid #343d3a; }
+.hero { padding-block: 36px 28px; border-bottom: 1px solid #2c2c2c; }
 .introduction { max-width: 660px; margin-top: 18px; color: var(--muted-foreground); font-size: 15px; line-height: 1.7; }
 .reassurance { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: 24px; padding: 0; list-style: none; }
-.reassurance li { display: flex; align-items: center; gap: 8px; color: #bacbc2; font-size: 12px; }
-.reassurance svg { flex-shrink: 0; color: #93af9f; }
+.reassurance li { display: flex; align-items: center; gap: 8px; color: #bfbfbf; font-size: 12px; }
+.reassurance svg { flex-shrink: 0; color: #aaaaaa; }
 .planSection { padding-block: 32px 44px; }
 .sectionHeading { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
 .sectionHeading > p { max-width: 640px; color: var(--muted-foreground); font-size: 13px; line-height: 1.7; }
-.faqSection { padding-block: 36px; border-top: 1px solid #343d3a; }
+.faqSection { padding-block: 36px; border-top: 1px solid #2c2c2c; }
 .faqGrid { display: grid; gap: 12px; align-items: start; }
-.faq { border: 1px solid #394440; border-radius: 8px; background: #171d1a; }
+.faq { border: 1px solid #333333; border-radius: 8px; background: #171717; }
 .faq summary { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; padding: 18px; cursor: pointer; list-style: none; font-size: 14px; font-weight: 600; }
 .faq summary::-webkit-details-marker { display: none; }
-.faq summary svg { color: #a5bab0; transition: transform 180ms ease; }
+.faq summary svg { color: #aaaaaa; transition: transform 180ms ease; }
 .faq[open] summary svg { transform: rotate(180deg); }
-.faq summary:focus-visible { outline: 2px solid #d7e8de; outline-offset: -3px; border-radius: 8px; }
+.faq summary:focus-visible { outline: 2px solid #eeeeee; outline-offset: -3px; border-radius: 8px; }
 .faq p { padding: 0 18px 20px; color: var(--muted-foreground); font-size: 13px; line-height: 1.8; }
 .helpSection { padding-block: 12px 48px; }
-.help { display: flex; flex-direction: column; gap: 24px; border: 1px solid #45544c; border-radius: 10px; background: #1d2621; padding: 24px; }
+.help { display: flex; flex-direction: column; gap: 24px; border: 1px solid #383838; border-radius: 10px; background: #1b1b1b; padding: 24px; }
 .helpActions { display: flex; flex-direction: column; gap: 10px; }
 .helpActions > a { white-space: normal; }
 @media (min-width: 768px) {

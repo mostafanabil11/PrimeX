@@ -1,45 +1,21 @@
 import { Link } from "@/i18n/navigation";
-import { Search } from "lucide-react";
+import { ArrowUpRight, Search } from "lucide-react";
 import { Wordmark } from "./wordmark";
 import { HeaderNav } from "./header-nav";
 import { AccountMenu } from "@/components/layout/account-menu";
-import { WhatsAppLink } from "@/components/public/whatsapp";
-import { SOCIAL_LINKS } from "@/components/public/floating-contact";
 import { SHOP_ENABLED } from "@/lib/features";
 import { BRAND } from "@/lib/brand";
 import { getBranchesServer } from "@/lib/api/gym-server";
 import { fullAddress, mapsUrl } from "@/lib/gym-format";
 import { MobileNav } from "./mobile-nav";
 import { LanguageSwitcher } from "./language-switcher";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
+import styles from "./desktop-header.module.css";
+import mobile from "./mobile-header.module.css";
 
-/**
- * The site header, rebuilt to the navbar design in
- * `design/Primex _web_design/primex_navbar` (option 1A).
- *
- * What changed and why: the old bar was one row about 128px tall carrying a
- * 112px logo, six links and a button, and it read as mostly air. This is two
- * rows — a 38px utility strip over a 96px main bar — and it is SHORTER than
- * what it replaces while carrying strictly more: where to find the gym, the
- * phone number, social, search, the account chip and the join button.
- *
- * Colours and faces are the app's own tokens, not the comp's literal hexes, as
- * the handoff asks: the design's #e01b22 is this palette's --primary, its
- * Space Mono is JetBrains Mono, and its #7d7f82 dimmest grey is the muted
- * foreground held back rather than a new grey nobody else uses. Sizes,
- * letter-spacing and the two-row structure are the comp's.
- *
- * Breakpoints are NOT from the design — it stops at desktop and says so, and
- * the comp is drawn 1400px wide, which is more room than this site's own 64px
- * page margins leave at xl. So the bar arrives in three steps rather than one:
- * the strip and the search square at lg, the centre nav at xl, and the full
- * comp — 104px logo, the lockup behind its hairline, the 30px nav gap — at 2xl,
- * which is the first width where all of it fits without crowding. Below sm the
- * bar is a 64px logo-and-join row exactly as it was.
- */
+/** One header row, with the full-size logo preserved on every screen. */
 export async function SiteHeader() {
   const common = await getTranslations("Common");
-  const locale = await getLocale();
   // Fetched here and handed down rather than looked up inside MobileNav,
   // which is a client component and has no business talking to the API. The
   // same server-fetch cache the footer and /contact read from, so this is not
@@ -59,75 +35,12 @@ export async function SiteHeader() {
     : null;
 
   return (
-    <header className="site-header sticky top-0 z-40 w-full border-b border-border bg-background">
-      {/* ---- Row 1: utility strip -------------------------------------
-          DESKTOP ONLY NOW, and this reverses an earlier call.
-
-          The strip used to render at every width on the reasoning that a phone
-          keeping the old bar meant most of the traffic seeing none of the new
-          work. The redesign settles it the other way, and it is right: on a
-          375px screen the strip plus the marquee plus a 96px bar was ~150px of
-          chrome standing between somebody and the headline — the single
-          largest thing keeping the offer below the fold. Chrome that explains
-          the page is worth less than the page.
-
-          Nothing on it is lost. "Open now" moves onto the hero photograph,
-          where it reads against the image and costs no height at all; the
-          social links are in the mobile sheet as icons and in the footer; and
-          WhatsApp has a permanent button in the bar below and another in the
-          sticky action bar at the foot of the screen.
-
-          Padded to the site's own margins rather than the comp's 28px, so the
-          strip lines up with the bar below it and with every page. */}
-      <div className="block border-b border-border bg-surface-1">
-        <div className="mx-auto flex py-2.5 min-h-[40px] w-full max-w-(--spacing-container-max) items-center justify-between gap-4 px-4 font-mono text-[10px] tracking-[0.12em] text-muted-foreground/75 uppercase sm:px-margin-mobile md:px-margin-desktop lg:h-[38px] lg:py-0 lg:gap-8 lg:text-[11px] lg:tracking-[0.145em]">
-          <div className="flex min-w-0 items-center gap-[22px]">
-            {/* The open-now badge, which is the lockup's job at 2xl and
-                nobody's below it. The dot is the same red pip the lockup uses,
-                doing the same "we are open right now" work. */}
-            <span className="flex shrink-0 items-center gap-2 text-foreground">
-              <span className="relative flex size-2 items-center justify-center">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#25D366] opacity-75"></span>
-                <span className="relative inline-flex size-1.5 rounded-full bg-[#25D366]"></span>
-              </span>
-              {common("openAlways")}
-            </span>
-          </div>
-
-          <div className="flex shrink-0 items-center gap-4 lg:gap-[26px]">
-            <LanguageSwitcher className="text-muted-foreground" />
-            {/* The same list the footer and the mobile sheet render, so there
-                is still one definition of where "our Instagram" points. Text
-                here rather than the glyphs — this row is type. Dropped on a
-                phone: they are the least urgent thing on the strip and the
-                first thing that would push the number off the edge at 320px,
-                and the sheet carries them as icons anyway. */}
-            {SOCIAL_LINKS.map((social) => (
-              <a
-                key={social.href}
-                href={social.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="hidden transition-colors duration-150 hover:text-primary-soft lg:inline"
-              >
-                {social.label}
-              </a>
-            ))}
-            <WhatsAppLink
-              message={locale === "ar" ? `مرحباً ${BRAND.name}، لدي استفسار.` : `Hi ${BRAND.name}, I have a question.`}
-              className="hidden transition-colors duration-150 hover:text-primary-soft lg:inline"
-            >
-              {common("whatsapp")}
-            </WhatsAppLink>
-          </div>
-        </div>
-      </div>
-
+    <header className={`site-header sticky top-0 z-40 w-full border-b border-border bg-background ${styles.header} ${mobile.header}`}>
       {/* ---- Row 2: main bar --------------------------------------------
           px-4 below sm, not px-margin-mobile. At 320px the bar is 40px of
           padding away from fitting, and the gutter is the cheapest 8px to
           find — the logo and the button are both already at their floor. */}
-      <div className="mx-auto flex h-20 w-full max-w-(--spacing-container-max) items-center justify-between gap-2 px-4 sm:h-24 sm:gap-4 sm:px-margin-mobile md:gap-6 md:px-margin-desktop lg:h-24">
+      <div className={`mx-auto flex h-20 w-full max-w-(--spacing-container-max) items-center justify-between gap-2 px-4 sm:h-24 sm:gap-4 sm:px-margin-mobile md:gap-6 md:px-margin-desktop lg:h-24 ${styles.mainRow} ${mobile.mainRow}`}>
         {/* THE LOGO DOES NOT SHRINK, and that is a fix rather than an
             oversight. This side used to be min-w-0 + shrink with nothing
             holding the mark's width, on the reasoning that the logo giving way
@@ -137,7 +50,7 @@ export async function SiteHeader() {
             wide at its full 104px tall: the wordmark visibly narrowed, which
             is the one thing a logo may never do. It is shrink-0 now, and the
             widths below are stepped so the bar fits without needing it. */}
-        <div className="flex min-w-0 shrink items-center gap-1 sm:gap-3 lg:gap-4 2xl:gap-5">
+        <div className={`flex min-w-0 shrink items-center gap-1 sm:gap-3 lg:gap-4 2xl:gap-5 ${styles.brand} ${mobile.brand}`}>
           <MobileNav contact={contact} />
           {/* THE MARK IS SIZED BY THE ROOM ACROSS, NOT THE ROOM DOWN, and on a
               phone that is the whole story. It is a wide lockup — about 1.93:1
@@ -166,19 +79,20 @@ export async function SiteHeader() {
           <Link
             href="/"
             aria-label={common("homeAriaLabel", { brand: BRAND.name })}
-            className="relative z-50 -ml-[35px] flex shrink-0 items-center transition-opacity hover:opacity-80 sm:-ml-7 lg:ml-0"
+            className={`relative z-50 -ml-[35px] flex shrink-0 items-center transition-opacity hover:opacity-80 sm:-ml-7 lg:ml-0 ${styles.logoLink} ${mobile.logoLink}`}
           >
             {/* Logo increased to 104px to purposefully overhang the container */}
             <Wordmark
               priority
-              className="site-header-logo h-[104px] w-auto shrink-0 sm:h-28 lg:h-24 2xl:h-[112px]"
+              width={216}
+              className={`site-header-logo h-[104px] w-auto shrink-0 sm:h-28 lg:h-24 2xl:h-[112px] ${styles.logoImage} ${mobile.logoImage}`}
             />
           </Link>
         </div>
 
         <HeaderNav />
 
-        <div className="flex shrink-0 items-center gap-1 sm:gap-3 lg:gap-4">
+        <div className={`flex shrink-0 items-center gap-1 sm:gap-3 lg:gap-4 ${styles.actions} ${mobile.actions}`}>
           {/* Only with the shop on: /search is a product search and 404s
               otherwise (see lib/features.ts), so in showcase mode this square
               would be a control that leads nowhere. */}
@@ -192,27 +106,15 @@ export async function SiteHeader() {
             </Link>
           )}
 
-          {/* Whether this renders at all is AccountMenu's decision, not this
-              file's — it depends on whether somebody is signed in, and only a
-              client component knows that. Signed-out visitors see it when
-              member accounts are on; anyone signed in always sees it, which is
-              how staff reach /admin. See the note there.
-
-              LEFT EXACTLY AS IT WAS before the navbar redesign. The comp draws
-              this as a red-ringed initial disc beside the member's name; that
-              was built and then taken back out on request. Square hit box at
-              the 44px minimum, min-w-24 to hold the row still while the profile
-              query is in flight. */}
-          <AccountMenu className="hidden h-11 min-w-24 items-center justify-end gap-2 px-2 font-mono text-[13px] font-semibold tracking-[0.08em] text-foreground uppercase transition-opacity hover:opacity-70 sm:flex" />
-          <AccountMenu
-            iconOnly
-            className="flex size-11 items-center justify-center text-foreground transition-opacity hover:opacity-70 sm:hidden"
-          />
+          {/* Language is always visible; mobile account access stays in the drawer. */}
+          <LanguageSwitcher segmented />
+          <AccountMenu iconOnly className="hidden xl:flex size-11 items-center justify-center text-foreground" />
           <Link
             href="/membership"
-            className="ui-action ui-action--header press flex h-11 shrink-0 items-center bg-primary px-3 font-mono text-[11px] font-bold tracking-[0.06em] text-primary-foreground uppercase transition-colors duration-150 hover:bg-primary-hover sm:px-4 sm:text-[12px] sm:tracking-[0.167em] lg:px-[22px]"
+            className={`ui-action ui-action--header press flex h-11 shrink-0 items-center bg-primary px-3 font-mono text-[11px] font-bold tracking-[0.06em] text-primary-foreground uppercase transition-colors duration-150 hover:bg-primary-hover sm:px-4 sm:text-[12px] sm:tracking-[0.167em] lg:px-[22px] ${styles.join} ${mobile.join}`}
           >
             {common("joinNow")}
+            <ArrowUpRight aria-hidden className={styles.joinArrow} size={18} strokeWidth={1.8} />
           </Link>
         </div>
       </div>

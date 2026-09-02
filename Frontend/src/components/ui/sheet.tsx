@@ -50,6 +50,7 @@ function SheetContent({
   children,
   side = "right",
   showCloseButton = true,
+  overlayClassName,
   // Pulled out of the spread and applied by hand.
   //
   // React 19 hands `ref` to a function component as an ordinary prop, so it
@@ -64,11 +65,12 @@ function SheetContent({
 }: SheetPrimitive.Popup.Props & {
   side?: "top" | "right" | "bottom" | "left"
   showCloseButton?: boolean
+  overlayClassName?: string
   ref?: React.Ref<HTMLDivElement>
 }) {
   return (
     <SheetPortal>
-      <SheetOverlay />
+      <SheetOverlay className={overlayClassName} />
       <SheetPrimitive.Popup
         ref={ref}
         data-slot="sheet-content"
