@@ -274,117 +274,109 @@ const RETIRED_PLAN_SLUGS = [
   'student',
 ];
 
-const CLASS_TYPES = [
+// The gym's real classes, from the timetable it supplied.
+//
+// Six of them, and no photographs yet — `image` is null on every one and the
+// class card draws a placeholder icon in its place, so these can go live now
+// and take their pictures later. When the photographs arrive, drop them in
+// Frontend/public/images/ and run scripts/update-class-images.js rather than
+// editing this file.
+//
+// durationMinutes and defaultCapacity are NOT on the supplied timetable — it
+// gives days and start times only. 60 minutes matches the hourly grid it is
+// laid out on, and 20 is the schema default. Both are worth confirming with
+// the gym before this is treated as authoritative.
+const CLASS_TYPES: {
+  slug: string;
+  name: string;
+  description: string;
+  image: string | null;
+  intensity: number;
+  durationMinutes: number;
+  equipment: string[];
+  defaultCapacity: number;
+  colorToken: string | null;
+  sortOrder: number;
+}[] = [
   {
-    slug: 'strength-foundations',
-    name: 'Strength Foundations',
-    image: '/images/class-strength-foundations.jpg',
+    slug: 'fitness',
+    name: 'Fitness',
     description:
-      'Squat, press, hinge, pull. The four movements everything else is built on, coached properly and loaded slowly.',
+      'General strength and conditioning for every level. Coached through the movement, the load and the tempo, so you leave knowing what you did and why.',
+    image: null,
     intensity: 3,
     durationMinutes: 60,
-    equipment: ['Barbell', 'Rack', 'Plates'],
-    defaultCapacity: 12,
+    equipment: ['Dumbbells', 'Barbell', 'Mat'],
+    defaultCapacity: 20,
     colorToken: 'primary',
     sortOrder: 1,
   },
   {
-    slug: 'hiit-inferno',
-    name: 'HIIT Inferno',
-    image: '/images/class-hiit-inferno.jpg',
-    description: 'Forty-five minutes of intervals with nowhere to hide. Come having eaten.',
-    intensity: 5,
-    durationMinutes: 45,
-    equipment: ['Kettlebells', 'Rower', 'Assault bike'],
+    slug: 'aerobic',
+    name: 'Aerobic',
+    description:
+      'Continuous low-impact cardio set to music. Builds stamina without the pounding, and the one to start on if you have been away from training for a while.',
+    image: null,
+    intensity: 3,
+    durationMinutes: 60,
+    equipment: ['Step', 'Mat'],
     defaultCapacity: 20,
-    colorToken: 'destructive',
+    colorToken: 'chart-2',
     sortOrder: 2,
   },
   {
-    slug: 'olympic-lifting',
-    name: 'Olympic Lifting',
-    image: '/images/class-olympic-lifting.jpg',
+    slug: 'core-glutes',
+    name: 'Core + Glutes',
     description:
-      'Snatch and clean and jerk, from the platform. Technique first — you will spend a session on an empty bar and be glad of it.',
-    intensity: 4,
-    durationMinutes: 90,
-    equipment: ['Olympic barbell', 'Platform', 'Bumper plates'],
-    defaultCapacity: 8,
-    colorToken: 'chart-2',
+      'Focused work on the midsection, hips and glutes. Short ranges, high control and the accessory work that most training programmes skip.',
+    image: null,
+    intensity: 3,
+    durationMinutes: 60,
+    equipment: ['Mat', 'Resistance bands', 'Dumbbells'],
+    defaultCapacity: 20,
+    colorToken: 'chart-4',
     sortOrder: 3,
   },
   {
-    slug: 'metabolic-conditioning',
-    name: 'Metabolic Conditioning',
-    image: '/images/class-metabolic-conditioning.jpg',
+    slug: 'kick-boxing',
+    name: 'Kick Boxing',
     description:
-      'Sustained work at a pace you can hold. Builds the engine everything else runs on.',
-    intensity: 4,
-    durationMinutes: 50,
-    equipment: ['Rower', 'Ski erg', 'Sled'],
-    defaultCapacity: 16,
-    colorToken: 'chart-2',
+      'Pads, combinations and footwork at pace. The hardest class on the timetable, and no previous striking experience is assumed.',
+    image: null,
+    intensity: 5,
+    durationMinutes: 60,
+    equipment: ['Gloves', 'Pads'],
+    defaultCapacity: 20,
+    colorToken: 'destructive',
     sortOrder: 4,
   },
   {
-    slug: 'mobility-core',
-    name: 'Mobility & Core',
-    image: '/images/class-mobility-core.jpg',
-    description: 'Slow, deliberate, and the reason your other sessions keep working. Bring socks.',
-    intensity: 1,
-    durationMinutes: 45,
-    equipment: ['Mat', 'Bands', 'Foam roller'],
-    defaultCapacity: 24,
+    slug: 'zumba',
+    name: 'Zumba',
+    description:
+      'Latin-led dance cardio. Follow the coach, pick it up as you go, and get an hour of conditioning without counting a single rep.',
+    image: null,
+    intensity: 3,
+    durationMinutes: 60,
+    equipment: [],
+    defaultCapacity: 25,
     colorToken: 'chart-5',
     sortOrder: 5,
   },
   {
-    slug: 'boxing',
-    name: 'Boxing',
-    image: '/images/class-boxing.jpg',
-    description: 'Footwork, combinations and pad work. No sparring, no experience needed.',
-    intensity: 4,
-    durationMinutes: 60,
-    equipment: ['Gloves', 'Wraps', 'Pads'],
-    defaultCapacity: 16,
-    colorToken: 'chart-4',
-    sortOrder: 6,
-  },
-  {
-    slug: 'yoga',
-    name: 'Yoga',
-    image: '/images/class-yoga.jpg',
-    description: 'Vinyasa flow, open to every level. The quietest hour in the building.',
+    slug: 'belly-dance',
+    name: 'Belly Dance',
+    description:
+      'Technique, isolation and posture, taught as a class rather than a workout — though it asks more of your core than most people expect.',
+    image: null,
     intensity: 2,
     durationMinutes: 60,
-    equipment: ['Mat', 'Blocks'],
-    defaultCapacity: 20,
+    equipment: [],
+    defaultCapacity: 25,
+    // Shares Zumba's colour: both read as dance on the timetable, and they
+    // never fall in the same cell.
     colorToken: 'chart-5',
-    sortOrder: 7,
-  },
-  {
-    slug: 'functional-circuit',
-    name: 'Functional Circuit',
-    image: '/images/class-functional-circuit.jpg',
-    description:
-      'Stations, timed rotations, full body. The best place to start if classes are new.',
-    intensity: 3,
-    durationMinutes: 45,
-    equipment: ['Kettlebells', 'Dumbbells', 'Box', 'Sled'],
-    defaultCapacity: 18,
-    colorToken: 'primary',
-    sortOrder: 8,
-  },
-  {
-    slug: 'recovery-stretch',
-    name: 'Recovery & Stretch',
-    description: 'Guided mobility for the day after a heavy session. Thirty minutes, no shoes.',
-    intensity: 1,
-    durationMinutes: 30,
-    equipment: ['Mat', 'Foam roller', 'Bands'],
-    defaultCapacity: 20,
-    colorToken: 'chart-5',
-    sortOrder: 9,
+    sortOrder: 6,
   },
 ];
 

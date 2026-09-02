@@ -1,17 +1,19 @@
 require("dotenv").config();
 const mongoose = require("mongoose");
 
+// slug -> public image path, e.g. "power-yoga": "/images/class-power-yoga.jpg".
+//
+// EMPTY ON PURPOSE. This mapped the nine placeholder classes to the
+// public/images/class-*.jpg files that were deleted along with them, so every
+// entry pointed at a file that is gone and a slug that no longer exists.
+//
+// The script itself is kept rather than deleted: it is the tool for the real
+// class photographs when they arrive. Drop the files into
+// Frontend/public/images/, list them here, and run
+//   node scripts/update-class-images.js
+// It only ever sets `image` on classes that already exist, so it is safe to
+// re-run and will report any slug it cannot find.
 const classImages = {
-  "strength-foundations": "/images/class-strength-foundations.jpg",
-  "hiit-inferno": "/images/class-hiit-inferno.jpg",
-  "olympic-lifting": "/images/class-olympic-lifting.jpg",
-  "metabolic-conditioning": "/images/class-metabolic-conditioning.jpg",
-  "mobility-core": "/images/class-mobility-core.jpg",
-  "boxing": "/images/class-boxing.jpg",
-  "spin": "/images/class-spin.jpg",
-  "yoga": "/images/class-yoga.jpg",
-  "functional-circuit": "/images/class-functional-circuit.jpg",
-  "recovery-stretch": "/images/class-recovery-stretch.jpg"
 };
 
 async function updateClassImages() {

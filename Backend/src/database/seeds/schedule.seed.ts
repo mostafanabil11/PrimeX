@@ -53,189 +53,45 @@ interface Slot {
   womenOnly?: boolean;
 }
 
-const WEEKDAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday'] as const;
-
 function weekdayRun(base: Omit<Slot, 'weekday'>, days: readonly string[]): Slot[] {
   return days.map(weekday => ({ ...base, weekday }));
 }
 
+// The gym's real weekly timetable, transcribed from the schedule it supplied.
+//
+// It runs on two alternating shapes. Saturday, Monday and Wednesday are the
+// morning-heavy days; Sunday, Tuesday and Thursday are the evening ones. There
+// is no Friday column — the gym runs no classes that day.
+//
+// TWO THINGS READ OFF THE IMAGE AND WORTH CONFIRMING:
+//   1. The midday column is labelled "12:00 AM". Taken as 12:00 noon: it sits
+//      between the 11:00 AM and 4:00 PM columns, and midnight belly dance is
+//      not a thing the rest of the timetable supports.
+//   2. Kick boxing appears at 4:00 PM on Saturday and Wednesday ONLY. Monday,
+//      the third morning-shape day, has that cell empty.
+//
+// Trainers are unassigned — the timetable names classes, not coaches — so every
+// rule is trainer: null and the gym can attach coaches in /admin/schedule.
+// Rooms and women-only flags are likewise not on the supplied sheet.
+const MORNING_DAYS = ['saturday', 'monday', 'wednesday'] as const;
+const EVENING_DAYS = ['sunday', 'tuesday', 'thursday'] as const;
+
 const SLOTS: Slot[] = [
-  // These three blocks were one branch each — New Cairo, Sheikh Zayed and
-  // Maadi — back when this file seeded three gyms. There is one gym now, so
-  // they are grouped by what they emphasise instead.
-  //
-  // WORTH KNOWING: rules are upserted on (branch, classType, weekday,
-  // startTime), so any two slots that differed only by branch now collide and
-  // the later one wins. The timetable is not smaller than it should be by
-  // accident — it is three timetables folded onto one gym. Prune it to a real
-  // week's schedule when class booking is switched on.
-  //
-  // --- Conditioning-led ---
-  ...weekdayRun(
-    {
-      branch: 'faiyum',
-      classType: 'strength-foundations',
-      trainer: 'marcus-vance',
-      startTime: '07:00',
-      room: 'Studio 1',
-    },
-    WEEKDAYS
-  ),
-  ...weekdayRun(
-    {
-      branch: 'faiyum',
-      classType: 'hiit-inferno',
-      trainer: 'tarek-zaki',
-      startTime: '18:30',
-      room: 'Studio 2',
-      capacity: 20,
-    },
-    ['sunday', 'tuesday', 'thursday']
-  ),
-  ...weekdayRun(
-    {
-      branch: 'faiyum',
-      classType: 'metabolic-conditioning',
-      trainer: 'tarek-zaki',
-      startTime: '06:30',
-      room: 'Studio 2',
-    },
-    ['monday', 'wednesday']
-  ),
-  ...weekdayRun(
-    {
-      branch: 'faiyum',
-      classType: 'mobility-core',
-      trainer: 'youssef-darwish',
-      startTime: '11:00',
-      room: 'Studio 3',
-      womenOnly: true,
-    },
-    ['sunday', 'tuesday', 'thursday']
-  ),
-  ...weekdayRun(
-    {
-      branch: 'faiyum',
-      classType: 'yoga',
-      trainer: 'youssef-darwish',
-      startTime: '19:30',
-      room: 'Studio 3',
-    },
-    ['monday', 'wednesday']
-  ),
-  {
-    branch: 'faiyum',
-    classType: 'boxing',
-    trainer: 'omar-hassan',
-    weekday: 'saturday',
-    startTime: '10:00',
-    room: 'Studio 2',
-  },
-  {
-    branch: 'faiyum',
-    classType: 'functional-circuit',
-    trainer: null,
-    weekday: 'saturday',
-    startTime: '11:30',
-    room: 'Studio 1',
-  },
-  {
-    branch: 'faiyum',
-    classType: 'recovery-stretch',
-    trainer: 'youssef-darwish',
-    weekday: 'friday',
-    startTime: '17:00',
-    room: 'Studio 3',
-  },
+  // ---- Saturday / Monday / Wednesday -------------------------------------
+  ...weekdayRun({ branch: 'faiyum', classType: 'fitness', trainer: null, startTime: '09:00' }, MORNING_DAYS),
+  ...weekdayRun({ branch: 'faiyum', classType: 'aerobic', trainer: null, startTime: '10:00' }, MORNING_DAYS),
+  ...weekdayRun({ branch: 'faiyum', classType: 'belly-dance', trainer: null, startTime: '12:00' }, MORNING_DAYS),
+  ...weekdayRun({ branch: 'faiyum', classType: 'core-glutes', trainer: null, startTime: '17:00' }, MORNING_DAYS),
+  ...weekdayRun({ branch: 'faiyum', classType: 'zumba', trainer: null, startTime: '18:00' }, MORNING_DAYS),
 
-  // --- Strength-led ---
-  ...weekdayRun(
-    {
-      branch: 'faiyum',
-      classType: 'olympic-lifting',
-      trainer: 'david-kim',
-      startTime: '17:00',
-      capacity: 8,
-      room: 'Platform',
-    },
-    ['monday', 'wednesday']
-  ),
-  ...weekdayRun(
-    {
-      branch: 'faiyum',
-      classType: 'strength-foundations',
-      trainer: 'marcus-vance',
-      startTime: '07:30',
-      room: 'Studio 1',
-    },
-    ['sunday', 'tuesday', 'thursday']
-  ),
-  ...weekdayRun(
-    {
-      branch: 'faiyum',
-      classType: 'functional-circuit',
-      trainer: 'karim-fahmy',
-      startTime: '11:30',
-      womenOnly: true,
-      room: 'Studio 2',
-    },
-    ['monday', 'wednesday']
-  ),
-  {
-    branch: 'faiyum',
-    classType: 'boxing',
-    trainer: 'omar-hassan',
-    weekday: 'saturday',
-    startTime: '12:00',
-    room: 'Studio 2',
-  },
+  // Saturday and Wednesday only — Monday's 4:00 PM cell is empty.
+  ...weekdayRun({ branch: 'faiyum', classType: 'kick-boxing', trainer: null, startTime: '16:00' }, ['saturday', 'wednesday']),
 
-  // --- Calmer: yoga, mobility, recovery ---
-  ...weekdayRun(
-    {
-      branch: 'faiyum',
-      classType: 'yoga',
-      trainer: 'youssef-darwish',
-      startTime: '08:00',
-      room: 'Studio',
-    },
-    ['sunday', 'tuesday', 'thursday']
-  ),
-  ...weekdayRun(
-    {
-      branch: 'faiyum',
-      classType: 'functional-circuit',
-      trainer: 'karim-fahmy',
-      startTime: '18:00',
-      room: 'Studio',
-    },
-    ['monday', 'wednesday']
-  ),
-  {
-    branch: 'faiyum',
-    classType: 'boxing',
-    trainer: 'omar-hassan',
-    weekday: 'tuesday',
-    startTime: '19:30',
-    room: 'Studio',
-  },
-  {
-    branch: 'faiyum',
-    classType: 'recovery-stretch',
-    trainer: 'youssef-darwish',
-    weekday: 'saturday',
-    startTime: '09:00',
-    room: 'Studio',
-  },
-  {
-    branch: 'faiyum',
-    classType: 'mobility-core',
-    trainer: 'karim-fahmy',
-    weekday: 'saturday',
-    startTime: '10:00',
-    womenOnly: true,
-    room: 'Studio',
-  },
+  // ---- Sunday / Tuesday / Thursday ---------------------------------------
+  ...weekdayRun({ branch: 'faiyum', classType: 'core-glutes', trainer: null, startTime: '11:00' }, EVENING_DAYS),
+  ...weekdayRun({ branch: 'faiyum', classType: 'aerobic', trainer: null, startTime: '17:00' }, EVENING_DAYS),
+  ...weekdayRun({ branch: 'faiyum', classType: 'fitness', trainer: null, startTime: '18:00' }, EVENING_DAYS),
+  ...weekdayRun({ branch: 'faiyum', classType: 'belly-dance', trainer: null, startTime: '20:00' }, EVENING_DAYS),
 ];
 
 async function main() {
