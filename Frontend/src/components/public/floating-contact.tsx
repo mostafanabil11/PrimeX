@@ -1,6 +1,4 @@
-import { ActionButton } from "@/components/ui/action-button";
 import { BRAND } from "@/lib/brand";
-import { whatsappHref } from "@/lib/gym-format";
 import { WhatsAppIcon, WhatsAppLink } from "./whatsapp";
 
 /**
@@ -120,67 +118,8 @@ export function FloatingContact({ locale = "en" }: { locale?: string }) {
   const isArabic = locale === "ar";
   return (
     <>
-      {/* ---- Phones: one action, not two --------------------------------
-          This bar used to carry "Join now" beside a WhatsApp button, and both
-          halves were wrong.
-
-          The Join half was a duplicate. SiteHeader is `sticky top-0` and its
-          red JOIN NOW link has no responsive hiding, so on a phone that button
-          is on screen permanently, roughly 700px above this one. Spending the
-          most valuable strip on the display to repeat a control that never
-          leaves the viewport buys nothing, and it pushed the action that ISN'T
-          in the header into a 132px stub.
-
-          The colour was the other half of the problem: a saturated #d12028
-          panel hard against a saturated #25D366 panel, seam to seam. Two brands
-          at full volume touching each other is what made the bar read as pasted
-          on rather than designed, and no amount of restyling either button
-          fixes it while both are shouting.
-
-          So the bar now does the one job the header does not: talking to a
-          human. Full width, a real label instead of a stub, and the green kept
-          to the mark — which is what anyone actually scans for — while the
-          panel stays on the site's own surface ramp. One loud control per zone:
-          red at the top for the ask, this at the bottom for the conversation.
-
-          The safe-area padding is on the bar rather than an offset from the
-          bottom, so the fill runs into the home-indicator strip (a bar with a
-          gap of page under it looks broken) while the tappable area stays
-          clear of it. Requires viewportFit: "cover" in layout.tsx, without
-          which every env() here reports zero. */}
-      <div className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-surface-2 pb-[env(safe-area-inset-bottom)] sm:hidden">
-        <ActionButton
-          href={whatsappHref(
-            BRAND.whatsapp,
-            isArabic ? `مرحباً ${BRAND.name}، لدي استفسار.` : `Hi ${BRAND.name}, I have a question.`,
-          )}
-          target="_blank"
-          rel="noopener noreferrer"
-          variant="whatsapp"
-          size="lg"
-          fullWidth
-          // Flush to all four edges: the bar IS the button's chrome, so the
-          // button drops its own border and squares off against the seam.
-          className="ui-action--flush gap-3"
-        >
-          {/* The mark in a disc rather than loose on the panel. At 20px a bare
-              glyph on a dark surface reads as an icon among icons; the disc is
-              the shape people already know from their home screen, and it is
-              the one place the green earns full saturation. */}
-          <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-[#25D366] text-black">
-            <WhatsAppIcon className="size-4" />
-          </span>
-          {isArabic ? "اسأل عن الاشتراك" : "Ask about membership"}
-        </ActionButton>
-      </div>
-
-      {/* ---- sm and up: the circle, unchanged ---------------------------
-          There is no bar here because there is no problem here. The redesign
-          draws a phone, and a persistent full-width bar across a 1440px screen
-          would be a far heavier piece of furniture than the one it replaced.
-          Above sm the viewport is tall enough that the disc covers nothing
-          anybody is reading, and the footer's reservation is enough to keep it
-          off the copyright line. */}
+      {/* ---- The circle, visible on all screens ---------------------------
+          The sticky bar was removed as it took up too much mobile screen space. */}
       <WhatsAppLink
         message={isArabic ? `مرحباً ${BRAND.name}، لدي استفسار.` : `Hi ${BRAND.name}, I have a question.`}
         // The offsets are max() against the safe-area inset rather than flat
@@ -189,7 +128,7 @@ export function FloatingContact({ locale = "en" }: { locale?: string }) {
         // corner. Pinned to the opposite corner in Arabic — env() only takes
         // physical sides, so the side has to be picked in JS rather than with
         // a direction-aware Tailwind utility.
-        className={`press fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-40 hidden size-13 items-center justify-center rounded-full bg-[#25D366] text-black transition-transform duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground motion-reduce:transition-none motion-reduce:hover:scale-100 sm:flex ${
+        className={`press fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-40 flex size-13 items-center justify-center rounded-full bg-[#25D366] text-black transition-transform duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground motion-reduce:transition-none motion-reduce:hover:scale-100 ${
           isArabic
             ? "left-[max(1.5rem,env(safe-area-inset-left))]"
             : "right-[max(1.5rem,env(safe-area-inset-right))]"

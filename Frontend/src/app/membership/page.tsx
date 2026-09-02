@@ -23,7 +23,9 @@ export default async function MembershipPage() {
       <header className={styles.hero}>
         <div className={styles.container}>
           <Eyebrow>{t("eyebrow")}</Eyebrow>
-          <h1 className="mt-4 font-display text-5xl leading-[.95] tracking-[-0.02em] uppercase md:text-7xl">{t("heading")}</h1>
+          <h1 className="mt-4 font-display text-5xl leading-[.95] tracking-[-0.02em] uppercase md:text-7xl">
+            {t.rich("heading", { accent: (chunks) => <span className="text-primary">{chunks}</span> })}
+          </h1>
           <p className={styles.introduction}>{t("intro")}</p>
           <ul className={styles.reassurance}>
             <li><WhatsAppIcon className="size-4" />{t("whatsappReservation")}</li>

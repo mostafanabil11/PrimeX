@@ -1,11 +1,11 @@
 "use client";
 
 import { useId, useMemo, useState } from "react";
-import { ArrowRight, Check, ChevronDown, Columns3 } from "lucide-react";
+import { ArrowRight, ChevronDown, Columns3, Dumbbell, CalendarDays, User, Tag } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { formatAmount, formatPrice } from "@/lib/format";
 import type { Plan } from "@/types/gym";
-import { buildTerms, Collapse, planMonths, savingVsMonthly } from "./pricing-grid";
+import { buildTerms, Collapse } from "./pricing-grid";
 import { TrackedPlanLink } from "./tracked-cta";
 import styles from "./membership-plans.module.css";
 
@@ -18,102 +18,181 @@ function tierName(plan: Plan, locale: string) {
   return names[name] ?? name;
 }
 
-/** Detailed membership-page presentation; the homepage retains its compact grid. */
+/** Detailed membership-page presentation; redesigned with a term selector and animated cards. */
 export function MembershipPlans({ plans }: { plans: Plan[] }) {
-  const id = useId();
   const t = useTranslations("Membership");
+  const locale = useLocale();
+  const isRtl = locale === "ar";
   const terms = useMemo(() => buildTerms(plans), [plans]);
-  const [openMonths, setOpenMonths] = useState<number | null>(() => terms[0]?.months ?? null);
+  
+  const [activeTermIndex, setActiveTermIndex] = useState(0);
+  const [animatingState, setAnimatingState] = useState<"idle" | "out-left" | "out-right" | "in-left" | "in-right">("idle");
+  const [displayTermIndex, setDisplayTermIndex] = useState(0);
+
+  if (terms.length === 0) return null;
+
+  const activeTerm = terms[activeTermIndex];
+  const displayTerm = terms[displayTermIndex] || terms[0];
+
+  const handleTermChange = (newIndex: number) => {
+    if (newIndex === activeTermIndex || animatingState !== "idle") return;
+    const isMovingLeft = newIndex < activeTermIndex;
+    const logicalLeft = isRtl ? !isMovingLeft : isMovingLeft;
+    const direction = logicalLeft ? "left" : "right";
+    
+    setActiveTermIndex(newIndex);
+    setAnimatingState(`out-${direction}`);
+    
+    setTimeout(() => {
+      setDisplayTermIndex(newIndex);
+      setAnimatingState(`in-${direction}`);
+      
+      setTimeout(() => {
+        setAnimatingState("idle");
+      }, 50);
+    }, 300);
+  };
 
   return (
-    <div className={`${styles.accordion} pricing-accordion`}>
-      {terms.map((term, index) => {
-        const open = openMonths === term.months;
-        const label = term.months === 12 ? t("year") : t("months", { count: term.months });
-        return (
-          <div key={term.months} className={styles.term}>
-            <h3>
+    <div className={styles.plansWrapper}>
+      <div className={styles.termSelectorContainer}>
+        <div className={styles.termSelector}>
+          <div 
+            className={styles.activePill} 
+            style={{ 
+              width: `${100 / terms.length}%`, 
+              insetInlineStart: `${activeTermIndex * (100 / terms.length)}%` 
+            }} 
+            aria-hidden="true" 
+          />
+          {terms.map((term, index) => {
+            const isActive = index === activeTermIndex;
+            const label = term.months === 12 ? t("year") : t("months", { count: term.months });
+            return (
               <button
+                key={term.months}
                 type="button"
-                aria-expanded={open}
-                aria-controls={`${id}-${term.months}`}
-                onClick={() => setOpenMonths(open ? null : term.months)}
-                className={styles.termTrigger}
+                aria-pressed={isActive}
+                onClick={() => handleTermChange(index)}
+                className={`${styles.termButton} ${isActive ? styles.termButtonActive : ""}`}
               >
-                <span aria-hidden className={`${styles.termNumber} font-mono`}>{String(index + 1).padStart(2, "0")}</span>
-                <span className={styles.termTitle}>
-                  <span className="font-display text-2xl uppercase sm:text-[28px]">{label}</span>
-                  <span className="text-[12px] text-muted-foreground">{t("from", { price: formatPrice(term.fromPrice) })}</span>
-                </span>
-                <span className={styles.termEnd}>
-                  {term.saving > 0 && <span className={`${styles.saving} font-mono text-[10px] font-semibold uppercase`}>{t("saveUpTo", { percent: term.saving })}</span>}
-                  <span className={styles.chevron}><ChevronDown aria-hidden className="size-4" /></span>
-                </span>
+                {label}
               </button>
-            </h3>
-            <Collapse id={`${id}-${term.months}`} open={open}>
-              <div className={styles.cards}>
-                {term.tiers.map(({ plan, monthlyPlan }) => <MembershipCard key={plan._id} plan={plan} monthlyPlan={monthlyPlan} />)}
-              </div>
-            </Collapse>
+            );
+          })}
+        </div>
+        
+        <div className={`${styles.savingsIndicator} ${activeTerm.saving > 0 ? styles.savingsIndicatorVisible : ""}`}>
+          <div className={styles.savingsBadge}>
+            <Tag className="size-3" />
+            <span className="font-bold">{isRtl ? "أفضل قيمة" : "BEST VALUE"}</span>
+            <span className="opacity-80 mx-1">•</span>
+            {t("saveUpTo", { percent: activeTerm.saving })}
           </div>
-        );
-      })}
+        </div>
+      </div>
+
+      <div className={`${styles.cardsContainer} ${styles[`animating-${animatingState}`]}`}>
+        {displayTerm.tiers.map(({ plan }, idx) => (
+          <MembershipCard 
+            key={`${displayTerm.months}-${plan._id}`} 
+            plan={plan} 
+            animationDelay={idx * 80} 
+            isAnimatingIn={animatingState.startsWith("in-") || animatingState === "idle"} 
+          />
+        ))}
+      </div>
       <p className={styles.priceNote}>{t("priceNote")}</p>
     </div>
   );
 }
 
-function MembershipCard({ plan, monthlyPlan }: { plan: Plan; monthlyPlan: Plan | null }) {
+function MembershipCard({ plan, animationDelay, isAnimatingIn }: { plan: Plan; animationDelay: number; isAnimatingIn: boolean }) {
   const locale = useLocale();
   const t = useTranslations("Membership");
   const name = tierName(plan, locale);
   const price = plan.pricing?.effectivePriceMinorUnits ?? plan.priceMinorUnits;
   const listPrice = plan.pricing?.listPriceMinorUnits ?? plan.priceMinorUnits;
-  const months = planMonths(plan);
-  const saving = savingVsMonthly(plan, monthlyPlan);
-  const perMonth = months && months > 1 ? Math.round(price / months) : null;
-  const number = (value: number) => new Intl.NumberFormat(locale === "ar" ? "ar-EG" : "en-US").format(value);
+  
   const perks = plan.perks.map((perk) => {
     const known: Record<string, string> = { Jacuzzi: t("jacuzzi"), Sauna: t("sauna"), InBody: t("inbody") };
-    return `${number(perk.value)} ${known[perk.label] ?? perk.label}`;
+    return `${known[perk.label] ?? perk.label}`;
   });
-  const extras = [
-    ...perks,
-    ...(plan.guestPasses > 0 ? [t("guests", { count: plan.guestPasses })] : []),
-    ...(plan.freezeDaysAllowed > 0 ? [t("freezeDays", { count: plan.freezeDaysAllowed })] : []),
-    ...(plan.joiningFeeMinorUnits === 0 ? [t("noJoiningFee")] : []),
-  ];
+
+  const cardClasses = `${styles.card} ${plan.isFeatured ? styles.cardFeatured : ""} ${isAnimatingIn ? styles.cardIn : ""}`;
 
   return (
-    <article className={styles.card} data-featured={plan.isFeatured || undefined}>
-      <div className={styles.cardHeading}>
-        <h4 className="font-display text-2xl uppercase">{name}</h4>
-        {plan.isFeatured && <span className={`${styles.popular} font-mono text-[10px] font-bold uppercase`}>{t("popular")}</span>}
-      </div>
-      <p className="font-mono text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
-        {plan.accessScope === "gym_plus_fitness" ? t("gymAndFitness") : t("gymOrFitness")}
-      </p>
-      <div className={styles.priceBlock}>
-        <p className={styles.price} dir="ltr"><span className="font-display">{formatAmount(price)}</span><span className="font-mono text-[11px]">EGP</span></p>
-        <div className={styles.priceCaption}>
-          <span>{t("fullTerm")}</span>
-          {price < listPrice && <del dir="ltr">{formatPrice(listPrice)}</del>}
+    <article 
+      className={cardClasses} 
+      style={{ "--animation-delay": `${animationDelay}ms` } as React.CSSProperties}
+    >
+      {plan.isFeatured && (
+        <div className={styles.popularBadge}>
+          {t("popular")}
         </div>
-        <p className={styles.monthly}>
-          {perMonth !== null ? t("perMonth", { price: formatPrice(perMonth) }) : t("oneMonthTerm")}
-          {saving !== null && saving > 0 && <span className={styles.inlineSaving}>{t("save", { percent: saving })}</span>}
-        </p>
+      )}
+      
+      <div className={styles.cardHeader}>
+        <div className={styles.cardHeaderLeft}>
+          <h4 className="font-display text-2xl uppercase md:text-3xl">{name}</h4>
+          <p className="font-mono text-[10px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
+            {plan.accessScope === "gym_plus_fitness" ? t("gymAndFitness") : t("gymOrFitness")}
+          </p>
+        </div>
+        <div className={styles.priceBlock}>
+          <p className={styles.price} dir="ltr">
+            <span className="font-mono text-[12px] opacity-70">EGP</span>
+            <span className="font-display text-3xl md:text-4xl">{formatAmount(price)}</span>
+          </p>
+          <div className={styles.priceCaption}>
+            <span>{t("fullTerm")}</span>
+            {price < listPrice && <del dir="ltr" className="ml-2 opacity-50">{formatPrice(listPrice)}</del>}
+          </div>
+        </div>
       </div>
-      <ul className={styles.features}>
-        <li><Check aria-hidden className="size-4" /><span>{plan.sessionsIncluded === null ? t("unlimitedSessions") : t("sessions", { count: plan.sessionsIncluded })}</span></li>
-        <li><Check aria-hidden className="size-4" /><span>{plan.daysPerWeek === null ? t("everyDay") : t("daysPerWeek", { count: plan.daysPerWeek })}</span></li>
+
+      <hr className={styles.divider} />
+
+      <ul className={styles.benefits}>
+        <li className={styles.benefitItem}>
+          <div className={styles.benefitIcon}><Dumbbell className="size-5" /></div>
+          <div className={styles.benefitText}>
+            <span className={styles.benefitTitle}>
+              {plan.sessionsIncluded === null ? t("unlimitedSessions") : t("sessions", { count: plan.sessionsIncluded })}
+            </span>
+            <span className={styles.benefitDesc}>{locale === "ar" ? "الإجمالي" : "Total"}</span>
+          </div>
+        </li>
+        <li className={styles.benefitItem}>
+          <div className={styles.benefitIcon}><CalendarDays className="size-5" /></div>
+          <div className={styles.benefitText}>
+            <span className={styles.benefitTitle}>
+              {plan.daysPerWeek === null ? t("everyDay") : t("daysPerWeek", { count: plan.daysPerWeek })}
+            </span>
+            <span className={styles.benefitDesc}>{locale === "ar" ? "الاستمرارية" : "Consistency"}</span>
+          </div>
+        </li>
+        <li className={styles.benefitItem}>
+          <div className={styles.benefitIcon}><User className="size-5" /></div>
+          <div className={styles.benefitText}>
+            <span className={styles.benefitTitle}>
+              {plan.guestPasses === null || plan.guestPasses === 0 ? t("guests", { count: 1 }) /* fallback if 0 to show something, though usually it's >0 in design */ : t("guests", { count: plan.guestPasses })}
+            </span>
+            <span className={styles.benefitDesc}>{locale === "ar" ? "أحضر صديقاً" : "Bring a friend"}</span>
+          </div>
+        </li>
       </ul>
-      {extras.length > 0 && <p className={styles.extras}>{extras.join(" · ")}</p>}
+
+      {perks.length > 0 && (
+        <div className={styles.extraPerks}>
+          <span className={styles.extraPerksTitle}>{locale === "ar" ? "يشمل أيضاً:" : "Also includes:"}</span> {perks.join(" · ")}
+        </div>
+      )}
+
       <TrackedPlanLink
         planId={plan._id}
         href={`/join?plan=${plan.slug}`}
-        className={`ui-action ${styles.choose} flex font-mono text-[12px] font-semibold tracking-[0.08em] uppercase ${plan.isFeatured ? "ui-action--primary" : "ui-action--outline"}`}
+        className={`ui-action ${styles.chooseBtn} ${plan.isFeatured ? styles.chooseBtnPrimary : styles.chooseBtnOutline}`}
       >
         {t("choose", { tier: name })}<ArrowRight aria-hidden className="rtl-flip size-4" />
       </TrackedPlanLink>

@@ -146,9 +146,9 @@
     "seePlans": "See membership plans"
   },
   "Membership": {
-    "eyebrow": "Membership",
-    "heading": "Choose your path",
-    "intro": "Find the level that fits your training, then choose your term. Reserve your place and our team will take it from there on WhatsApp.",
+    "eyebrow": "Memberships",
+    "heading": "Choose your <accent>commitment</accent>",
+    "intro": "Pick the term that fits your goals. All prices are for the full selected term.",
     "whatsappReservation": "Reserve via WhatsApp",
     "noOnlinePayment": "No online payment",
     "staffActivation": "Activated by our team",
