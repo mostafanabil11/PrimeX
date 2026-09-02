@@ -17,7 +17,13 @@
     min-width: 0;
     max-width: 193px;
     height: 100%;
+    /* Pulled toward the menu button. The lockup is flush to the edge of its
+       own PNG — no transparent padding — but its left edge is the thin tail of
+       the bolt, so the dense wordmark starts about 40px in and the header read
+       as a button marooned away from the logo. The negative start margin lets
+       that sparse corner overlap the gap instead of reserving space for it. */
     margin: 0;
+    margin-inline-start: -14px;
     justify-content: center;
   }
   .logoImage {

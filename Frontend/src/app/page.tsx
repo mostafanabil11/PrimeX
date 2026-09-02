@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import { Photo } from "@/components/public/photo";
 import {
   getContentServer,
   getPlansServer,
@@ -98,16 +97,57 @@ export default async function Home() {
       */}
       <section className="w-full border-b border-border">
         <div className="mx-auto grid w-full max-w-(--spacing-container-max) grid-cols-1 items-stretch lg:grid-cols-2">
-          <div className="relative order-first h-[320px] w-full overflow-hidden sm:h-[400px] lg:order-last lg:h-auto lg:min-h-[38rem]">
-            <Photo
-              src="/images/hero-home.jpg"
-              alt=""
-              fill
-              priority
-              quality={90}
-              sizes="(min-width: 1024px) 50vw, 100vw"
-              className="object-cover object-[center_38%] [filter:grayscale(0.85)_contrast(1.15)_brightness(0.62)] lg:object-center lg:[filter:grayscale(0.85)_contrast(1.1)_brightness(0.75)]"
+          {/* A tall, immersive hero rather than a band above the copy.
+
+              Sized in svh, not vh: on a phone vh is the viewport WITHOUT the
+              browser chrome, so a 70vh hero is taller than the screen actually
+              shows and the copy below it starts further down than intended.
+              svh is the small viewport — the height with the address bar
+              visible — which is the state the page first paints in.
+
+              70svh deliberately leaves roughly a third of the screen for the
+              eyebrow and the start of the headline. A full-height hero would
+              be a wall of video with nothing indicating there is a page under
+              it; this shows enough to read as the top of something. The
+              min/max keep it sane on a short landscape phone and on a very
+              tall desktop window. */}
+          <div className="relative order-first h-[70svh] max-h-[680px] min-h-[420px] w-full overflow-hidden sm:h-[74svh] lg:order-last lg:h-auto lg:max-h-none lg:min-h-[46rem]">
+            {/* The poster sits UNDER the video rather than only in its poster
+                attribute, so it covers the first frames while the clip is
+                still buffering and stays put if the video never plays at all —
+                a data-saver setting, a codec refusal, or reduced motion below.
+                Same object-position as the video, so the swap is invisible. */}
+            <div
+              aria-hidden="true"
+              className="absolute inset-0 bg-[url('/images/hero-poster.jpg')] bg-cover bg-[center_52%] bg-no-repeat [filter:grayscale(0.2)_contrast(1.05)_brightness(0.9)] lg:[filter:grayscale(0.2)_contrast(1.03)_brightness(0.95)]"
             />
+
+            {/* muted + playsInline are not optional: without both, iOS refuses
+                to autoplay and shows a play button over the hero, and every
+                other mobile browser blocks a clip with audio. The file has no
+                audio track at all, so there is nothing to unmute.
+
+                motion-reduce:hidden drops the video for anyone who has asked
+                their system to limit motion — the poster underneath is then
+                what they get, which is the whole reason it is a layer rather
+                than an attribute.
+
+                object-position matches the still it replaced: the source is
+                720x1280 portrait going into a landscape slot, so object-cover
+                crops most of the height and this percentage decides the
+                framing. 52% holds the dumbbell racks. */}
+            <video
+              aria-hidden="true"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              poster="/images/hero-poster.jpg"
+              className="absolute inset-0 size-full object-cover object-[center_52%] [filter:grayscale(0.2)_contrast(1.05)_brightness(0.9)] motion-reduce:hidden lg:object-[center_52%] lg:[filter:grayscale(0.2)_contrast(1.03)_brightness(0.95)]"
+            >
+              <source src="/video/hero.mp4" type="video/mp4" />
+            </video>
 
             {/* Grades the band into the panel below it, so the overlap reads
                 as the copy emerging from the photograph rather than as a
