@@ -1,11 +1,9 @@
 .page { --muted-foreground: #b5b5b5; color: var(--foreground); background: #101010; }
 .container { width: calc(100% - 40px); max-width: 1240px; margin-inline: auto; }
-.hero { padding-block: 36px 28px; border-bottom: 1px solid #2c2c2c; }
-.introduction { max-width: 660px; margin-top: 18px; color: var(--muted-foreground); font-size: 15px; line-height: 1.7; }
-.reassurance { display: flex; flex-wrap: wrap; gap: 12px 24px; margin-top: 24px; padding: 0; list-style: none; }
-.reassurance li { display: flex; align-items: center; gap: 8px; color: #bfbfbf; font-size: 12px; }
-.reassurance svg { flex-shrink: 0; color: #aaaaaa; }
-.planSection { padding-block: 32px 44px; }
+.hero { padding-block: 28px 22px; }
+.heading { margin-top: 12px; font-size: clamp(24px, 7.2vw, 44px); line-height: 1.08; letter-spacing: -.035em; }
+.introduction { max-width: 660px; margin-top: 12px; color: var(--muted-foreground); font-size: 13px; line-height: 1.6; }
+.planSection { padding-block: 0 36px; }
 .sectionHeading { display: flex; flex-direction: column; gap: 8px; margin-bottom: 22px; }
 .sectionHeading > p { max-width: 640px; color: var(--muted-foreground); font-size: 13px; line-height: 1.7; }
 .faqSection { padding-block: 36px; border-top: 1px solid #2c2c2c; }
@@ -23,9 +21,10 @@
 .helpActions > a { white-space: normal; }
 @media (min-width: 768px) {
   .container { width: calc(100% - 80px); }
-  .hero { padding-block: 52px 36px; }
-  .introduction { font-size: 17px; }
-  .planSection { padding-block: 40px 56px; }
+  .hero { padding-block: 44px 28px; }
+  .heading { font-size: clamp(44px, 5vw, 64px); }
+  .introduction { font-size: 15px; }
+  .planSection { padding-block: 0 48px; }
   .faqGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .help { flex-direction: row; align-items: center; justify-content: space-between; padding: 36px; }
   .helpActions { min-width: 250px; flex-shrink: 0; }

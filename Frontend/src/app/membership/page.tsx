@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import { Check, ChevronDown, CreditCard } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { getPlansServer } from "@/lib/api/gym-server";
 import { pageTitle } from "@/lib/brand";
 import { CtaButton, EmptyState, Eyebrow } from "@/components/public/section";
-import { WhatsAppCta, WhatsAppIcon } from "@/components/public/whatsapp";
+import { WhatsAppCta } from "@/components/public/whatsapp";
 import { joinEnquiry } from "@/lib/whatsapp-messages";
 import { MembershipPlans, MembershipComparison } from "@/components/public/membership-plans";
 import styles from "./membership.module.css";
@@ -23,23 +23,15 @@ export default async function MembershipPage() {
       <header className={styles.hero}>
         <div className={styles.container}>
           <Eyebrow>{t("eyebrow")}</Eyebrow>
-          <h1 className="mt-4 font-display text-5xl leading-[.95] tracking-[-0.02em] uppercase md:text-7xl">
+          <h1 className={`${styles.heading} font-display uppercase`}>
             {t.rich("heading", { accent: (chunks) => <span className="text-primary">{chunks}</span> })}
           </h1>
           <p className={styles.introduction}>{t("intro")}</p>
-          <ul className={styles.reassurance}>
-            <li><WhatsAppIcon className="size-4" />{t("whatsappReservation")}</li>
-            <li><CreditCard aria-hidden className="size-4" />{t("noOnlinePayment")}</li>
-            <li><Check aria-hidden className="size-4" />{t("staffActivation")}</li>
-          </ul>
         </div>
       </header>
 
       <section className={`${styles.container} ${styles.planSection}`} aria-labelledby="membership-plans-title">
-        <div className={styles.sectionHeading}>
-          <h2 id="membership-plans-title" className="font-display text-3xl uppercase">{t("plansHeading")}</h2>
-          <p>{t("plansIntro")}</p>
-        </div>
+        <h2 id="membership-plans-title" className="sr-only">{t("plansHeading")}</h2>
         {plans.length === 0 ? <EmptyState message={t("empty")} /> : <>
           <MembershipPlans plans={plans} />
           <div className="mt-6"><MembershipComparison plans={plans} /></div>
