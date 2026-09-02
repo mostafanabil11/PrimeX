@@ -494,14 +494,23 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
         <span>{t("agreement")}</span>
       </label>
 
-      {/* The button stays ENABLED, and that is the fix.
-          It used to be disabled until this box was ticked, which rendered dark
-          red on dark red with grey text at the end of a long form — it read as
-          a broken control rather than a waiting one, and nothing on screen
-          connected it to a 16px checkbox two rows above. A control that cannot
-          say why it will not work is worse than one that tells you what is
-          missing when you press it. So: press it, and it either submits or
-          points at the thing standing in the way. */}
+      {/* The button is disabled until this box is ticked.
+          An earlier revision left it enabled and validated on press, because a
+          disabled control that cannot say why it will not work reads as broken
+          rather than waiting — .ui-action:disabled is opacity .45 AND
+          pointer-events:none, so a tap gets no response at all. That objection
+          is answered rather than reintroduced: whenever the box is unticked the
+          reason sits beside the button in both layouts — under it on desktop,
+          and in the pinned bar on a phone, where it replaces the "no online
+          payment" line so the copy lands in a slot that already exists and the
+          bar does not change height. Both buttons point at that text with
+          aria-describedby, so it is announced and not merely seen.
+
+          The onSubmit consent guard below stays: a disabled button cannot be
+          clicked, but Enter in a text field still submits the form, and that
+          path should still scroll the checkbox into view rather than fail
+          silently. This also matches JoinFunnel, which already gates its own
+          continue button on the same agreement. */}
       {showAcceptHint && (
         <p id="accept-hint" role="alert" className="text-[13px] text-destructive">
           {t("agreementError")}
@@ -516,13 +525,20 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
 
       <button
         type="submit"
-        disabled={reserve.isPending}
+        disabled={reserve.isPending || !accepted}
         aria-busy={reserve.isPending || undefined}
+        aria-describedby={!accepted ? "accept-required" : undefined}
         className="ui-action hidden min-h-13 w-full bg-primary font-mono text-[13px] font-bold tracking-[0.08em] uppercase lg:flex"
       >
         <WhatsAppIcon className="size-5" />
         {reserve.isPending ? t("reserving") : t("reserveWhatsapp")}
       </button>
+
+      {!accepted && (
+        <p id="accept-required" className="hidden text-[12px] text-muted-foreground lg:block">
+          {t("agreementRequired")}
+        </p>
+      )}
       </div>
 
       {/* ---- The same button, pinned, on a phone -------------------------
@@ -557,13 +573,16 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
               <p className="mt-0.5 text-[12px] text-muted-foreground">{quoteError ? "—" : t("loadingTotal")}</p>
             )}
             </div>
-            <p className={styles.noPayment}>{t("noOnlinePayment")}</p>
+            <p id="accept-required-mobile" className={styles.noPayment}>
+              {accepted ? t("noOnlinePayment") : t("agreementRequired")}
+            </p>
           </div>
 
           <button
             type="submit"
-            disabled={reserve.isPending}
+            disabled={reserve.isPending || !accepted}
             aria-busy={reserve.isPending || undefined}
+            aria-describedby={!accepted ? "accept-required-mobile" : undefined}
             className={`ui-action ${styles.mobileSubmit} bg-primary font-mono text-[13px] font-bold tracking-[0.06em] uppercase`}
           >
             <WhatsAppIcon className="size-5" />

@@ -114,6 +114,7 @@
     "loadingTotal": "Loading total…",
     "agreement": "I accept the membership agreement and the gym rules.",
     "agreementError": "Please accept the membership agreement and the gym rules to continue.",
+    "agreementRequired": "Tick the agreement above to continue",
     "reserve": "Reserve",
     "reserveFull": "Reserve my membership",
     "reserving": "Reserving…",
