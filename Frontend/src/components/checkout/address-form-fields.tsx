@@ -1,6 +1,7 @@
 "use client";
 
 import { EGYPT_GOVERNORATES, type EgyptGovernorate } from "@/types/address";
+import { fieldInput, fieldLabel } from "@/components/ui/form-classes";
 
 export interface AddressFormValues {
   firstName: string;
@@ -22,9 +23,10 @@ export const EMPTY_ADDRESS_FORM: AddressFormValues = {
   postalCode: "",
 };
 
-const inputClass =
-  "w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground";
-const labelClass = "mb-2 block font-mono text-[12px] font-semibold tracking-[0.1em] text-foreground uppercase";
+// Shared with every other form on the site — see ui/form-classes.ts. The
+// label keeps its own block layout; only the type treatment is shared.
+const inputClass = fieldInput;
+const labelClass = `mb-2 block ${fieldLabel}`;
 
 // The delivery fields themselves, with no opinion about what happens to them.
 // Shared by the signed-in "add a new address" form (which POSTs them to the

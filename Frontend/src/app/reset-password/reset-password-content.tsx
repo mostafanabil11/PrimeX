@@ -11,6 +11,7 @@ import { resetPassword } from "@/lib/api/auth";
 import { apiErrorMessage } from "@/lib/api-error";
 import { AuthPanel } from "@/components/public/auth-panel";
 import { Wordmark } from "@/components/layout/wordmark";
+import { fieldInput } from "@/components/ui/form-classes";
 
 export function ResetPasswordContent() {
   const tCommon = useTranslations("Common");
@@ -101,7 +102,7 @@ export function ResetPasswordContent() {
                     minLength={6}
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
+                    className={fieldInput}
                   />
                   <p className="mt-2 text-[12px] text-muted-foreground">
                     At least 6 characters, with an uppercase letter, a lowercase letter, and a number.
@@ -122,7 +123,7 @@ export function ResetPasswordContent() {
                     minLength={6}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
+                    className={fieldInput}
                   />
                 </div>
 

@@ -15,6 +15,7 @@ import { apiErrorMessage } from "@/lib/api-error";
 import { AuthPanel } from "@/components/public/auth-panel";
 import { MEMBER_ACCOUNTS_ENABLED } from "@/lib/features";
 import { Wordmark } from "@/components/layout/wordmark";
+import { fieldInput } from "@/components/ui/form-classes";
 
 // Only same-origin paths are honoured. Taking ?next= at face value would let a
 // crafted link bounce someone to another site immediately after they sign in,
@@ -98,7 +99,7 @@ export function LoginContent() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
+                className={fieldInput}
               />
             </div>
 
@@ -128,7 +129,7 @@ export function LoginContent() {
                 minLength={6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
+                className={fieldInput}
               />
             </div>
 

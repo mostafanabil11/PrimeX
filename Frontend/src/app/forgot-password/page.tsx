@@ -8,6 +8,7 @@ import { forgotPassword } from "@/lib/api/auth";
 import { BRAND } from "@/lib/brand";
 import { AuthPanel } from "@/components/public/auth-panel";
 import { Wordmark } from "@/components/layout/wordmark";
+import { fieldInput } from "@/components/ui/form-classes";
 
 export default function ForgotPasswordPage() {
   const tCommon = useTranslations("Common");
@@ -87,7 +88,7 @@ export default function ForgotPasswordPage() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
+                    className={fieldInput}
                   />
                 </div>
 

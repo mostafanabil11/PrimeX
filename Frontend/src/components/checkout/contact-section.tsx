@@ -2,9 +2,10 @@
 
 import { Link } from "@/i18n/navigation";
 import { usePathname } from "next/navigation";
+import { fieldInput } from "@/components/ui/form-classes";
 
-const inputClass =
-  "w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground";
+// Shared with every other form on the site — see ui/form-classes.ts.
+const inputClass = fieldInput;
 
 // Contact collapses to a read-only line once we know who the customer is, and
 // asks for an email when we don't. Signing in is offered, never required —

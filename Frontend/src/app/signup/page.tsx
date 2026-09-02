@@ -14,6 +14,7 @@ import { apiErrorMessage } from "@/lib/api-error";
 import { AuthPanel } from "@/components/public/auth-panel";
 import { MEMBER_ACCOUNTS_ENABLED } from "@/lib/features";
 import { Wordmark } from "@/components/layout/wordmark";
+import { fieldInput, fieldInputBase } from "@/components/ui/form-classes";
 
 export default function SignupPage() {
   const tCommon = useTranslations("Common");
@@ -112,7 +113,7 @@ export default function SignupPage() {
                       required
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
-                      className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
+                      className={fieldInput}
                     />
                   </div>
                   <div>
@@ -127,7 +128,7 @@ export default function SignupPage() {
                       required
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
-                      className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
+                      className={fieldInput}
                     />
                   </div>
                 </div>
@@ -145,7 +146,7 @@ export default function SignupPage() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
+                    className={fieldInput}
                   />
                 </div>
 
@@ -163,7 +164,7 @@ export default function SignupPage() {
                     minLength={6}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
+                    className={fieldInput}
                   />
                 </div>
 
@@ -221,7 +222,7 @@ export default function SignupPage() {
                     maxLength={6}
                     value={otp}
                     onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                    className="w-full border border-input bg-background px-4 py-3 text-center text-lg tracking-[0.3em] text-foreground outline-none focus:border-foreground"
+                    className={`${fieldInputBase} w-full text-center text-lg tracking-[0.3em]`}
                     placeholder="······"
                   />
                 </div>

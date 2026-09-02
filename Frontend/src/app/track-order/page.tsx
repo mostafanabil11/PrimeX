@@ -9,10 +9,12 @@ import { OrderDetail } from "@/components/orders/order-detail";
 import type { Order } from "@/types/order";
 import { requireShop } from "@/lib/features";
 import { apiErrorStatus } from "@/lib/api-error";
+import { fieldInput, fieldLabel } from "@/components/ui/form-classes";
 
-const inputClass =
-  "w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground";
-const labelClass = "mb-2 block font-mono text-[12px] font-semibold tracking-[0.1em] text-foreground uppercase";
+// Shared with every other form on the site — see ui/form-classes.ts. The
+// label keeps its own block layout; only the type treatment is shared.
+const inputClass = fieldInput;
+const labelClass = `mb-2 block ${fieldLabel}`;
 
 // Lets anyone who ordered — guest or member — reach an order with the pair of
 // things only they should have: the order number and the email it was placed

@@ -8,6 +8,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { getReviewsForClassType, createReview } from "@/lib/api/reviews";
 import { StarRating } from "@/components/products/star-rating";
 import { apiErrorMessage } from "@/lib/api-error";
+import { fieldInput, fieldLabel } from "@/components/ui/form-classes";
 
 function StarInput({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   return (
@@ -34,9 +35,9 @@ function StarInput({ value, onChange }: { value: number; onChange: (v: number) =
   );
 }
 
-const inputBase =
-  "w-full border border-input bg-surface-2 px-3.5 py-3 text-base md:text-[14px] text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring";
-const labelBase = "font-mono text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase";
+// Shared with every other form on the site — see ui/form-classes.ts.
+const inputBase = fieldInput;
+const labelBase = fieldLabel;
 
 export function ClassReviewsSection({
   classTypeId,

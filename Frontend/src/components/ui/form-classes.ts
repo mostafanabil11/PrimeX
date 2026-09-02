@@ -19,8 +19,15 @@ export const fieldLabel =
 /** The optional-field suffix, e.g. Email (optional). */
 export const fieldOptional = "normal-case opacity-70";
 
-export const fieldInput =
-  "ui-input w-full text-base text-foreground placeholder:text-muted-foreground";
+/** The control without a width or a type scale, for the places that set their
+ *  own: a field sharing a flex row with a button (newsletter, back-in-stock)
+ *  cannot take w-full, and the one-time-code box wants text-lg centred. Both
+ *  would otherwise collide with the defaults below — two Tailwind type
+ *  utilities on one element resolve by stylesheet order, not by the order they
+ *  appear in the string, so "text-base text-lg" is a coin toss. */
+export const fieldInputBase = "ui-input text-foreground placeholder:text-muted-foreground";
+
+export const fieldInput = `${fieldInputBase} w-full text-base`;
 
 /** A textarea is the same control with room to grow. */
 export const fieldTextarea = `${fieldInput} resize-y leading-relaxed`;

@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { requestBackInStock } from "@/lib/api/back-in-stock";
 import type { ProductSize } from "@/types/product";
 import { apiErrorMessage } from "@/lib/api-error";
+import { fieldInputBase } from "@/components/ui/form-classes";
 
 export function NotifyBackInStock({ productId, size }: { productId: string; size: ProductSize }) {
   const [email, setEmail] = useState("");
@@ -39,7 +40,7 @@ export function NotifyBackInStock({ productId, size }: { productId: string; size
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Email for a restock alert"
-        className="min-w-0 flex-1 border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
+        className={`min-w-0 flex-1 ${fieldInputBase} text-base`}
       />
       <button
         type="submit"
