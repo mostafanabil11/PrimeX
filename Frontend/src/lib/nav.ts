@@ -15,7 +15,6 @@ const ALL_PRIMARY_NAV = [
   // The wordmark links home too, as every site's does, but an explicit Home
   // link is what a lot of people actually look for — and it costs one slot.
   { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
   { label: "Membership", href: "/membership" },
   { label: "Classes", href: "/classes" },
   { label: "Timetable", href: "/schedule" },

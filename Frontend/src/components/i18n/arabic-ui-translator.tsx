@@ -6,7 +6,7 @@ import { useLocale } from "next-intl";
 // A safety net for legacy and staff-only views while their data remains shared.
 // Exact matches only: it never changes values, URLs, names, prices, or API data.
 const AR: Record<string, string> = {
-  Home: "الرئيسية", About: "عن برايم إكس", Membership: "الاشتراكات", Classes: "الحصص", Trainers: "المدربون",
+  Home: "الرئيسية", Membership: "الاشتراكات", Classes: "الحصص", Trainers: "المدربون",
   Contact: "تواصل معنا", FAQ: "الأسئلة الشائعة", Shop: "المتجر", "Join Now": "اشترك الآن", "Ask on WhatsApp": "اسألنا على واتساب",
   WhatsApp: "واتساب", Search: "بحث", Menu: "القائمة", Close: "إغلاق", Back: "رجوع",
   "Open menu": "فتح القائمة", "ALWAYS OPEN, NO LIMITS": "مفتوح دائماً، بلا حدود", "Open 24 hours, seven days a week": "مفتوح ٢٤ ساعة طوال أيام الأسبوع",

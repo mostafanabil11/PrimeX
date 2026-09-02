@@ -188,7 +188,7 @@ export type SiteContent = Record<string, string | string[]>;
 // from, so the form is driven by the backend rather than duplicated here.
 export interface ContentField {
   key: string;
-  group: "site" | "home" | "about" | "contact";
+  group: "site" | "home" | "contact";
   label: string;
   type: ContentType;
   hint?: string;

@@ -53,7 +53,7 @@ type AsButton = CommonProps &
 
 type AsLink = CommonProps &
   Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "className" | "children" | "href"> & {
-    /** Internal paths are localised (/about becomes /ar/about in Arabic). */
+    /** Internal paths are localised (/contact becomes /ar/contact in Arabic). */
     href: string;
   };
 

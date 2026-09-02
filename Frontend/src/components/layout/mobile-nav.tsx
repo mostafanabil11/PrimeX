@@ -70,7 +70,7 @@ export function MobileNav({ contact }: { contact?: MobileNavContact | null }) {
                   className={`${styles.link} font-mono font-bold uppercase`}>
                   <span aria-hidden className={styles.index}>{String(index + 1).padStart(2, "0")}</span>
                   <span className={styles.label}>
-                    {item.href === "/" ? t("home") : item.href === "/about" ? t("about") : item.href === "/membership" ? t("membership") : item.href === "/classes" ? t("classes") : item.href === "/trainers" ? t("trainers") : item.href === "/contact" ? t("contact") : item.label}
+                    {item.href === "/" ? t("home") : item.href === "/membership" ? t("membership") : item.href === "/classes" ? t("classes") : item.href === "/trainers" ? t("trainers") : item.href === "/contact" ? t("contact") : item.label}
                   </span>
                   <ArrowRight aria-hidden className={styles.arrow} size={17} strokeWidth={1.6} />
                 </Link>

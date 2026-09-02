@@ -11,7 +11,6 @@ const STATIC_ROUTES: Array<[string, number]> = [
   ["/membership", 0.9],
   ["/classes", 0.8],
   ["/trainers", 0.7],
-  ["/about", 0.7],
   ["/contact", 0.6],
   ["/faq", 0.5],
   ["/privacy", 0.3],

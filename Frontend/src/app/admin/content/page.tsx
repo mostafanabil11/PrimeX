@@ -17,11 +17,10 @@ import type { ContentField } from "@/types/gym";
 const GROUP_LABELS: Record<ContentField["group"], string> = {
   site: "Site-wide",
   home: "Home page",
-  about: "About page",
   contact: "Contact page",
 };
 
-const GROUP_ORDER: ContentField["group"][] = ["site", "home", "about", "contact"];
+const GROUP_ORDER: ContentField["group"][] = ["site", "home", "contact"];
 
 export default function AdminContentPage() {
   const queryClient = useQueryClient();

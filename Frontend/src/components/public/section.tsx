@@ -157,7 +157,7 @@ export function PageHeader({
           {title}
         </h1>
         {/* 16px on a phone, 18 from md. Unlike a SectionHeader's body this one
-            is NOT dropped — it is the page's own introduction, and on /about or
+            is NOT dropped — it is the page's own introduction, and on /membership or
             /membership it is the only prose there is. But 18px at 1.6 across
             335px is about six words a line, so a three-sentence intro became
             seven lines and pushed the content it introduces off the first

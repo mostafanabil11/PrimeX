@@ -47,7 +47,7 @@ export function HeaderNav() {
             aria-current={isActive ? "page" : undefined}
             className={`${styles.navLink} font-mono font-semibold uppercase`}
           >
-            {item.href === "/" ? t("home") : item.href === "/about" ? t("about") : item.href === "/membership" ? t("membership") : item.href === "/classes" ? t("classes") : item.href === "/trainers" ? t("trainers") : item.href === "/contact" ? t("contact") : item.label}
+            {item.href === "/" ? t("home") : item.href === "/membership" ? t("membership") : item.href === "/classes" ? t("classes") : item.href === "/trainers" ? t("trainers") : item.href === "/contact" ? t("contact") : item.label}
           </Link>
         );
       })}

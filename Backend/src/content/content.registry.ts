@@ -17,7 +17,7 @@ export interface ContentDefinition {
   // Grouped so the admin screen can render one panel per page. 'site' is the
   // one group not tied to a single page — it renders in the layout shell
   // itself, so editing it changes copy everywhere at once.
-  group: 'site' | 'home' | 'about' | 'contact';
+  group: 'site' | 'home' | 'contact';
   label: string;
   type: ContentType;
   // Shown under the field in admin — why this copy exists, not what it says.
@@ -105,45 +105,16 @@ export const CONTENT_DEFINITIONS: ContentDefinition[] = [
     default: 'Everything you need to get stronger, from elite machines to premium free weights.',
   },
 
-  // --- About ---
   {
-    key: 'about.story.heading',
-    group: 'about',
-    label: 'Story headline',
-    type: 'text',
-    maxLength: 120,
-    default: 'The Origin',
-  },
-  {
-    key: 'about.story.body',
-    group: 'about',
-    label: 'Story body',
-    type: 'longText',
-    hint: 'How the gym started and what it is trying to be.',
-    maxLength: 3000,
-    default:
-      'We opened because Fayoum had plenty of places to exercise and very few built for people who take training seriously. Our first floor had eight racks and no mirrors. The idea has not changed since: give serious people the equipment, the coaching and the room to do the work properly.',
-  },
-  {
-    key: 'about.mission.heading',
-    group: 'about',
-    label: 'Mission headline',
-    type: 'text',
-    maxLength: 120,
-    default: 'The Mission',
-  },
-  {
-    key: 'about.mission.body',
-    group: 'about',
-    label: 'Mission body',
-    type: 'longText',
-    maxLength: 2000,
-    default:
-      'To make good training accessible to anyone willing to show up for it — with coaching that meets you where you are, and standards that do not move.',
-  },
-  {
+    // Group is 'home', not 'about': the /about page is gone but this list is
+    // still what the homepage's "what makes the difference" section renders,
+    // so it needs an editor and the About tab no longer exists to hold one.
+    //
+    // The KEY deliberately keeps its about.* prefix. Editors' saved values are
+    // stored against it in content blocks, and renaming the key would orphan
+    // whatever the gym has already written here.
     key: 'about.whyUs.items',
-    group: 'about',
+    group: 'home',
     label: 'Why choose us',
     type: 'list',
     hint: 'One short reason per line. Three to six reads best.',
