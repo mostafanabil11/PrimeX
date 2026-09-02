@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { useMutation } from "@tanstack/react-query";
 import { forgotPassword } from "@/lib/api/auth";
 import { BRAND } from "@/lib/brand";
@@ -9,6 +10,7 @@ import { AuthPanel } from "@/components/public/auth-panel";
 import { Wordmark } from "@/components/layout/wordmark";
 
 export default function ForgotPasswordPage() {
+  const tCommon = useTranslations("Common");
   const [email, setEmail] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
@@ -41,7 +43,7 @@ export default function ForgotPasswordPage() {
               simply survived over here. */}
           <Link
             href="/"
-            aria-label={`${BRAND.name} — home`}
+            aria-label={tCommon("homeAriaLabel", { brand: BRAND.name })}
             className="mb-10 flex justify-center"
           >
             <Wordmark className="h-16 w-auto" width={128} />

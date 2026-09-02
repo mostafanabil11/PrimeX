@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -12,6 +13,7 @@ import { AuthPanel } from "@/components/public/auth-panel";
 import { Wordmark } from "@/components/layout/wordmark";
 
 export function ResetPasswordContent() {
+  const tCommon = useTranslations("Common");
   const router = useRouter();
   const params = useSearchParams();
   const token = params.get("token");
@@ -54,7 +56,7 @@ export function ResetPasswordContent() {
               simply survived over here. */}
           <Link
             href="/"
-            aria-label={`${BRAND.name} — home`}
+            aria-label={tCommon("homeAriaLabel", { brand: BRAND.name })}
             className="mb-10 flex justify-center"
           >
             <Wordmark className="h-16 w-auto" width={128} />

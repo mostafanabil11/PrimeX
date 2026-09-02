@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -26,6 +27,7 @@ function safeNextPath(next: string | null): string {
 }
 
 export function LoginContent() {
+  const tCommon = useTranslations("Common");
   const router = useRouter();
   const searchParams = useSearchParams();
   const queryClient = useQueryClient();
@@ -69,7 +71,7 @@ export function LoginContent() {
               simply survived over here. */}
           <Link
             href="/"
-            aria-label={`${BRAND.name} — home`}
+            aria-label={tCommon("homeAriaLabel", { brand: BRAND.name })}
             className="mb-10 flex justify-center"
           >
             <Wordmark className="h-16 w-auto" width={128} />

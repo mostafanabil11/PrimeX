@@ -6,7 +6,16 @@
     "whatsapp": "واتساب",
     "openAlways": "مفتوح ٢٤ ساعة · بلا حدود",
     "staffConfirmation": "تأكيد فريق الجيم",
-    "goBack": "رجوع"
+    "goBack": "رجوع",
+    "switchLanguage": "التبديل إلى الإنجليزية",
+    "homeAriaLabel": "{brand} — الصفحة الرئيسية"
+  },
+  "Home": {
+    "seePlans": "عرض الاشتراكات",
+    "plansFrom": "اشتراكات تبدأ من {price}",
+    "statOpen": "مفتوح",
+    "statCoaches": "{count, plural, zero {مدربون} one {مدرب} two {مدربان} few {مدربون} many {مدرباً} other {مدربون}}",
+    "statClasses": "{count, plural, zero {حصص} one {حصة} two {حصتان} few {حصص} many {حصة} other {حصص}}"
   },
   "Navigation": {
     "home": "الرئيسية",

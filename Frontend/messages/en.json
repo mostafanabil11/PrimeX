@@ -6,7 +6,16 @@
     "whatsapp": "WhatsApp",
     "openAlways": "24/7 · Always open, no limits",
     "staffConfirmation": "Staff confirmation",
-    "goBack": "Go back"
+    "goBack": "Go back",
+    "switchLanguage": "Switch to Arabic",
+    "homeAriaLabel": "{brand} — home"
+  },
+  "Home": {
+    "seePlans": "See plans",
+    "plansFrom": "Plans from {price}",
+    "statOpen": "Open",
+    "statCoaches": "{count, plural, one {Coach} other {Coaches}}",
+    "statClasses": "{count, plural, one {Class} other {Classes}}"
   },
   "Navigation": {
     "home": "Home",

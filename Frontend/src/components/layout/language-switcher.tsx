@@ -1,15 +1,16 @@
 "use client";
 
 import { Languages } from "lucide-react";
-import { useLocale } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { usePathname } from "next/navigation";
 import { localizePath } from "@/i18n/config";
 
 export function LanguageSwitcher({ compact = false, className = "" }: { compact?: boolean; className?: string }) {
   const locale = useLocale();
+  const t = useTranslations("Common");
   const pathname = usePathname();
   const nextLocale = locale === "ar" ? "en" : "ar";
-  const label = nextLocale === "ar" ? "العربية" : "English";
+  const label = t("language");
 
   function switchLanguage() {
     document.cookie = `PRIMEX_LOCALE=${nextLocale}; path=/; max-age=31536000; samesite=lax`;
@@ -28,7 +29,7 @@ export function LanguageSwitcher({ compact = false, className = "" }: { compact?
       type="button"
       onClick={switchLanguage}
       className={`ui-action ui-action--ghost ui-action--utility inline-flex min-h-11 items-center justify-center gap-2 font-mono text-[11px] font-bold tracking-[0.08em] uppercase transition-colors hover:text-primary-soft ${className}`}
-      aria-label={nextLocale === "ar" ? "التبديل إلى العربية" : "Switch to English"}
+      aria-label={t("switchLanguage")}
     >
       <Languages aria-hidden className="size-4" strokeWidth={1.7} />
       {!compact && <span>{label}</span>}

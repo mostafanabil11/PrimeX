@@ -165,7 +165,7 @@ export async function SiteHeader() {
               utility strip above, allowing it to overhang the bottom of the nav bar instead. */}
           <Link
             href="/"
-            aria-label={`${BRAND.name} — home`}
+            aria-label={common("homeAriaLabel", { brand: BRAND.name })}
             className="relative z-50 -ml-[35px] flex shrink-0 items-center transition-opacity hover:opacity-80 sm:-ml-7 lg:ml-0"
           >
             {/* Logo increased to 104px to purposefully overhang the container */}

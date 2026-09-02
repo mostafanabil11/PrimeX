@@ -15,7 +15,7 @@ import { ExpandingCards } from "@/components/public/expanding-cards";
 import { WhatsAppCta } from "@/components/public/whatsapp";
 import { PricingGrid } from "@/components/public/pricing-grid";
 import { formatPrice } from "@/lib/format";
-import { getLocale } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 import { FollowUsSection, VisitUsSection } from "@/components/public/home-connect";
 
 export const metadata: Metadata = {
@@ -24,6 +24,7 @@ export const metadata: Metadata = {
 
 export default async function Home() {
   const locale = await getLocale();
+  const t = await getTranslations("Home");
   // One round of parallel fetches rather than a waterfall — every section is
   // independent, and awaiting them in sequence would add up to a slow page for
   // no reason.
@@ -166,7 +167,7 @@ export default async function Home() {
               style={{ animationDelay: "270ms" }}
             >
               <CtaButton href="/membership" className="max-lg:w-full max-lg:py-4">
-                {entryPrice !== null ? `Plans from ${formatPrice(entryPrice)}` : "See plans"}
+                {entryPrice !== null ? t("plansFrom", { price: formatPrice(entryPrice) }) : t("seePlans")}
               </CtaButton>
               <WhatsAppCta
                 message={`Hi ${BRAND.name}, I have a question about membership.`}
@@ -193,11 +194,11 @@ export default async function Home() {
       <section className="w-full border-b border-border bg-border">
         <div className="mx-auto grid w-full max-w-(--spacing-container-max) grid-cols-3 gap-px">
           {[
-            { value: "24/7", label: "Open" },
-            { value: String(trainers.length), label: trainers.length === 1 ? "Coach" : "Coaches" },
+            { value: "24/7", label: t("statOpen") },
+            { value: String(trainers.length), label: t("statCoaches", { count: trainers.length }) },
             {
               value: String(classTypes.length),
-              label: classTypes.length === 1 ? "Class" : "Classes",
+              label: t("statClasses", { count: classTypes.length }),
             },
           ].map((stat) => (
             <div key={stat.label} className="bg-surface-1 px-3 py-4 text-center md:py-6">

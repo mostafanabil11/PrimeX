@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Link } from "@/i18n/navigation";
+import { useTranslations } from "next-intl";
 import { notFound, useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -15,6 +16,7 @@ import { MEMBER_ACCOUNTS_ENABLED } from "@/lib/features";
 import { Wordmark } from "@/components/layout/wordmark";
 
 export default function SignupPage() {
+  const tCommon = useTranslations("Common");
   if (!MEMBER_ACCOUNTS_ENABLED) {
     notFound();
   }
@@ -81,7 +83,7 @@ export default function SignupPage() {
               simply survived over here. */}
           <Link
             href="/"
-            aria-label={`${BRAND.name} — home`}
+            aria-label={tCommon("homeAriaLabel", { brand: BRAND.name })}
             className="mb-10 flex justify-center"
           >
             <Wordmark className="h-16 w-auto" width={128} />
