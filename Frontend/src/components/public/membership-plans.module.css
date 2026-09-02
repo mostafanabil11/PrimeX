@@ -68,7 +68,6 @@
   background: #141414;
   border: 1px solid #333;
   border-radius: 16px;
-  padding: 24px;
   overflow: hidden;
   transition: transform 300ms ease, border-color 300ms ease, box-shadow 300ms ease;
 }
@@ -95,6 +94,17 @@
   :global([dir="rtl"]) .card:hover .chooseBtn svg {
     transform: translateX(-4px);
   }
+}
+
+/* The card's body, and the link itself. Carries the padding the card used to
+   have, so the whole surface — edges included — is inside the anchor. */
+.cardLink {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 24px;
+  color: inherit;
+  text-decoration: none;
 }
 
 .popularBadge {
@@ -261,7 +271,6 @@
   transition: transform 300ms ease;
 }
 
-.card .chooseBtn::after { content: ""; position: absolute; inset: 0; z-index: 1; border-radius: 16px; }
 
 .chooseBtnOutline {
   background: transparent;

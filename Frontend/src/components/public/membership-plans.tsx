@@ -86,6 +86,31 @@ function MembershipCard({ plan }: { plan: Plan }) {
         </div>
       )}
       
+      {/* THE WHOLE CARD IS THE LINK, rather than a button with a stretched
+          ::after overlay.
+
+          The overlay version looked right and quietly stopped working. An
+          absolutely positioned pseudo-element is placed against its nearest
+          positioned ancestor — unless something between it and that ancestor
+          has a transform, because any transform other than none makes an
+          element a containing block. .chooseBtn transitions transform, and
+          once it had been pressed its computed value resolved from none to
+          matrix(1, 0, 0, 1, 0, 0): an identity matrix that changes nothing
+          visually and moves the containing block onto the button. The overlay
+          then covered the button's own 49px instead of the card's 397px, so
+          the card kept its hover state while the click landed on a list item
+          that is not inside any anchor.
+
+          Wrapping the content is immune to that: there is no overlay to
+          reposition, the anchor genuinely occupies the card, and it stays one
+          link — so tracking, keyboard focus and screen readers are unchanged.
+          The padding moves here too, so the card's edges are inside the link
+          rather than a dead border around it. */}
+      <TrackedPlanLink
+        planId={plan._id}
+        href={`/join?plan=${plan.slug}`}
+        className={styles.cardLink}
+      >
       <div className={styles.cardHeader}>
         <div className={styles.cardHeaderLeft}>
           <h3 className="font-display text-2xl uppercase md:text-3xl">{name}</h3>
@@ -143,12 +168,15 @@ function MembershipCard({ plan }: { plan: Plan }) {
         </div>
       )}
 
-      <TrackedPlanLink
-        planId={plan._id}
-        href={`/join?plan=${plan.slug}`}
+      {/* A span, not a second link: the card around it already navigates,
+          and nesting an anchor inside an anchor is invalid and unreachable by
+          keyboard. It keeps the button styling because it is still what a
+          visitor aims at. */}
+      <span
         className={`ui-action ${styles.chooseBtn} ${plan.isFeatured ? styles.chooseBtnPrimary : styles.chooseBtnOutline}`}
       >
         {t("choose", { tier: name })}<ArrowRight aria-hidden className="rtl-flip size-4" />
+      </span>
       </TrackedPlanLink>
     </article>
   );
