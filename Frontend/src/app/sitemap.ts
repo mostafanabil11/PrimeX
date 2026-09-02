@@ -6,6 +6,7 @@ import {
   getTrainersServer,
 } from "@/lib/api/gym-server";
 import { SHOP_ENABLED } from "@/lib/features";
+import { siteUrl as canonicalSiteUrl } from "@/lib/brand";
 
 const STATIC_ROUTES: Array<[string, number]> = [
   ["/membership", 0.9],
@@ -18,7 +19,13 @@ const STATIC_ROUTES: Array<[string, number]> = [
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3001";
+  // Via the shared helper, not process.env directly. NEXT_PUBLIC_SITE_URL is
+  // typed into a dashboard by hand and a trailing slash is the natural way to
+  // paste a URL — which turned every entry below into a double slash
+  // (…app//classes/fitness), and a crawler reads that as a different URL from
+  // the canonical tag on the page itself. brand.ts already strips it; this
+  // file was the one place reading the variable raw.
+  const siteUrl = canonicalSiteUrl();
 
   const [classTypes, trainers] = await Promise.all([
     getClassTypesServer(),
