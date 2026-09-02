@@ -227,7 +227,7 @@ export function TrainerForm({ trainer }: { trainer?: Trainer }) {
               <select
                 value={a.day}
                 aria-label={`Availability ${i + 1} day`}
-                className="border border-border bg-surface-2 px-2 py-1.5 text-[12px] text-foreground"
+                className="border border-input bg-surface-2 px-2 py-1.5 text-base md:text-[12px] text-foreground"
                 onChange={(e) => {
                   const next = [...availability];
                   next[i] = { ...a, day: e.target.value as Weekday };
@@ -244,7 +244,7 @@ export function TrainerForm({ trainer }: { trainer?: Trainer }) {
                 type="time"
                 value={a.startsAt}
                 aria-label={`Availability ${i + 1} starts at`}
-                className="border border-border bg-surface-2 px-2 py-1.5 text-[12px] text-foreground"
+                className="border border-input bg-surface-2 px-2 py-1.5 text-base md:text-[12px] text-foreground"
                 onChange={(e) => {
                   const next = [...availability];
                   next[i] = { ...a, startsAt: e.target.value };
@@ -256,7 +256,7 @@ export function TrainerForm({ trainer }: { trainer?: Trainer }) {
                 type="time"
                 value={a.endsAt}
                 aria-label={`Availability ${i + 1} ends at`}
-                className="border border-border bg-surface-2 px-2 py-1.5 text-[12px] text-foreground"
+                className="border border-input bg-surface-2 px-2 py-1.5 text-base md:text-[12px] text-foreground"
                 onChange={(e) => {
                   const next = [...availability];
                   next[i] = { ...a, endsAt: e.target.value };
@@ -265,7 +265,7 @@ export function TrainerForm({ trainer }: { trainer?: Trainer }) {
               />
               <button
                 type="button"
-                className="text-[12px] text-destructive hover:underline"
+                className="ui-action ui-action--sm inline-flex text-[12px] text-destructive hover:underline"
                 onClick={() => setAvailability(availability.filter((_, index) => index !== i))}
               >
                 Remove
@@ -274,7 +274,7 @@ export function TrainerForm({ trainer }: { trainer?: Trainer }) {
           ))}
           <button
             type="button"
-            className="w-fit text-[12px] font-medium text-primary-soft hover:underline"
+            className="ui-action ui-action--ghost ui-action--sm inline-flex w-fit text-[12px] font-medium text-primary-soft hover:underline"
             onClick={() =>
               setAvailability([
                 ...availability,

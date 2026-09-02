@@ -6,9 +6,10 @@ import { useMutation } from "@tanstack/react-query";
 import { Check } from "lucide-react";
 import { submitEnquiry } from "@/lib/api/gym";
 import { apiErrorMessage } from "@/lib/api-error";
+import { ctaClasses } from "@/components/public/section";
 
 const inputBase =
-  "w-full border border-border bg-surface-2 px-3.5 py-3 text-[14px] text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring";
+  "w-full border border-input bg-surface-2 px-3.5 py-3 text-base md:text-[14px] text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring";
 
 const labelBase =
   "font-mono text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase";
@@ -198,10 +199,19 @@ export function EnquiryForm({
         </p>
       )}
 
+      {/* ctaClasses, and full width on a phone.
+          Two changes, both about consistency. The style was a one-off — no 2px
+          border, no press feedback, and a `hover:bg-primary-hover` colour
+          change that the design brief in section.tsx explicitly rules out for
+          red buttons — so it now wears the same contract as every other primary
+          action. And `w-fit` left the submit as a ~200px button floating at the
+          left edge under a column of full-width fields, which on a phone reads
+          as a secondary control; the form's own action should be as wide as the
+          form. */}
       <button
         type="submit"
         disabled={mutation.isPending}
-        className="w-fit bg-primary px-7 py-3.5 font-mono text-[13px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
+        className={ctaClasses("primary", "w-full disabled:opacity-50 sm:w-fit")}
       >
         {mutation.isPending ? "Sending…" : submitLabel}
       </button>

@@ -8,15 +8,13 @@ const GETTERS: Record<FeatureName, (config: ConfigService) => boolean> = {
   membershipTracking: config => config.membershipTrackingEnabled,
   classBooking: config => config.classBookingEnabled,
   memberAccounts: config => config.memberAccountsEnabled,
-  shop: config => config.shopEnabled,
 };
 
 // Enforces @Feature(...) at the API boundary. This is the backend half of the
-// SHOP_ENABLED pattern in Frontend/src/lib/features.ts: a whole capability
-// (membership sales, class booking, member accounts, the shop) can be
-// switched off without touching the module graph, deleting a route, or
-// letting a client that skips the UI reach a controller the site no longer
-// advertises.
+// showcase-mode pattern in Frontend/src/lib/features.ts: a whole capability
+// (membership sales, class booking, member accounts) can be switched off
+// without touching the module graph, deleting a route, or letting a client
+// that skips the UI reach a controller the site no longer advertises.
 //
 // NotFoundException, not Forbidden — same reasoning as requireShop() on the
 // frontend: to the outside world these routes genuinely do not exist while
@@ -38,11 +36,9 @@ export class FeatureGuard implements CanActivate {
       return true;
     }
 
-    // Any named feature being on is enough — @Feature('membershipSales', 'shop')
-    // on the payment controller means "reachable if either capability that can
-    // create something for Paymob to confirm is switched on", not "only when
-    // both are". A controller that only ever needs one flag reads the same
-    // either way, so this stays the single rule for every use.
+    // Any named feature being on is enough. Most controllers only ever name
+    // one, but the rule is "any", not "all", so a controller straddling two
+    // capabilities reads the same way as one that only needs a single flag.
     const anyEnabled = requiredFeatures.some(feature => GETTERS[feature](this.configService));
     if (!anyEnabled) {
       throw new NotFoundException();

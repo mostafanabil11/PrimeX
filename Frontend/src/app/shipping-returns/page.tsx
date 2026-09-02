@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { requireShop } from "@/lib/features";
+import { pageTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "Shipping & Returns — Valiant",
+  title: pageTitle("Shipping & Returns"),
   description: "Delivery times, shipping rates, and how to return or exchange an order.",
 };
 

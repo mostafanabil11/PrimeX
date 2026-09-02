@@ -144,6 +144,8 @@ export interface ContentBlockInput {
   key: string;
   value?: string;
   values?: string[];
+  valueAr?: string;
+  valuesAr?: string[];
 }
 
 export async function updateContent(blocks: ContentBlockInput[]): Promise<ContentField[]> {

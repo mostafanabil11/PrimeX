@@ -19,14 +19,14 @@ const ALL_PRIMARY_NAV = [
   { label: "Membership", href: "/membership" },
   { label: "Classes", href: "/classes" },
   { label: "Timetable", href: "/schedule" },
-  { label: "Trainers", href: "/trainers" },
+  { label: "Personal Training", href: "/trainers" },
   { label: "Contact", href: "/contact" },
 ] as const;
 
 const ALL_FOOTER_NAV = [
   { label: "Membership", href: "/membership" },
   { label: "Class Schedule", href: "/schedule" },
-  { label: "Trainers", href: "/trainers" },
+  { label: "Personal Training", href: "/trainers" },
   { label: "FAQ", href: "/faq" },
   { label: "Contact", href: "/contact" },
   { label: "Privacy Policy", href: "/privacy" },

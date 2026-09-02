@@ -195,6 +195,7 @@ export interface ContentField {
   maxLength: number;
   default: string | string[];
   current: string | string[];
+  currentAr: string | string[];
   isOverridden: boolean;
 }
 

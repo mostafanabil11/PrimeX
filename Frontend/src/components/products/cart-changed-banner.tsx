@@ -27,12 +27,12 @@ export function CartChangedBanner({ items }: { items: ResolvedCartLine[] }) {
         <p className="font-semibold">Your bag has changed</p>
         {unavailable.map((item) => (
           <p key={`${item.productId}-${item.size}`} className="text-muted-foreground">
-            {item.name ?? "An item"} ({item.size}) {REASON_COPY[item.reason] ?? "is no longer available"} and was removed.
+            {`${item.name ?? "An item"} (${item.size}) ${REASON_COPY[item.reason] ?? "is no longer available"} and was removed.`}
           </p>
         ))}
         {clamped.map((item) => (
           <p key={`${item.productId}-${item.size}-qty`} className="text-muted-foreground">
-            Only {item.availableStock} of {item.name} ({item.size}) {item.availableStock === 1 ? "is" : "are"} left — quantity updated.
+            {`Only ${item.availableStock} of ${item.name} (${item.size}) ${item.availableStock === 1 ? "is" : "are"} left — quantity updated.`}
           </p>
         ))}
       </div>

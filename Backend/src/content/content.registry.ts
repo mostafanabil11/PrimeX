@@ -102,8 +102,7 @@ export const CONTENT_DEFINITIONS: ContentDefinition[] = [
     label: 'Facilities body',
     type: 'longText',
     maxLength: 800,
-    default:
-      'Equipment chosen by the people who use it, floors laid for the lifts that happen on them, and recovery spaces that are not an afterthought.',
+    default: 'Everything you need to get stronger, from elite machines to premium free weights.',
   },
 
   // --- About ---
@@ -123,7 +122,7 @@ export const CONTENT_DEFINITIONS: ContentDefinition[] = [
     hint: 'How the gym started and what it is trying to be.',
     maxLength: 3000,
     default:
-      'We opened because Cairo had plenty of places to exercise and very few built for people who take training seriously. Our first floor had eight racks and no mirrors. The idea has not changed since: give serious people the equipment, the coaching and the room to do the work properly.',
+      'We opened because Fayoum had plenty of places to exercise and very few built for people who take training seriously. Our first floor had eight racks and no mirrors. The idea has not changed since: give serious people the equipment, the coaching and the room to do the work properly.',
   },
   {
     key: 'about.mission.heading',

@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getOffer } from "@/lib/api/offers";
 import { OfferForm } from "@/components/admin/offer-form";

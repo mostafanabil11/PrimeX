@@ -78,7 +78,7 @@ export default function SessionRosterPage({ params }: { params: Promise<{ id: st
             const reason = prompt("Reason for cancelling this class (shown to members):");
             if (reason !== null) cancel.mutate(reason);
           }}
-          className="mb-6 border border-destructive px-4 py-2 text-[11px] font-semibold tracking-[0.06em] text-destructive uppercase"
+          className="ui-action ui-action--sm inline-flex mb-6 border border-destructive px-4 py-2 text-[11px] font-semibold tracking-[0.06em] text-destructive uppercase"
         >
           Cancel this class
         </button>
@@ -127,7 +127,7 @@ export default function SessionRosterPage({ params }: { params: Promise<{ id: st
                       onClick={() => attendance.mutate({ bookingId: entry._id, attended: true })}
                       disabled={attendance.isPending}
                       aria-label="Mark attended"
-                      className="flex items-center gap-1.5 border border-border px-3 py-1.5 text-[11px] font-semibold tracking-[0.06em] text-foreground uppercase hover:border-primary hover:text-primary-soft disabled:opacity-40"
+                      className="ui-action ui-action--outline ui-action--sm flex items-center gap-1.5 border border-border px-3 py-1.5 text-[11px] font-semibold tracking-[0.06em] text-foreground uppercase hover:border-primary hover:text-primary-soft disabled:opacity-40"
                     >
                       <Check className="size-3.5" strokeWidth={2} />
                       Attended
@@ -137,7 +137,7 @@ export default function SessionRosterPage({ params }: { params: Promise<{ id: st
                       onClick={() => attendance.mutate({ bookingId: entry._id, attended: false })}
                       disabled={attendance.isPending}
                       aria-label="Mark no-show"
-                      className="flex items-center gap-1.5 border border-border px-3 py-1.5 text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:border-destructive hover:text-destructive disabled:opacity-40"
+                      className="ui-action ui-action--sm flex items-center gap-1.5 border border-border px-3 py-1.5 text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:border-destructive hover:text-destructive disabled:opacity-40"
                     >
                       <X className="size-3.5" strokeWidth={2} />
                       No-show

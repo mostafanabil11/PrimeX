@@ -2,14 +2,18 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { AdminNav } from "@/components/admin/admin-nav";
+import { AdminMobileNav } from "@/components/admin/admin-mobile-nav";
 import { Wordmark } from "@/components/layout/wordmark";
+import { LanguageSwitcher } from "@/components/layout/language-switcher";
+import { useLocale } from "next-intl";
 
 export default function AdminLayout({ children }: LayoutProps<"/admin">) {
   const router = useRouter();
   const { data: user, isLoading } = useCurrentUser();
+  const locale = useLocale();
 
   // Front-desk staff belong here too: recording a membership and taking cash
   // are their job, and the backend already grants them those routes. This is
@@ -43,12 +47,21 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
         </Link>
         {/* Red chip rather than grey caps — this is the one label on the page
             that says which side of the site you are standing on. */}
-        <p className="mb-5 ml-4 inline-block bg-primary px-2 py-1 text-[10px] font-bold tracking-[0.16em] text-primary-foreground uppercase">
-          Admin
+        <p className="mb-5 ms-4 inline-block bg-primary px-2 py-1 text-[10px] font-bold tracking-[0.16em] text-primary-foreground uppercase">
+          {locale === "ar" ? "الإدارة" : "Admin"}
         </p>
+        <LanguageSwitcher className="mx-4 mb-4 w-[calc(100%-2rem)] border border-border text-muted-foreground" />
         <AdminNav />
       </aside>
-      <div className="min-w-0 flex-1">{children}</div>
+      <div className="min-w-0 flex-1">
+        {/* The sidebar above is md:block, so below that there was no admin
+            navigation at all — every screen reachable only by typing its URL.
+            This is its counterpart: a drawer, above the page content, showing
+            the same list. See AdminMobileNav for why a drawer and not a
+            scrolling tab strip. */}
+        <AdminMobileNav />
+        {children}
+      </div>
     </div>
   );
 }

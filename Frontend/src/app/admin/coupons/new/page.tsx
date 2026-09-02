@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { CouponForm } from "@/components/admin/coupon-form";
 
 export default function NewCouponPage() {

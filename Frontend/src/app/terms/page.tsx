@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { BRAND, pageTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
@@ -20,9 +20,7 @@ export default function TermsPage() {
         <div className="flex flex-col gap-10 text-[14px] leading-relaxed text-muted-foreground">
           <Section title="Who these apply to">
             <p>
-              These terms cover anyone using {BRAND.name} — members, guests on a pass, and anyone
-              using this website. Joining, booking a class or walking through the door means you
-              accept them.
+              {`These terms cover anyone using ${BRAND.name} — members, guests on a pass, and anyone using this website. Joining, booking a class or walking through the door means you accept them.`}
             </p>
             <p>
               Your membership agreement is a separate document you accept when you join. Where the
@@ -137,7 +135,7 @@ export default function TermsPage() {
           <Section title="Getting in touch">
             <p>
               Anything unclear here, ask us through the{" "}
-              <Link href="/contact" className="text-primary underline">
+              <Link href="/contact" className="text-primary-soft underline">
                 contact page
               </Link>{" "}
               or at the front desk.

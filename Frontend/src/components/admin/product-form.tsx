@@ -82,7 +82,7 @@ export function ProductForm({ product }: { product?: Product }) {
   });
 
   const inputClass =
-    "w-full border border-border bg-background px-4 py-2.5 text-sm text-foreground outline-none focus:border-foreground";
+    "w-full border border-input bg-background px-4 py-2.5 text-base md:text-sm text-foreground outline-none focus:border-foreground";
   const labelClass = "mb-1.5 block text-[11px] font-semibold tracking-[0.1em] text-foreground uppercase";
 
   return (
@@ -181,7 +181,7 @@ export function ProductForm({ product }: { product?: Product }) {
                 type="button"
                 onClick={() => setImages((prev) => prev.filter((_, idx) => idx !== i))}
                 disabled={images.length === 1}
-                className="shrink-0 border border-border px-3 text-muted-foreground transition-colors hover:text-destructive disabled:opacity-30"
+                className="ui-action ui-action--sm inline-flex shrink-0 border border-border px-3 text-muted-foreground transition-colors hover:text-destructive disabled:opacity-30"
                 aria-label="Remove image"
               >
                 <Trash2 className="size-4" strokeWidth={1.5} />
@@ -192,7 +192,7 @@ export function ProductForm({ product }: { product?: Product }) {
         <button
           type="button"
           onClick={() => setImages((prev) => [...prev, ""])}
-          className="mt-2 flex items-center gap-1.5 text-[12px] text-muted-foreground underline hover:text-foreground"
+          className="ui-action ui-action--ghost ui-action--sm mt-2 flex items-center gap-1.5 text-[12px] text-muted-foreground underline hover:text-foreground"
         >
           <Plus className="size-3.5" strokeWidth={2} />
           Add image URL
@@ -236,14 +236,14 @@ export function ProductForm({ product }: { product?: Product }) {
         <button
           type="submit"
           disabled={mutation.isPending}
-          className="bg-primary px-8 py-3 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
+          className="ui-action ui-action--sm inline-flex bg-primary px-8 py-3 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
         >
           {mutation.isPending ? "Saving…" : isEdit ? "Save Changes" : "Create Product"}
         </button>
         <button
           type="button"
           onClick={() => router.push("/admin/products")}
-          className="border border-border px-8 py-3 text-button font-medium tracking-[0.05em] text-foreground uppercase transition-colors hover:bg-muted"
+          className="ui-action ui-action--outline ui-action--sm inline-flex border border-border px-8 py-3 text-button font-medium tracking-[0.05em] text-foreground uppercase transition-colors hover:bg-muted"
         >
           Cancel
         </button>

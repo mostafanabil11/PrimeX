@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Plus, X } from "lucide-react";
@@ -14,7 +14,7 @@ import { WEEKDAYS } from "@/types/gym";
 import { sessionTime, todayLocalDate } from "@/types/schedule";
 
 const inputBase =
-  "w-full border border-border bg-surface-2 px-3 py-2 text-[13px] text-foreground focus:border-ring focus:outline-none";
+  "w-full border border-input bg-surface-2 px-3 py-2 text-base md:text-[13px] text-foreground focus:border-ring focus:outline-none";
 
 export default function AdminSchedulePage() {
   const queryClient = useQueryClient();
@@ -79,7 +79,7 @@ export default function AdminSchedulePage() {
         <button
           type="button"
           onClick={() => setShowForm(!showForm)}
-          className="ms-auto flex items-center gap-2 bg-primary px-5 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase"
+          className="ui-action ui-action--sm ms-auto flex items-center gap-2 bg-primary px-5 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase"
         >
           <Plus className="size-4" strokeWidth={2} />
           New slot
@@ -105,7 +105,7 @@ export default function AdminSchedulePage() {
               <Link
                 key={s._id}
                 href={`/admin/schedule/sessions/${s._id}`}
-                className="border border-border bg-background px-3 py-2 text-[12px] text-foreground hover:border-primary"
+                className="ui-action ui-action--outline ui-action--sm inline-flex border border-border bg-background px-3 py-2 text-[12px] text-foreground hover:border-primary"
               >
                 <span className="font-semibold tabular-nums">{sessionTime(s, "Africa/Cairo")}</span>{" "}
                 {s.classType.name} · {s.branch.name} · {s.bookedCount}/{s.capacity}
@@ -118,7 +118,7 @@ export default function AdminSchedulePage() {
       <p className="mb-4 text-[12px] text-muted-foreground">
         The grid below is the recurring pattern. To manage a specific occurrence — cancel it, mark
         attendance, see who is booked — open it from today&apos;s sessions above, or from the{" "}
-        <a href="/schedule" target="_blank" rel="noreferrer" className="text-primary underline">
+        <a href="/schedule" target="_blank" rel="noreferrer" className="text-primary-soft underline">
           public timetable
         </a>
         .
@@ -165,7 +165,7 @@ export default function AdminSchedulePage() {
                           }
                         }}
                         aria-label="Stop this slot"
-                        className="absolute top-1.5 right-1.5 hidden p-1 text-muted-foreground hover:text-destructive group-hover:block"
+                        className="ui-action ui-action--icon ui-action--ghost ui-action--sm absolute top-1.5 right-1.5 hidden p-1 text-muted-foreground hover:text-destructive group-hover:block"
                       >
                         <X className="size-3.5" strokeWidth={2} />
                       </button>
@@ -325,14 +325,14 @@ function NewSlotForm({
         <button
           type="submit"
           disabled={create.isPending}
-          className="bg-primary px-6 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase disabled:opacity-50"
+          className="ui-action ui-action--sm inline-flex bg-primary px-6 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase disabled:opacity-50"
         >
           {create.isPending ? "Adding…" : "Add slot"}
         </button>
         <button
           type="button"
           onClick={onDone}
-          className="px-4 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase"
+          className="ui-action ui-action--ghost ui-action--sm inline-flex px-4 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase"
         >
           Cancel
         </button>

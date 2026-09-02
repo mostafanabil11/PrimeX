@@ -102,10 +102,6 @@ export const envSchema = z.object({
     .string()
     .default('false')
     .transform(value => value === 'true'),
-  SHOP_ENABLED: z
-    .string()
-    .default('false')
-    .transform(value => value === 'true'),
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;

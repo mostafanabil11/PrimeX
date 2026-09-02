@@ -1,0 +1,18 @@
+.pricing-accordion { gap: 10px; overflow-anchor: none; }
+.pricing-term { overflow: hidden; border: 1px solid #383e3f; border-radius: 12px; }
+.pricing-term-trigger { cursor: pointer; border-radius: 11px; -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
+.pricing-term-trigger:focus-visible { outline: 2px solid #e4eded; outline-offset: -3px; }
+.pricing-term-trigger[aria-expanded="true"] { background: #1b2021; }
+.pricing-accordion .term-panel { overflow: clip; contain: layout; }
+.term-content { display: flow-root; }
+.pricing-accordion .term-row,
+.pricing-accordion .term-panel[data-open] .term-row {
+  opacity: 1;
+  transform: none;
+  transition: background-color 180ms ease;
+  transition-delay: 0s;
+}
+.pricing-accordion .term-panel[data-open] .term-row:active { transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  .pricing-accordion .term-row { transition: none; }
+}

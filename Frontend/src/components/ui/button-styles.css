@@ -1,0 +1,100 @@
+/* Shared button skin. Unlayered on purpose: migrated controls retain their
+   layout and typography utilities. Only the surface and interaction are shared. */
+.ui-action,
+.ui-control {
+  border-radius: 8px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.ui-action {
+  --button-bg: #242728;
+  --button-hover: #303536;
+  --button-border: #505859;
+  --button-color: #f3f5f5;
+  min-block-size: 44px;
+  padding: 10px 18px;
+  border: 1px solid var(--button-border);
+  background: var(--button-bg);
+  color: var(--button-color);
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background-color 180ms ease, border-color 180ms ease,
+    color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+}
+
+.ui-action--primary,
+.ui-action[class~="bg-primary"] {
+  --button-bg: #c9212b;
+  --button-hover: #dc2b36;
+  --button-border: transparent;
+  --button-color: #fff;
+  box-shadow: 0 3px 10px rgb(0 0 0 / 14%);
+}
+
+.ui-action--outline { --button-bg: transparent; --button-hover: #242829; }
+.ui-action--ghost { --button-bg: transparent; --button-border: transparent; --button-hover: #252a2b; --button-color: #d8dede; }
+.ui-action--danger,
+.ui-action[class~="text-destructive"],
+.ui-action[class~="border-destructive"] {
+  --button-bg: #321e22;
+  --button-hover: #46252c;
+  --button-border: #6c4149;
+  --button-color: #ffc2ca;
+}
+.ui-action--whatsapp { --button-bg: #202727; --button-hover: #293333; --button-border: #455653; }
+.ui-action--link { --button-bg: transparent; --button-border: transparent; padding-inline: 8px; text-decoration: underline; text-underline-offset: 4px; }
+.ui-action--icon { inline-size: 44px; min-inline-size: 44px; block-size: 44px; padding: 0; border-radius: 8px; }
+.ui-action--sm { padding-inline: 14px; }
+.ui-action--icon.ui-action--sm { padding: 0; }
+.ui-action--utility { min-block-size: 36px; padding: 6px 8px; }
+.ui-action--header { padding-inline: 14px; }
+.ui-action--flush { border-radius: 0; border: 0; box-shadow: none; }
+
+@media (hover: hover) {
+  .ui-action:hover:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--button-hover);
+    color: var(--button-color);
+    border-color: var(--button-border);
+  }
+  .ui-control:hover:not(:disabled):not([aria-disabled="true"]) { background-color: #252a2b; }
+}
+.ui-action:active:not(:disabled):not([aria-disabled="true"]) { transform: translateY(1px); }
+.ui-action:focus-visible,
+.ui-control:focus-visible {
+  outline: 2px solid #e4eded;
+  outline-offset: 3px;
+  box-shadow: none;
+}
+.ui-action:disabled,
+.ui-action[aria-disabled="true"] {
+  opacity: .45;
+  pointer-events: none;
+  box-shadow: none;
+  transform: none;
+}
+.ui-action svg { flex-shrink: 0; }
+.ui-control { min-block-size: 44px; transition: background-color 180ms ease, border-color 180ms ease, color 180ms ease; }
+.ui-control[aria-pressed="true"],
+.ui-control[aria-checked="true"],
+.ui-control[class~="bg-primary"] {
+  background: #2c3334;
+  color: #fff;
+  border-color: #7b8788;
+}
+.ui-control--icon { border-radius: 8px; }
+[dir="rtl"] .ui-action--code { font-family: var(--font-jetbrains), monospace; }
+
+/* A stretched plan link must keep its positioned tier as the hit-area parent. */
+.tier-cta.ui-action { position: static; }
+.tier-cta.ui-action:active:not(:disabled) { transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-action, .ui-control { transition: none; }
+  .ui-action:active:not(:disabled) { transform: none; }
+}

@@ -100,16 +100,17 @@ export function OrderDetail({ order, canCancel = true }: { order: Order; canCanc
         </p>
         <p className="text-muted-foreground">{order.shippingAddress.phone}</p>
         <p className="mt-2 text-foreground">
-          Payment:{" "}
-          {order.paymentMethod === "cod"
-            ? "Cash on Delivery"
-            : order.paymentStatus === "paid"
-              ? "Paid by card"
-              : order.paymentStatus === "refunded"
-                ? "Refunded"
-                : order.paymentStatus === "failed"
-                  ? "Card payment failed"
-                  : "Card — awaiting payment"}
+          {`Payment: ${
+            order.paymentMethod === "cod"
+              ? "Cash on Delivery"
+              : order.paymentStatus === "paid"
+                ? "Paid by card"
+                : order.paymentStatus === "refunded"
+                  ? "Refunded"
+                  : order.paymentStatus === "failed"
+                    ? "Card payment failed"
+                    : "Card — awaiting payment"
+          }`}
         </p>
       </div>
 
@@ -123,7 +124,7 @@ export function OrderDetail({ order, canCancel = true }: { order: Order; canCanc
                   type="button"
                   onClick={() => cancelMutation.mutate()}
                   disabled={cancelMutation.isPending}
-                  className="border border-destructive px-6 py-2.5 font-mono text-[12px] font-medium tracking-[0.05em] text-destructive uppercase transition-colors hover:bg-destructive/10 disabled:opacity-50"
+                  className="ui-action inline-flex border border-destructive px-6 py-2.5 font-mono text-[12px] font-medium tracking-[0.05em] text-destructive uppercase transition-colors hover:bg-destructive/10 disabled:opacity-50"
                 >
                   {cancelMutation.isPending ? "Cancelling…" : "Yes, Cancel Order"}
                 </button>
@@ -131,7 +132,7 @@ export function OrderDetail({ order, canCancel = true }: { order: Order; canCanc
                   type="button"
                   onClick={() => setConfirming(false)}
                   disabled={cancelMutation.isPending}
-                  className="border border-border px-6 py-2.5 font-mono text-[12px] font-medium tracking-[0.05em] text-foreground uppercase transition-colors hover:bg-muted"
+                  className="ui-action ui-action--outline inline-flex border border-border px-6 py-2.5 font-mono text-[12px] font-medium tracking-[0.05em] text-foreground uppercase transition-colors hover:bg-muted"
                 >
                   Never Mind
                 </button>
@@ -141,7 +142,7 @@ export function OrderDetail({ order, canCancel = true }: { order: Order; canCanc
             <button
               type="button"
               onClick={() => setConfirming(true)}
-              className="text-[13px] text-muted-foreground underline hover:text-foreground"
+              className="ui-action ui-action--ghost inline-flex text-[13px] text-muted-foreground underline hover:text-foreground"
             >
               Cancel this order
             </button>

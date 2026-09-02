@@ -34,17 +34,26 @@ export default function AdminContentPage() {
   // "leave alone", so posting every field back would mark the whole site as
   // overridden and quietly freeze it against future default changes.
   const [edits, setEdits] = useState<Record<string, string | string[]>>({});
+  const [editsAr, setEditsAr] = useState<Record<string, string | string[]>>({});
 
   const save = useMutation({
     mutationFn: async () => {
-      const blocks: ContentBlockInput[] = Object.entries(edits).map(([key, value]) =>
-        Array.isArray(value) ? { key, values: value } : { key, value },
-      );
+      const keys = new Set([...Object.keys(edits), ...Object.keys(editsAr)]);
+      const blocks: ContentBlockInput[] = [...keys].map((key) => {
+        const english = edits[key];
+        const arabic = editsAr[key];
+        return {
+          key,
+          ...(english !== undefined ? (Array.isArray(english) ? { values: english } : { value: english }) : {}),
+          ...(arabic !== undefined ? (Array.isArray(arabic) ? { valuesAr: arabic } : { valueAr: arabic }) : {}),
+        };
+      });
       return updateContent(blocks);
     },
     onSuccess: () => {
       toast.success("Content saved");
       setEdits({});
+      setEditsAr({});
       queryClient.invalidateQueries({ queryKey: ["admin", "content"] });
     },
     onError: (err) => toast.error(apiErrorMessage(err, "Could not save the content")),
@@ -59,6 +68,11 @@ export default function AdminContentPage() {
         delete next[key];
         return next;
       });
+      setEditsAr((prev) => {
+        const next = { ...prev };
+        delete next[key];
+        return next;
+      });
       queryClient.invalidateQueries({ queryKey: ["admin", "content"] });
     },
     onError: (err) => toast.error(apiErrorMessage(err, "Could not reset the field")),
@@ -68,10 +82,14 @@ export default function AdminContentPage() {
     return <div className="h-96 animate-pulse bg-muted" />;
   }
 
-  const dirtyCount = Object.keys(edits).length;
+  const dirtyCount = new Set([...Object.keys(edits), ...Object.keys(editsAr)]).size;
 
   function currentValue(field: ContentField): string | string[] {
     return edits[field.key] ?? field.current;
+  }
+
+  function currentArabicValue(field: ContentField): string | string[] {
+    return editsAr[field.key] ?? field.currentAr ?? (field.type === "list" ? [] : "");
   }
 
   return (
@@ -103,7 +121,8 @@ export default function AdminContentPage() {
 
               {groupFields.map((field) => {
                 const value = currentValue(field);
-                const isDirty = field.key in edits;
+                const valueAr = currentArabicValue(field);
+                const isDirty = field.key in edits || field.key in editsAr;
 
                 return (
                   <div key={field.key} className="flex flex-col gap-1.5">
@@ -122,7 +141,7 @@ export default function AdminContentPage() {
                             if (confirm(`Reset "${field.label}" to the standard wording?`))
                               reset.mutate(field.key);
                           }}
-                          className="flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground"
+                          className="ui-action ui-action--ghost ui-action--sm flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground"
                         >
                           <RotateCcw className="size-3" strokeWidth={1.5} />
                           Reset
@@ -130,6 +149,7 @@ export default function AdminContentPage() {
                       )}
                     </div>
 
+                    <p className="font-mono text-[10px] font-semibold tracking-[0.12em] text-muted-foreground uppercase">English</p>
                     {field.type === "list" ? (
                       <StringList
                         label=""
@@ -146,7 +166,7 @@ export default function AdminContentPage() {
                           maxLength={field.maxLength}
                           value={typeof value === "string" ? value : ""}
                           onChange={(e) => setEdits({ ...edits, [field.key]: e.target.value })}
-                          className="w-full resize-y border border-border bg-surface-2 px-3 py-2 text-[13px] leading-relaxed text-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring"
+                          className="w-full resize-y border border-input bg-surface-2 px-3 py-2 text-base md:text-[13px] leading-relaxed text-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring"
                         />
                         <p className="text-[12px] text-muted-foreground">
                           {field.hint ? `${field.hint} · ` : ""}
@@ -161,13 +181,44 @@ export default function AdminContentPage() {
                           maxLength={field.maxLength}
                           value={typeof value === "string" ? value : ""}
                           onChange={(e) => setEdits({ ...edits, [field.key]: e.target.value })}
-                          className="w-full border border-border bg-surface-2 px-3 py-2 text-[13px] text-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring"
+                          className="w-full border border-input bg-surface-2 px-3 py-2 text-base md:text-[13px] text-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring"
                         />
                         {field.hint && (
                           <p className="text-[12px] text-muted-foreground">{field.hint}</p>
                         )}
                       </>
                     )}
+
+                    <div className="mt-3 border-t border-border pt-4" dir="rtl">
+                      <p className="mb-2 text-right font-mono text-[10px] font-semibold text-muted-foreground">العربية</p>
+                      {field.type === "list" ? (
+                        <StringList
+                          label=""
+                          hint="Arabic version; English is used if this is left empty."
+                          items={Array.isArray(valueAr) ? valueAr : []}
+                          onChange={(items) => setEditsAr({ ...editsAr, [field.key]: items })}
+                          maxItems={30}
+                        />
+                      ) : field.type === "longText" ? (
+                        <textarea
+                          rows={4}
+                          maxLength={field.maxLength}
+                          value={typeof valueAr === "string" ? valueAr : ""}
+                          onChange={(e) => setEditsAr({ ...editsAr, [field.key]: e.target.value })}
+                          placeholder="اتركه فارغاً لاستخدام النص الإنجليزي"
+                          className="w-full resize-y border border-input bg-surface-2 px-3 py-2 text-base leading-relaxed text-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring md:text-[13px]"
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          maxLength={field.maxLength}
+                          value={typeof valueAr === "string" ? valueAr : ""}
+                          onChange={(e) => setEditsAr({ ...editsAr, [field.key]: e.target.value })}
+                          placeholder="اتركه فارغاً لاستخدام النص الإنجليزي"
+                          className="w-full border border-input bg-surface-2 px-3 py-2 text-base text-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring md:text-[13px]"
+                        />
+                      )}
+                    </div>
                   </div>
                 );
               })}
@@ -179,7 +230,7 @@ export default function AdminContentPage() {
           <button
             type="submit"
             disabled={save.isPending || dirtyCount === 0}
-            className="bg-primary px-6 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-40"
+            className="ui-action ui-action--sm inline-flex bg-primary px-6 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-40"
           >
             {save.isPending
               ? "Saving…"
@@ -190,8 +241,8 @@ export default function AdminContentPage() {
           {dirtyCount > 0 && (
             <button
               type="button"
-              onClick={() => setEdits({})}
-              className="px-4 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground"
+              onClick={() => { setEdits({}); setEditsAr({}); }}
+              className="ui-action ui-action--ghost ui-action--sm inline-flex px-4 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground"
             >
               Discard
             </button>

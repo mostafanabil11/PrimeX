@@ -1,0 +1,131 @@
+{
+  "Common": {
+    "language": "العربية",
+    "skipToContent": "Skip to main content",
+    "joinNow": "Join now",
+    "whatsapp": "WhatsApp",
+    "openAlways": "24/7 · Always open, no limits",
+    "staffConfirmation": "Staff confirmation",
+    "goBack": "Go back"
+  },
+  "Navigation": {
+    "home": "Home",
+    "about": "About",
+    "membership": "Membership",
+    "classes": "Classes",
+    "trainers": "Personal Training",
+    "contact": "Contact",
+    "faq": "FAQ",
+    "admin": "Admin"
+  },
+  "Membership": {
+    "eyebrow": "Membership",
+    "heading": "Choose your path",
+    "intro": "Find the level that fits your training, then choose your term. Reserve your place and our team will take it from there on WhatsApp.",
+    "whatsappReservation": "Reserve via WhatsApp",
+    "noOnlinePayment": "No online payment",
+    "staffActivation": "Activated by our team",
+    "plansHeading": "Your membership, your pace",
+    "plansIntro": "Choose a term below to compare the plans. Every price shown covers the full term.",
+    "empty": "Plans are being updated. Please check back shortly, or get in touch and we will talk you through the options.",
+    "year": "1 Year",
+    "months": "{count, plural, one {1 Month} other {# Months}}",
+    "from": "From {price}",
+    "saveUpTo": "Save up to {percent}%",
+    "save": "Save {percent}%",
+    "priceNote": "Prices shown cover the full term; session allowances are totals for that term. Any joining fee or tax is shown in your reservation before you submit.",
+    "popular": "Popular",
+    "gymAndFitness": "Gym + Fitness",
+    "gymOrFitness": "Gym or Fitness",
+    "fullTerm": "For the full term",
+    "perMonth": "{price} / month",
+    "oneMonthTerm": "One-month membership",
+    "unlimitedSessions": "Unlimited sessions",
+    "sessions": "{count, plural, one {1 session} other {# sessions}}",
+    "everyDay": "Train every day",
+    "daysPerWeek": "{count, plural, one {1 day a week} other {# days a week}}",
+    "guests": "{count, plural, one {1 guest invite} other {# guest invites}}",
+    "freezeDays": "{count, plural, one {1 day freeze} other {# days freeze}}",
+    "noJoiningFee": "No joining fee",
+    "jacuzzi": "Jacuzzi",
+    "sauna": "Sauna",
+    "inbody": "InBody",
+    "choose": "Choose {tier}",
+    "compareTitle": "Compare every term",
+    "compareBody": "All tiers and full-term prices, side by side.",
+    "swipeHint": "Swipe across the table to compare all terms. Select a price to reserve.",
+    "tier": "Tier",
+    "unavailable": "Not available",
+    "faqHeading": "Before you join",
+    "faqIntro": "A few things worth knowing before you choose.",
+    "faq1Question": "What is the difference between the tiers?",
+    "faq1Answer": "How often you can train, and what you can train in. Starter and Go Pro cover the gym floor or the studio timetable — you choose which. Master and Elite cover both, and add jacuzzi, sauna and InBody scans.",
+    "faq2Question": "Is there a joining fee?",
+    "faq2Answer": "There is a one-off joining fee on most plans — we will tell you before you commit to anything. Every annual plan waives it.",
+    "faq3Question": "What does a session mean?",
+    "faq3Answer": "One visit. A Go Pro membership at three days a week works out as twelve sessions a month, and the number on each card is the total across the whole term. Elite has no cap at all.",
+    "faq4Question": "Can I freeze my membership?",
+    "faq4Answer": "The longer Master and Elite plans include a month of freeze time — the card says which. Ask us on WhatsApp or at the desk and we will set the date you choose.",
+    "faq5Question": "What happens when my plan runs out?",
+    "faq5Answer": "Nothing renews automatically. Message us on WhatsApp or drop by the desk when you want to carry on, and we will set you up again.",
+    "faq6Question": "Do the offers stack?",
+    "faq6Answer": "No. Where more than one promotion covers a plan you get the single best one, never both applied one after the other. The price on the card is always the price you pay.",
+    "helpHeading": "Not sure which plan fits?",
+    "helpBody": "Tell us how you like to train. Our team will help you choose a membership that works for you.",
+    "askWhatsapp": "Ask on WhatsApp",
+    "contact": "Talk to us first"
+  },
+  "Join": {
+    "reservationHeading": "Reserve your membership",
+    "reservationIntro": "Leave your details and continue on WhatsApp. Our team will confirm your membership — no online payment.",
+    "selectedPlan": "Your membership",
+    "changePlan": "Change plan",
+    "membershipPrice": "Membership price",
+    "confirmationNote": "Payment and activation are confirmed by our team on WhatsApp.",
+    "yourDetails": "Your details",
+    "emailReceiptNote": "For your receipt, if you would like one.",
+    "paymentPreferenceNote": "Choose how you prefer to pay. Our team will arrange the details on WhatsApp.",
+    "reserveWhatsapp": "Reserve via WhatsApp",
+    "noOnlinePayment": "No online payment",
+    "priceError": "We couldn't load the price. Please try again.",
+    "retryPrice": "Retry price",
+    "reservationOnlyTitle": "Reservation only.",
+    "reservationOnlyBody": "No payment is taken on this website. After you submit, WhatsApp will open and the team will confirm your payment before activating the membership.",
+    "plan": "Plan",
+    "firstName": "First name",
+    "lastName": "Last name",
+    "phone": "Phone",
+    "phoneHint": "This is how we will reach you on WhatsApp.",
+    "email": "Email",
+    "optional": "optional",
+    "emailHint": "Only if you want a receipt by email. We will not send you anything else.",
+    "startDate": "Start date",
+    "paymentMethod": "Preferred payment method",
+    "amountDue": "Amount due",
+    "loadingTotal": "Loading total…",
+    "agreement": "I accept the membership agreement and the gym rules.",
+    "agreementError": "Please accept the membership agreement and the gym rules to continue.",
+    "reserve": "Reserve",
+    "reserveFull": "Reserve my membership",
+    "reserving": "Reserving…",
+    "reserved": "Reserved",
+    "reference": "Your reference",
+    "openWhatsapp": "Open WhatsApp again"
+    ,"joiningFee": "Joining fee"
+    ,"tax": "Tax"
+    ,"starting": "Starting {date}."
+    ,"receiptHint": "Only if you want a receipt by email. We will not send you anything else."
+    ,"agreement": "I accept the membership agreement and the gym rules."
+    ,"reservationError": "Could not reserve that — please try again"
+    ,"reservedBody": "Your {plan} reservation has been created. Nothing has been charged, and the membership stays inactive until the team confirms your payment and activates it."
+    ,"yourReference": "Your reference"
+    ,"referenceHint": "Quote this at the desk, or in the chat."
+    ,"whatsappReady": "We opened WhatsApp with your details ready to send. Send the message so the team can confirm your payment method and complete the activation."
+    ,"findUs": "Or find us"
+    ,"alreadyMember": "You are already a member"
+    ,"alreadyMemberBody": "Your {plan} membership runs until {date}. Nothing has been changed."
+    ,"askMembership": "Ask us about your membership"
+    ,"seePlans": "See all plans"
+    ,"wallet": "Wallet"
+  }
+}

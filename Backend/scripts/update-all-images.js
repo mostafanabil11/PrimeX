@@ -1,9 +1,13 @@
 require('dotenv').config();
 const mongoose = require('mongoose');
 
+// Only 'faiyum' still resolves — sheikh-zayed went when the gym consolidated to
+// one site, and its image is kept only so this map is not a lie about what is
+// on disk. The faiyum entry was 'maadi' pointing at branch-maadi-hero.jpg, both
+// renamed by relocate-branch-to-faiyum.js.
 const branchCovers = {
   'sheikh-zayed': ['/images/branch-sheikh-zayed-hero.jpg'],
-  'maadi': ['/images/branch-maadi-hero.jpg']
+  'faiyum': ['/images/branch-hero.jpg']
 };
 
 // NOTE: the field is `photo`, not `photoUrl`. `photoUrl` is not a path on the

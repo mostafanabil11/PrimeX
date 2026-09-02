@@ -7,6 +7,8 @@ import { formatPrice } from "@/lib/format";
 import { formatMembershipDateShort, paymentMethodLabel, isSettledByStaff } from "@/lib/gym-format";
 import { AdminPageHeader } from "@/components/admin/resource-list";
 import { RecordCashButton } from "@/components/admin/record-cash-button";
+import { AdminContactButtons } from "@/components/admin/contact-buttons";
+import { chaseReservation, memberOpener } from "@/lib/whatsapp-messages";
 import type { PaymentStatus } from "@/types/membership";
 
 const STATUS_FILTERS: Array<{ value: PaymentStatus | ""; label: string }> = [
@@ -75,7 +77,7 @@ export default function AdminMembershipsPage() {
               setStatus(f.value);
               setPage(1);
             }}
-            className={`px-3.5 py-2 text-[12px] font-semibold tracking-[0.06em] uppercase transition-colors ${
+            className={`ui-control px-3.5 py-2 text-[12px] font-semibold tracking-[0.06em] uppercase transition-colors ${
               status === f.value
                 ? "bg-primary text-primary-foreground"
                 : "border border-border text-muted-foreground hover:text-foreground"
@@ -92,7 +94,7 @@ export default function AdminMembershipsPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Reference or invoice no."
-          className="ml-auto w-56 border border-border bg-surface-1 px-3 py-2 text-[13px] text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none"
+          className="ml-auto w-56 border border-input bg-surface-1 px-3 py-2 text-base md:text-[13px] text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none"
         />
       </div>
 
@@ -128,6 +130,12 @@ export default function AdminMembershipsPage() {
                   // Email is nullable now that members can be signed up at the
                   // desk without one, so the phone is the fallback contact.
                   const contact = invoice.email ?? memberObj?.phone ?? invoice.phone ?? null;
+                  // Separately from the display line above: the call and
+                  // WhatsApp buttons need a number specifically, and the
+                  // display line may well be showing an email.
+                  const phone = memberObj?.phone ?? invoice.phone ?? null;
+                  const firstName = memberObj?.firstName ?? "there";
+                  const reference = subscription?.referenceCode ?? null;
 
                   return (
                     <tr key={invoice._id} className="border-b border-border last:border-0">
@@ -174,19 +182,42 @@ export default function AdminMembershipsPage() {
                         {formatPrice(invoice.totalMinorUnits)}
                       </td>
                       <td className="px-3 py-3.5 align-top whitespace-nowrap">
-                        {/* Off-system methods only. A pending card invoice is
-                            between the member and Paymob — marking it paid by
-                            hand would activate a membership nobody was
-                            charged for. */}
-                        {invoice.paymentStatus === "pending" &&
-                          isSettledByStaff(invoice.paymentMethod) && (
-                            <RecordCashButton
-                              invoiceId={invoice._id}
-                              invoiceNumber={invoice.invoiceNumber}
-                              amount={formatPrice(invoice.totalMinorUnits)}
-                              method={invoice.paymentMethod}
+                        <div className="flex items-center justify-end gap-2">
+                          {/* Same pair as the dashboard's awaiting-payment list,
+                              from the same component — this table is where staff
+                              actually work through unpaid invoices, and it was
+                              printing the member's number as text with no way to
+                              act on it.
+
+                              The draft depends on the row: an unpaid invoice gets
+                              the chase, anything else gets a plain greeting,
+                              because "we still have your membership reserved" is
+                              the wrong thing to send somebody who has paid. */}
+                          {phone && (
+                            <AdminContactButtons
+                              phone={phone}
+                              name={member}
+                              message={
+                                invoice.paymentStatus === "pending"
+                                  ? chaseReservation(reference, firstName)
+                                  : memberOpener(firstName, reference)
+                              }
                             />
                           )}
+                          {/* Off-system methods only. A pending card invoice is
+                              between the member and Paymob — marking it paid by
+                              hand would activate a membership nobody was
+                              charged for. */}
+                          {invoice.paymentStatus === "pending" &&
+                            isSettledByStaff(invoice.paymentMethod) && (
+                              <RecordCashButton
+                                invoiceId={invoice._id}
+                                invoiceNumber={invoice.invoiceNumber}
+                                amount={formatPrice(invoice.totalMinorUnits)}
+                                method={invoice.paymentMethod}
+                              />
+                            )}
+                        </div>
                       </td>
                     </tr>
                   );
@@ -201,7 +232,7 @@ export default function AdminMembershipsPage() {
                 type="button"
                 disabled={page <= 1}
                 onClick={() => setPage(page - 1)}
-                className="border border-border px-4 py-2 text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
+                className="ui-action ui-action--outline ui-action--sm inline-flex border border-border px-4 py-2 text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
               >
                 Previous
               </button>
@@ -212,7 +243,7 @@ export default function AdminMembershipsPage() {
                 type="button"
                 disabled={page >= data.totalPages}
                 onClick={() => setPage(page + 1)}
-                className="border border-border px-4 py-2 text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
+                className="ui-action ui-action--outline ui-action--sm inline-flex border border-border px-4 py-2 text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
               >
                 Next
               </button>

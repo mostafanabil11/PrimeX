@@ -7,6 +7,7 @@ import { RelatedProducts } from "@/components/products/related-products";
 import { RecentlyViewed } from "@/components/products/recently-viewed";
 import { formatPrice } from "@/lib/format";
 import { requireShop } from "@/lib/features";
+import { BRAND, pageTitle } from "@/lib/brand";
 
 type Params = Promise<{ slug: string }>;
 
@@ -20,19 +21,19 @@ export async function generateMetadata({ params }: { params: Params }): Promise<
   const product = await getProductBySlugServer(slug);
 
   if (!product) {
-    return { title: "Product Not Found — Valiant" };
+    return { title: pageTitle("Product Not Found") };
   }
 
   const price = formatPrice(product.discountPrice ?? product.price);
   const description = product.description
     ? product.description
-    : `${product.name} in ${product.color} — ${price}. Shop the collection at Valiant.`;
+    : `${product.name} in ${product.color} — ${price}. Shop the collection at ${BRAND.name}.`;
 
   return {
-    title: `${product.name} — Valiant`,
+    title: `${product.name} — ${BRAND.name}`,
     description,
     openGraph: {
-      title: `${product.name} — Valiant`,
+      title: `${product.name} — ${BRAND.name}`,
       description,
       images: product.images[0] ? [{ url: product.images[0] }] : undefined,
       type: "website",

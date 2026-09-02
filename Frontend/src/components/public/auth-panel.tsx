@@ -33,7 +33,7 @@ export function AuthPanel({ caption }: { caption?: string }) {
       </div>
 
       <p className="relative font-mono text-[11px] tracking-[0.1em] text-muted-foreground uppercase">
-        Cairo · Est. 2024
+        Fayoum · Est. 2024
       </p>
     </div>
   );

@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { ProductBrowser } from "@/components/products/product-browser";
 import { requireShop } from "@/lib/features";
+import { pageTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "Sale — Valiant",
+  title: pageTitle("Sale"),
   description: "Selected styles, 20% off while stock lasts.",
 };
 

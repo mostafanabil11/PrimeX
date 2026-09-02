@@ -1,7 +1,7 @@
 "use client";
 
 import { use } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { ArrowLeft } from "lucide-react";
@@ -137,7 +137,7 @@ export default function AdminCustomerDetailPage({ params }: { params: Promise<{ 
                       type="button"
                       disabled={unfreeze.isPending}
                       onClick={() => unfreeze.mutate(current._id)}
-                      className="border border-border px-4 py-2 text-[11px] font-semibold tracking-[0.06em] text-foreground uppercase hover:border-foreground disabled:opacity-40"
+                      className="ui-action ui-action--outline ui-action--sm inline-flex border border-border px-4 py-2 text-[11px] font-semibold tracking-[0.06em] text-foreground uppercase hover:border-foreground disabled:opacity-40"
                     >
                       Unfreeze now
                     </button>
@@ -150,7 +150,7 @@ export default function AdminCustomerDetailPage({ params }: { params: Promise<{ 
                         cancel.mutate(current._id);
                       }
                     }}
-                    className="border border-destructive px-4 py-2 text-[11px] font-semibold tracking-[0.06em] text-destructive uppercase hover:bg-destructive hover:text-destructive-foreground disabled:opacity-40"
+                    className="ui-action ui-action--sm inline-flex border border-destructive px-4 py-2 text-[11px] font-semibold tracking-[0.06em] text-destructive uppercase hover:bg-destructive hover:text-destructive-foreground disabled:opacity-40"
                   >
                     Cancel membership
                   </button>

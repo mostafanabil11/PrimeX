@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { getOrder } from "@/lib/api/orders";
@@ -64,12 +64,11 @@ export default function AccountOrderDetailPage() {
             {order.orderNumber}
           </h1>
           <p className="mt-1 text-[13px] text-muted-foreground">
-            Placed on{" "}
-            {new Date(order.createdAt).toLocaleDateString("en-US", {
+            {`Placed on ${new Date(order.createdAt).toLocaleDateString("en-US", {
               year: "numeric",
               month: "long",
               day: "numeric",
-            })}
+            })}`}
           </p>
         </div>
         <OrderStatusBadge fulfillmentStatus={order.fulfillmentStatus} paymentStatus={order.paymentStatus} />

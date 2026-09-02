@@ -11,17 +11,21 @@ import { apiErrorMessage } from "@/lib/api-error";
 
 function StarInput({ value, onChange }: { value: number; onChange: (v: number) => void }) {
   return (
-    <div className="flex items-center gap-1">
+    // -mx-2 cancels the padding for layout, so the stars sit where they always
+    // did and only the hit box grows. p-0.5 around a 24px icon gave a 28px
+    // target — five of them in a row, 4px apart, which on a phone is a lottery.
+    <div className="-mx-2 flex items-center">
       {[1, 2, 3, 4, 5].map((n) => (
         <button
           key={n}
           type="button"
           onClick={() => onChange(n)}
           aria-label={`${n} star${n > 1 ? "s" : ""}`}
-          className="p-0.5"
+          aria-pressed={n === value}
+          className="ui-control flex size-11 items-center justify-center"
         >
           <Star
-            className={`size-6 ${n <= value ? "fill-primary text-primary" : "fill-none text-border"}`}
+            className={`size-6 ${n <= value ? "fill-primary text-primary" : "fill-none text-concrete"}`}
             strokeWidth={1.5}
           />
         </button>
@@ -31,7 +35,7 @@ function StarInput({ value, onChange }: { value: number; onChange: (v: number) =
 }
 
 const inputBase =
-  "w-full border border-border bg-surface-2 px-3.5 py-3 text-[14px] text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring";
+  "w-full border border-input bg-surface-2 px-3.5 py-3 text-base md:text-[14px] text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring";
 const labelBase = "font-mono text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase";
 
 export function ClassReviewsSection({
@@ -81,7 +85,7 @@ export function ClassReviewsSection({
             <div className="flex items-center gap-2">
               <StarRating value={averageRating} />
               <span className="text-[13px] text-muted-foreground">
-                {averageRating.toFixed(1)} out of 5 ({reviewCount} review{reviewCount === 1 ? "" : "s"})
+                {`${averageRating.toFixed(1)} out of 5 (${reviewCount} review${reviewCount === 1 ? "" : "s"})`}
               </span>
             </div>
           ) : (
@@ -92,7 +96,7 @@ export function ClassReviewsSection({
           <button
             type="button"
             onClick={() => setShowForm(true)}
-            className="border border-border px-6 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase hover:border-foreground"
+            className="ui-action ui-action--outline inline-flex border border-border px-6 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase hover:border-foreground"
           >
             Write a review
           </button>
@@ -145,14 +149,14 @@ export function ClassReviewsSection({
             <button
               type="submit"
               disabled={mutation.isPending}
-              className="bg-primary px-6 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
+              className="ui-action inline-flex bg-primary px-6 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
             >
               {mutation.isPending ? "Submitting…" : "Submit review"}
             </button>
             <button
               type="button"
               onClick={() => setShowForm(false)}
-              className="px-4 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground"
+              className="ui-action ui-action--ghost inline-flex px-4 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground"
             >
               Cancel
             </button>

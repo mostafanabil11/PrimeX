@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Plus } from "lucide-react";
 
 // Branches, plans, trainers and class types all list the same way: a title, a
@@ -34,7 +34,7 @@ export function AdminPageHeader({
       {newHref && (
         <Link
           href={newHref}
-          className="flex shrink-0 items-center gap-2 bg-primary px-5 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
+          className="ui-action ui-action--sm flex shrink-0 items-center gap-2 bg-primary px-5 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
         >
           <Plus className="size-4" strokeWidth={2} />
           {newLabel ?? "New"}

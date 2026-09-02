@@ -59,7 +59,19 @@ export function Photo({ className, alt, ...props }: ImageProps) {
       {...props}
       alt={alt}
       ref={ref}
-      data-photo={fades ? "" : undefined}
+      // TWO ATTRIBUTES, TWO JOBS. `data-photo` used to carry both and was only
+      // written for non-priority images, which meant every hero on the site
+      // quietly opted out of the brand's photography treatment as well as out
+      // of the fade — see the note in globals.css.
+      //
+      // data-photo: this is a photograph on this site. Always. It is what
+      //   applies the desaturation that keeps red the only saturated thing on
+      //   the page.
+      // data-fade: and it may fade in when it decodes. Withheld from priority
+      //   images, because an element at opacity 0 does not count as painted
+      //   and would push LCP out by however long the fade lasts.
+      data-photo=""
+      data-fade={fades ? "" : undefined}
       className={className}
     />
   );

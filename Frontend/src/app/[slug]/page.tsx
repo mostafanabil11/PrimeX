@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { getCategoryBySlugServer, getTopLevelCategorySlugsServer } from "@/lib/api/categories";
 import { ProductBrowser } from "@/components/products/product-browser";
 import { CategoryPageHeader } from "@/components/products/category-page-header";
-import { requireShop } from "@/lib/features";
+import { requireShop, SHOP_ENABLED } from "@/lib/features";
+import { BRAND, pageTitle } from "@/lib/brand";
 
 type Params = Promise<{ slug: string }>;
 
@@ -15,19 +16,29 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: { params: Params }): Promise<Metadata> {
   const { slug } = await params;
+
+  // This route is the site-wide catch-all: it answers EVERY unrecognised URL,
+  // not just category ones. With the shop switched off it therefore stands in
+  // for the 404 page, and it must say so — a mistyped address used to put
+  // "Category Not Found" in the browser tab of a gym website, which describes
+  // a concept the visitor has never been shown. Short-circuiting before the
+  // fetch also saves an API round trip on every bad URL and every bot probe.
+  if (!SHOP_ENABLED) {
+    return { title: pageTitle("Page Not Found"), robots: { index: false, follow: false } };
+  }
   const category = await getCategoryBySlugServer(slug);
 
   if (!category) {
-    return { title: "Category Not Found — Valiant" };
+    return { title: pageTitle("Category Not Found") };
   }
 
-  const description = category.description ?? `Shop ${category.name} at Valiant — modern essentials, made to last.`;
+  const description = category.description ?? `Shop ${category.name} at ${BRAND.name} — modern essentials, made to last.`;
 
   return {
-    title: `${category.name} — Valiant`,
+    title: `${category.name} — ${BRAND.name}`,
     description,
     openGraph: {
-      title: `${category.name} — Valiant`,
+      title: `${category.name} — ${BRAND.name}`,
       description,
       images: category.image ? [{ url: category.image }] : undefined,
       type: "website",
@@ -57,7 +68,7 @@ export default async function CategoryPage({ params }: { params: Params }) {
               <Link
                 key={child._id}
                 href={`/products?category=${child._id}`}
-                className="border border-border px-5 py-2 font-mono text-[12px] font-semibold tracking-[0.05em] text-foreground uppercase transition-colors hover:border-primary hover:bg-primary/10"
+                className="ui-action inline-flex border border-border px-5 py-2 font-mono text-[12px] font-semibold tracking-[0.05em] text-foreground uppercase transition-colors hover:border-primary hover:bg-primary/10"
               >
                 {child.name}
               </Link>

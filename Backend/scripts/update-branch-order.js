@@ -6,9 +6,9 @@ const mongoose = require('mongoose');
     await mongoose.connect(process.env.MONGODB_URI);
     const branches = mongoose.connection.db.collection('branches');
 
-    await branches.updateOne({ slug: 'maadi' }, { $set: { sortOrder: 1 } });
-    await branches.updateOne({ slug: 'sheikh-zayed' }, { $set: { sortOrder: 2 } });
-    await branches.updateOne({ slug: 'new-cairo' }, { $set: { sortOrder: 3 } });
+    // Written when there were three branches. There is one, so this is a
+    // no-op that exists to keep sortOrder deterministic if more are ever added.
+    await branches.updateOne({ slug: 'faiyum' }, { $set: { sortOrder: 1 } });
 
     console.log('Branch order updated');
     await mongoose.disconnect();

@@ -62,9 +62,9 @@ export function getTestimonialsServer(): Promise<Testimonial[]> {
 // Falls back to an empty object rather than throwing, and every read goes
 // through contentText/contentList which supply their own fallback. So an API
 // outage costs the wording, not the page.
-export function getContentServer(): Promise<SiteContent> {
+export function getContentServer(locale: "en" | "ar" = "en"): Promise<SiteContent> {
   return serverFetchOptional<ApiEnvelope<SiteContent>>(
-    "/content",
+    `/content?locale=${locale}`,
     { revalidate: REVALIDATE },
     { success: true, message: "", data: {} },
   ).then((r) => r.data);

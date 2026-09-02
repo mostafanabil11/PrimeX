@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getMyMemberships } from "@/lib/api/membership";
 import { MembershipCard, NoMembershipCard } from "@/components/account/membership-card";
@@ -68,7 +68,7 @@ export default function MyMembershipPage() {
         </p>
         <Link
           href="/contact"
-          className="w-fit border border-border px-5 py-2.5 text-[12px] font-semibold tracking-[0.08em] text-foreground uppercase hover:border-foreground"
+          className="ui-action ui-action--outline inline-flex w-fit border border-border px-5 py-2.5 text-[12px] font-semibold tracking-[0.08em] text-foreground uppercase hover:border-foreground"
         >
           Get in touch
         </Link>

@@ -77,7 +77,7 @@ export class EmailService {
       void this.smtpTransporter
         .verify()
         .then(() =>
-          this.logger.log('Email transport: SMTP verified, order emails will be delivered')
+          this.logger.log('Email transport: SMTP verified, member emails will be delivered')
         )
         .catch((err: Error) =>
           this.logger.error(
@@ -90,7 +90,7 @@ export class EmailService {
 
     this.logger.warn(
       'No email transport configured (set BREVO_API_KEY, or EMAIL_USER + EMAIL_PASSWORD) — ' +
-        'order confirmations, OTPs and password resets will NOT be delivered.'
+        'membership emails, OTPs and password resets will NOT be delivered.'
     );
   }
 
@@ -103,10 +103,11 @@ export class EmailService {
    * The one place a message is actually sent. Every send* method below is a
    * subject line and a template; this owns transport, logging and failure.
    *
-   * Returns false rather than throwing: an order is already placed by the time
-   * its confirmation goes out, and losing the email is a far smaller problem
-   * than losing the order. Callers that genuinely depend on delivery — OTP,
-   * password reset — check the return value and raise their own error.
+   * Returns false rather than throwing: a membership or a booking is already
+   * recorded by the time its confirmation goes out, and losing the email is a
+   * far smaller problem than losing that record. Callers that genuinely
+   * depend on delivery — OTP, password reset — check the return value and
+   * raise their own error.
    */
   private async deliver({ to, subject, html, context }: Message): Promise<boolean> {
     const label = context ? `${context}: ` : '';
@@ -155,9 +156,9 @@ export class EmailService {
         subject,
         htmlContent: html,
       }),
-      // Brevo is a dependency of checkout's happy path only in the sense that
-      // it runs after the order exists; still, an unbounded wait would pin a
-      // request handler open indefinitely.
+      // Brevo is a dependency of the happy path only in the sense that it runs
+      // after the record it is confirming already exists; still, an unbounded
+      // wait would pin a request handler open indefinitely.
       signal: AbortSignal.timeout(15000),
     });
 
@@ -196,7 +197,8 @@ export class EmailService {
       context: 'Verification OTP',
     });
     // Signing up is pointless if the code never arrives, so this one does fail
-    // loudly — unlike the order mails, which must never break a placed order.
+    // loudly — unlike the membership and booking mails, which must never
+    // break something that already happened.
     if (!sent) {
       throw new Error('Failed to send verification email');
     }
@@ -227,97 +229,5 @@ export class EmailService {
       throw new Error('Failed to send password reset email');
     }
     return true;
-  }
-
-  // --- Orders ---
-
-  async sendOrderConfirmationEmail(
-    email: string,
-    userName: string,
-    orderNumber: string,
-    htmlTemplate: string
-  ): Promise<boolean> {
-    return this.deliver({
-      to: email,
-      subject: `Order Confirmed — ${orderNumber}`,
-      html: htmlTemplate,
-      context: `Order ${orderNumber} confirmation`,
-    });
-  }
-
-  async sendOrderShippedEmail(
-    email: string,
-    orderNumber: string,
-    htmlTemplate: string
-  ): Promise<boolean> {
-    return this.deliver({
-      to: email,
-      subject: `Your Order Has Shipped — ${orderNumber}`,
-      html: htmlTemplate,
-      context: `Order ${orderNumber} shipped`,
-    });
-  }
-
-  async sendOrderDeliveredEmail(
-    email: string,
-    orderNumber: string,
-    htmlTemplate: string
-  ): Promise<boolean> {
-    return this.deliver({
-      to: email,
-      subject: `Delivered — ${orderNumber}`,
-      html: htmlTemplate,
-      context: `Order ${orderNumber} delivered`,
-    });
-  }
-
-  async sendOrderRefundedEmail(
-    email: string,
-    orderNumber: string,
-    htmlTemplate: string
-  ): Promise<boolean> {
-    return this.deliver({
-      to: email,
-      subject: `Refund Processed — ${orderNumber}`,
-      html: htmlTemplate,
-      context: `Order ${orderNumber} refund`,
-    });
-  }
-
-  async sendOrderCancelledEmail(
-    email: string,
-    orderNumber: string,
-    htmlTemplate: string
-  ): Promise<boolean> {
-    return this.deliver({
-      to: email,
-      subject: `Order Cancelled — ${orderNumber}`,
-      html: htmlTemplate,
-      context: `Order ${orderNumber} cancellation`,
-    });
-  }
-
-  // --- Marketing ---
-
-  async sendBackInStockEmail(
-    email: string,
-    productName: string,
-    htmlTemplate: string
-  ): Promise<boolean> {
-    return this.deliver({
-      to: email,
-      subject: `Back in Stock — ${productName}`,
-      html: htmlTemplate,
-      context: `Back in stock (${productName})`,
-    });
-  }
-
-  async sendAbandonedCartEmail(email: string, htmlTemplate: string): Promise<boolean> {
-    return this.deliver({
-      to: email,
-      subject: 'You left something in your bag',
-      html: htmlTemplate,
-      context: 'Abandoned cart',
-    });
   }
 }

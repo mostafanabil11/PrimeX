@@ -4,16 +4,15 @@ import { SkipThrottle } from '@nestjs/throttler';
 import { Response } from 'express';
 
 import { PaymentService } from './payment.service';
-import { OrdersService } from '@/orders/orders.service';
 import { InvoicesService } from '@/invoices/invoices.service';
 import { ConfigService } from '@/config/config.service';
 import { Public } from '@/auth/decorators/public.decorator';
 import { Feature } from '@/common/decorators/feature.decorator';
 
 @ApiTags('Payments')
-// With both flags off there is nothing legitimate for Paymob to call back
-// about — no invoice, no order could have been created to begin with.
-@Feature('membershipSales', 'shop')
+// With the flag off there is nothing legitimate for Paymob to call back
+// about — no invoice could have been created to begin with.
+@Feature('membershipSales')
 @Controller('payments/paymob')
 // Paymob calls this as often as it needs to (including retries on non-2xx);
 // throttling it would cause dropped payment confirmations.
@@ -23,7 +22,6 @@ export class PaymentController {
 
   constructor(
     private paymentService: PaymentService,
-    private ordersService: OrdersService,
     private invoicesService: InvoicesService,
     private configService: ConfigService
   ) {}
@@ -70,41 +68,38 @@ export class PaymentController {
     const verified = this.paymentService.verifyTransactionHmac(obj, query.hmac);
 
     let reference: string | null = null;
-    let kind: 'invoice' | 'order' | null = null;
     let outcome: 'success' | 'failed' = 'failed';
 
     if (verified) {
       const result = await this.processTransaction(obj, 'redirect');
       reference = result.reference;
-      kind = result.kind;
       outcome = result.paid ? 'success' : 'failed';
     } else {
       this.logger.warn('Rejected Paymob redirect with invalid HMAC');
     }
 
-    // A membership payment lands on the join result page; a storefront order
-    // keeps its own. Defaulting to the join page is right while the shop is
-    // switched off — a callback with no reference is far more likely to be a
-    // member than a shopper.
-    const path = kind === 'order' ? '/checkout/result' : '/join/result';
-    const target = new URL(path, this.configService.frontendUrl);
+    const target = new URL('/join/result', this.configService.frontendUrl);
     target.searchParams.set('status', outcome);
     if (reference) {
-      target.searchParams.set(kind === 'order' ? 'order' : 'invoice', reference);
+      target.searchParams.set('invoice', reference);
     }
     return res.redirect(target.toString());
   }
 
-  // A Paymob order id belongs either to a gym invoice or to a storefront
-  // order, and this endpoint is the one thing both halves share. It routes on
-  // ownership rather than guessing: invoices are asked first because the shop
-  // is switched off, and orders remain the fallback so turning it back on
-  // needs no change here.
-  private async processTransaction(obj: Record<string, any>, source: 'webhook' | 'redirect') {
+  // Every Paymob order id this controller is ever handed belongs to a gym
+  // invoice — a card payment against a membership plan or a renewal. There
+  // used to be a second owner here (a storefront order) and this method
+  // routed between the two by checking which one existed; now there is only
+  // the one, and this is that lookup and confirmation, kept as its own method
+  // because handleWebhook and handleReturn both need it.
+  private async processTransaction(
+    obj: Record<string, any>,
+    source: 'webhook' | 'redirect'
+  ): Promise<{ reference: string | null; paid: boolean }> {
     const txn = this.paymentService.normalizeTransaction(obj);
     if (!txn) {
       this.logger.warn(`Paymob ${source} callback missing transaction/order id`);
-      return { reference: null, paid: false, kind: null as 'invoice' | 'order' | null };
+      return { reference: null, paid: false };
     }
 
     // Neither a success nor a failure yet — an unpaid wallet request, say.
@@ -112,56 +107,25 @@ export class PaymentController {
     // failing a payment that may still complete.
     if (txn.pending && !txn.success) {
       this.logger.log(`Paymob ${source}: transaction ${txn.transactionId} still pending`);
-      return { reference: null, paid: false, kind: null as 'invoice' | 'order' | null };
-    }
-
-    const isInvoice = await this.invoicesService.existsForPaymobOrder(txn.paymobOrderId);
-
-    if (isInvoice) {
-      if (txn.success) {
-        const result = await this.invoicesService.confirmCardPayment({
-          paymobOrderId: txn.paymobOrderId,
-          transactionId: txn.transactionId,
-          amountCents: txn.amountCents,
-        });
-        return {
-          reference: await this.invoicesService.findInvoiceNumberByPaymobId(txn.paymobOrderId),
-          paid: result === 'confirmed' || result === 'already_confirmed',
-          kind: 'invoice' as const,
-        };
-      }
-
-      await this.invoicesService.failCardPayment(txn.paymobOrderId, txn.transactionId);
-      return {
-        reference: await this.invoicesService.findInvoiceNumberByPaymobId(txn.paymobOrderId),
-        paid: false,
-        kind: 'invoice' as const,
-      };
+      return { reference: null, paid: false };
     }
 
     if (txn.success) {
-      const result = await this.ordersService.confirmCardPayment({
+      const result = await this.invoicesService.confirmCardPayment({
         paymobOrderId: txn.paymobOrderId,
         transactionId: txn.transactionId,
         amountCents: txn.amountCents,
       });
-      const paid = result === 'confirmed' || result === 'already_confirmed';
       return {
-        reference: await this.lookupOrderNumber(txn.paymobOrderId),
-        paid,
-        kind: 'order' as const,
+        reference: await this.invoicesService.findInvoiceNumberByPaymobId(txn.paymobOrderId),
+        paid: result === 'confirmed' || result === 'already_confirmed',
       };
     }
 
-    await this.ordersService.failCardPayment(txn.paymobOrderId, txn.transactionId);
+    await this.invoicesService.failCardPayment(txn.paymobOrderId, txn.transactionId);
     return {
-      reference: await this.lookupOrderNumber(txn.paymobOrderId),
+      reference: await this.invoicesService.findInvoiceNumberByPaymobId(txn.paymobOrderId),
       paid: false,
-      kind: 'order' as const,
     };
-  }
-
-  private async lookupOrderNumber(paymobOrderId: string): Promise<string | null> {
-    return this.ordersService.findOrderNumberByPaymobId(paymobOrderId);
   }
 }

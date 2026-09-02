@@ -24,7 +24,7 @@ export function OrderSummary({
           <div key={`${item.productId}-${item.size}`} className="flex items-start gap-4">
             <div className="relative aspect-3/4 w-16 shrink-0 bg-muted">
               {item.image && <Image src={item.image} alt={item.name ?? ""} fill className="object-cover" sizes="64px" />}
-              <span className="absolute -top-2 -right-2 flex size-5 items-center justify-center rounded-full bg-primary text-[10px] font-semibold text-primary-foreground">
+              <span className="absolute -top-2 -right-2 flex size-5.5 items-center justify-center rounded-full bg-primary text-[11px] leading-none font-semibold text-primary-foreground">
                 {item.quantity}
               </span>
             </div>

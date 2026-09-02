@@ -50,9 +50,12 @@ export function RecordMembershipForm() {
   const queryClient = useQueryClient();
 
   const [phone, setPhone] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+  // null means "use the matching member's saved value"; an empty string is a
+  // deliberate edit. Keeping those states distinct lets lookup data prefill
+  // the form without an effect that writes state after every result.
+  const [firstName, setFirstName] = useState<string | null>(null);
+  const [lastName, setLastName] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
   const [planId, setPlanId] = useState("");
   const [startsAt, setStartsAt] = useState(todayIso);
   const [paymentMethod, setPaymentMethod] = useState<"cash" | "instapay">("cash");
@@ -61,9 +64,7 @@ export function RecordMembershipForm() {
 
   const { data: plans } = useQuery({ queryKey: ["admin", "plans", "active"], queryFn: getPlans });
 
-  useEffect(() => {
-    if (!planId && plans?.length) setPlanId(plans[0]._id);
-  }, [plans, planId]);
+  const effectivePlanId = planId || plans?.[0]?._id || "";
 
   // Debounced so it does not fire on every keystroke of an eleven-digit
   // number. Only asks once the phone is long enough to be real.
@@ -80,20 +81,16 @@ export function RecordMembershipForm() {
     retry: false,
   });
 
-  // Prefill from the found member, but only for fields the person at the desk
-  // has not already typed into — retyping over someone's input mid-entry is
-  // maddening, and the lookup lands a beat after they start.
-  useEffect(() => {
-    if (!lookup?.found) return;
-    setFirstName((v) => v || lookup.firstName || "");
-    setLastName((v) => v || lookup.lastName || "");
-    setEmail((v) => v || lookup.email || "");
-  }, [lookup]);
+  // Do not show the previous phone's result during the debounce window.
+  const currentLookup = phone.trim() === debouncedPhone ? lookup : undefined;
+  const effectiveFirstName = firstName ?? (currentLookup?.found ? currentLookup.firstName : "") ?? "";
+  const effectiveLastName = lastName ?? (currentLookup?.found ? currentLookup.lastName : "") ?? "";
+  const effectiveEmail = email ?? (currentLookup?.found ? currentLookup.email : "") ?? "";
 
   const { data: quote } = useQuery({
-    queryKey: ["join", "preview", planId],
-    queryFn: () => previewJoin(planId),
-    enabled: Boolean(planId),
+    queryKey: ["join", "preview", effectivePlanId],
+    queryFn: () => previewJoin(effectivePlanId),
+    enabled: Boolean(effectivePlanId),
   });
 
   const planOptions = useMemo(
@@ -101,18 +98,18 @@ export function RecordMembershipForm() {
     [plans]
   );
 
-  const blockedByActive = Boolean(lookup?.found && lookup.hasActiveMembership);
+  const blockedByActive = Boolean(currentLookup?.found && currentLookup.hasActiveMembership);
   const backdated = startsAt < todayIso();
 
   const save = useMutation({
     mutationFn: () =>
       recordMembership({
-        planId,
+        planId: effectivePlanId,
         startsAt,
-        firstName,
-        lastName,
+        firstName: effectiveFirstName,
+        lastName: effectiveLastName,
         phone,
-        email: email.trim() || null,
+        email: effectiveEmail.trim() || null,
         paymentMethod,
         markPaid,
         note: note.trim() || null,
@@ -146,21 +143,26 @@ export function RecordMembershipForm() {
           label="Phone"
           required
           value={phone}
-          onChange={setPhone}
+          onChange={(value) => {
+            setPhone(value);
+            setFirstName(null);
+            setLastName(null);
+            setEmail(null);
+          }}
           placeholder="010 0000 0000"
         />
 
-        {lookup && <LookupBanner lookup={lookup} />}
+        {currentLookup && <LookupBanner lookup={currentLookup} />}
 
         <div className="grid gap-4 sm:grid-cols-2">
-          <TextInput label="First name" required value={firstName} onChange={setFirstName} />
-          <TextInput label="Last name" required value={lastName} onChange={setLastName} />
+          <TextInput label="First name" required value={effectiveFirstName} onChange={setFirstName} />
+          <TextInput label="Last name" required value={effectiveLastName} onChange={setLastName} />
         </div>
 
         <TextInput
           label="Email"
           type="email"
-          value={email}
+          value={effectiveEmail}
           onChange={setEmail}
           hint="Optional. Leave blank and no receipt is emailed — the membership works either way."
         />
@@ -170,7 +172,7 @@ export function RecordMembershipForm() {
         <Select
           label="Plan"
           required
-          value={planId}
+          value={effectivePlanId}
           onChange={setPlanId}
           options={planOptions}
         />
@@ -251,8 +253,8 @@ export function RecordMembershipForm() {
 
       {blockedByActive && (
         <p className="border border-destructive px-4 py-3 text-[13px] text-destructive">
-          {lookup?.firstName} already has an active membership
-          {lookup?.activeUntil ? ` until ${formatMembershipDate(lookup.activeUntil)}` : ""}. Cancel
+          {currentLookup?.firstName} already has an active membership
+          {currentLookup?.activeUntil ? ` until ${formatMembershipDate(currentLookup.activeUntil)}` : ""}. Cancel
           or wait for it to expire before recording a new one.
         </p>
       )}

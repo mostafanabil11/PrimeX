@@ -7,6 +7,7 @@ import {
   Delete,
   Body,
   Param,
+  Query,
   UseInterceptors,
 } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
@@ -28,8 +29,8 @@ export class ContentController {
   @Throttle({ default: { limit: 120, ttl: 60000 } })
   @Get()
   @ApiOperation({ summary: 'All site copy, with defaults already applied' })
-  async getAll() {
-    return this.contentService.getAllContent();
+  async getAll(@Query('locale') locale?: string) {
+    return this.contentService.getAllContent(locale === 'ar' ? 'ar' : 'en');
   }
 
   @Public()

@@ -21,7 +21,7 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { deflateSync, inflateSync } from "node:zlib";
 
-const MASTER = "../design/Primex _web_design/logo/final logo.png";
+const MASTER = "../design/Primex _web_design/logo/glowing_logo.png";
 const OUT_DIR = "public/brand";
 
 function decode(file) {

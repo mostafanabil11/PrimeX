@@ -16,9 +16,11 @@ export const updateContentBlocksSchema = z.object({
           key: z.string().trim().min(1).max(120),
           value: z.string().max(5000).nullish(),
           values: z.array(z.string().trim().min(1).max(500)).max(30).optional(),
+          valueAr: z.string().max(5000).nullish(),
+          valuesAr: z.array(z.string().trim().min(1).max(500)).max(30).optional(),
         })
-        .refine(b => b.value !== undefined || b.values !== undefined, {
-          message: 'Send either a value or a values array',
+        .refine(b => b.value !== undefined || b.values !== undefined || b.valueAr !== undefined || b.valuesAr !== undefined, {
+          message: 'Send at least one English or Arabic value',
         })
     )
     .min(1)

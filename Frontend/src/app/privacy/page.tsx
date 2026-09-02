@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { BRAND, pageTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
@@ -123,7 +123,7 @@ export default function PrivacyPage() {
           <Section title="Getting in touch">
             <p>
               Questions about any of this, or a request you want us to action, go through our{" "}
-              <Link href="/contact" className="text-primary underline">
+              <Link href="/contact" className="text-primary-soft underline">
                 contact page
               </Link>{" "}
               or the front desk at any branch.

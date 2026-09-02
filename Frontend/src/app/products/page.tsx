@@ -2,10 +2,11 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { ProductsContent } from "./products-content";
 import { requireShop } from "@/lib/features";
+import { BRAND, pageTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "Shop All Products — Valiant",
-  description: "Browse the full Valiant collection — modern essentials, made to last.",
+  title: pageTitle("Shop All Products"),
+  description: `Browse the full ${BRAND.name} collection — modern essentials, made to last.`,
 };
 
 export default function ProductsPage() {

@@ -117,7 +117,7 @@ function InstapayNumber() {
         type="button"
         onClick={copy}
         aria-label={`Copy the InstaPay number ${display}`}
-        className="flex shrink-0 items-center gap-1.5 border border-border px-3 py-2 font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase transition-colors hover:border-primary hover:text-primary-soft"
+        className="ui-action ui-action--outline flex shrink-0 items-center gap-1.5 border border-border px-3 py-2 font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase transition-colors hover:border-primary hover:text-primary-soft"
       >
         {copied ? (
           <Check className="size-3.5" strokeWidth={2} />

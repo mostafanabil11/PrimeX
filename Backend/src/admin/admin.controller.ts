@@ -39,16 +39,6 @@ export class AdminController {
     return this.adminService.getFunnelInsights(window);
   }
 
-  // The shop dashboard stays admin-only: the storefront is dormant, and
-  // nothing about it is front-desk work.
-  @Roles('admin')
-  @Feature('shop')
-  @Get('dashboard')
-  @ApiOperation({ summary: 'Revenue, order counts, low stock, and top products (admin only)' })
-  async getDashboard() {
-    return this.adminService.getDashboard();
-  }
-
   @Get('customers')
   @ApiOperation({ summary: 'List members, searchable by name, email or member number' })
   async listCustomers(@Query() query: AdminCustomerQueryDto) {

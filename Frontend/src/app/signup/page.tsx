@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { notFound, useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -12,6 +12,7 @@ import { API_BASE_PATH } from "@/lib/api/client";
 import { apiErrorMessage } from "@/lib/api-error";
 import { AuthPanel } from "@/components/public/auth-panel";
 import { MEMBER_ACCOUNTS_ENABLED } from "@/lib/features";
+import { Wordmark } from "@/components/layout/wordmark";
 
 export default function SignupPage() {
   if (!MEMBER_ACCOUNTS_ENABLED) {
@@ -71,11 +72,19 @@ export default function SignupPage() {
       {/* Form */}
       <div className="flex flex-col items-center justify-center px-margin-mobile py-stack-xl md:px-margin-desktop">
         <div className="w-full max-w-sm">
+          {/* The lockup, not the name set in the headline face.
+              Every other surface in this app shows the real mark — the header,
+              the footer, the mobile menu — and a typographic stand-in on the
+              one screen where somebody is being asked to trust the site with a
+              password reads as an oversight, because it is one. This is the
+              same substitution that was removed from the mobile menu; it had
+              simply survived over here. */}
           <Link
             href="/"
-            className="mb-10 block text-center font-display text-3xl tracking-[-0.02em] text-foreground uppercase"
+            aria-label={`${BRAND.name} — home`}
+            className="mb-10 flex justify-center"
           >
-            {BRAND.name}
+            <Wordmark className="h-16 w-auto" width={128} />
           </Link>
 
           {step === "register" ? (
@@ -101,7 +110,7 @@ export default function SignupPage() {
                       required
                       value={firstName}
                       onChange={(e) => setFirstName(e.target.value)}
-                      className="w-full border border-border bg-background px-4 py-3 text-sm text-foreground outline-none focus:border-foreground"
+                      className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
                     />
                   </div>
                   <div>
@@ -116,7 +125,7 @@ export default function SignupPage() {
                       required
                       value={lastName}
                       onChange={(e) => setLastName(e.target.value)}
-                      className="w-full border border-border bg-background px-4 py-3 text-sm text-foreground outline-none focus:border-foreground"
+                      className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
                     />
                   </div>
                 </div>
@@ -134,7 +143,7 @@ export default function SignupPage() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full border border-border bg-background px-4 py-3 text-sm text-foreground outline-none focus:border-foreground"
+                    className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
                   />
                 </div>
 
@@ -152,14 +161,14 @@ export default function SignupPage() {
                     minLength={6}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full border border-border bg-background px-4 py-3 text-sm text-foreground outline-none focus:border-foreground"
+                    className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={registerMutation.isPending}
-                  className="w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
+                  className="ui-action inline-flex w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
                 >
                   {registerMutation.isPending ? "Creating Account…" : "Create Account"}
                 </button>
@@ -173,7 +182,7 @@ export default function SignupPage() {
 
               <a
                 href={`${API_BASE_PATH}/auth/google`}
-                className="flex w-full items-center justify-center gap-3 border border-border py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+                  className="ui-action ui-action--outline flex w-full items-center justify-center gap-3 border border-border py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
               >
                 <GoogleIcon className="size-4" />
                 Continue with Google
@@ -210,7 +219,7 @@ export default function SignupPage() {
                     maxLength={6}
                     value={otp}
                     onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                    className="w-full border border-border bg-background px-4 py-3 text-center text-lg tracking-[0.3em] text-foreground outline-none focus:border-foreground"
+                    className="w-full border border-input bg-background px-4 py-3 text-center text-lg tracking-[0.3em] text-foreground outline-none focus:border-foreground"
                     placeholder="······"
                   />
                 </div>
@@ -218,7 +227,7 @@ export default function SignupPage() {
                 <button
                   type="submit"
                   disabled={verifyMutation.isPending || otp.length !== 6}
-                  className="w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
+                  className="ui-action inline-flex w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
                 >
                   {verifyMutation.isPending ? "Verifying…" : "Verify Email"}
                 </button>
@@ -230,7 +239,7 @@ export default function SignupPage() {
                   type="button"
                   onClick={() => resendMutation.mutate(email)}
                   disabled={resendMutation.isPending}
-                  className="font-semibold text-foreground underline disabled:opacity-50"
+                  className="ui-action ui-action--ghost inline-flex font-semibold text-foreground underline disabled:opacity-50"
                 >
                   Resend code
                 </button>

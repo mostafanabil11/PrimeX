@@ -1,6 +1,8 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "../components/ui/button-styles.css";
+@import "../components/public/pricing-accordion.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -500,73 +502,7 @@
     block-size: 8px;
   }
 
-  /* ---- Button hover ---------------------------------------------------
-     Two treatments, both taken from the design brief rather than invented,
-     and neither of which changes the button's colour on hover.
-
-     The primary is already red — recolouring red on hover is the move that
-     kept looking wrong, because there is no direction to go that does not
-     either dim it or make it shout louder. The brief instead specifies a 2px
-     inset border, which reads as the button tightening rather than changing.
-
-     The outline gets the speed line: a red block that sweeps across on a
-     12-degree skew, hard-edged, no gradient. That is the "aggressive motion /
-     forward momentum" the brand asks for, and it is the one place a button can
-     express the diagonal that runs through the wordmark and the section rules.
-
-     Both animate compositor-only properties. The wipe moves `transform` on a
-     pseudo-element; the inset border is a box-shadow, which repaints but over
-     a few hundred square pixels. Neither touches layout, so neither can drop a
-     frame the way an animated width or letter-spacing would.
-  -------------------------------------------------------------------- */
-
-  .cta-inset {
-    transition: box-shadow 180ms ease-out;
-  }
-
-  .cta-inset:hover {
-    box-shadow: inset 0 0 0 2px var(--primary-foreground);
-  }
-
-  /* isolation + a negative z-index is what keeps the sweeping block behind the
-     label without needing the label wrapped in an element — ctaClasses is
-     handed arbitrary children, so there is nothing reliable to wrap. */
-  .cta-wipe {
-    position: relative;
-    overflow: hidden;
-    isolation: isolate;
-  }
-
-  .cta-wipe::before {
-    content: "";
-    position: absolute;
-    /* Overhangs horizontally so the skewed edge is still off-screen at rest
-       and still covers the far corner when it lands. */
-    inset: -1px -25%;
-    z-index: -1;
-    background-color: var(--primary);
-    transform: translateX(-130%) skewX(-12deg);
-    transition: transform 340ms cubic-bezier(0.22, 1, 0.36, 1);
-  }
-
-  .cta-wipe:hover::before {
-    transform: translateX(0) skewX(-12deg);
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .cta-inset,
-    .cta-wipe::before {
-      transition: none;
-    }
-    /* The sweep is decoration; the state change it signals is not. Reduced
-       motion still gets the filled result, it just arrives without travelling. */
-    .cta-wipe::before {
-      transform: translateX(-130%);
-    }
-    .cta-wipe:hover::before {
-      transform: translateX(0);
-    }
-  }
+  /* Button states are owned by components/ui/button-styles.css. */
 
   /* Scroll reveal. Elements ship hidden and are un-hidden by the observer in
      reveal.tsx, which sets data-revealed once they enter the viewport. */
@@ -831,87 +767,95 @@
 
 
   /* ---- Pricing term panels -------------------------------------------
-     grid-template-rows is a layout property: every frame of the open
-     re-flows the page beneath the panel. We use it to animate the panel
-     height smoothly on all devices.
+     The panel's height is animated in JS (see Collapse in pricing-grid.tsx),
+     not here. It used to be grid-template-rows: 0fr -> 1fr, which reads well
+     but animates badly: an `fr` track has no size of its own, so every frame
+     of the transition re-resolves the track against the tier cards inside and
+     lays all of them out again. On top of that, the tiers used to mount in
+     the same commit that opened the panel, so the very first open had no
+     starting height to transition from and simply snapped to full size — the
+     "no animation at all" that this whole section replaced.
+
+     What is left here is layout, not motion: overflow so the panel can be
+     clipped mid-animation, and the reveal choreography for the tiers inside
+     it once the panel is open.
   -------------------------------------------------------------------- */
 
-  .term-panel {
-    display: grid;
-    grid-template-rows: 0fr;
+  /* ---- Preview rails -------------------------------------------------
+     The horizontal, snap-scrolling strips the redesign puts in place of the
+     classes and trainers grids on a phone. See components/public/rail.tsx for
+     why they exist and how the edge bleed is paid for; this is only the
+     scroller itself.
+
+     `scroll-snap-type: x mandatory` rather than `proximity`: these are cards
+     of one fixed width, so every resting position is a card boundary and
+     mandatory always has somewhere sensible to land. Proximity on a strip this
+     regular just makes the snap feel unreliable.
+
+     The scrollbar is hidden on purpose and it is NOT the affordance being
+     removed — a card is always cut by the edge of the screen, which is a
+     stronger signal than a 4px bar and one that survives on the platforms
+     (iOS, Android) that never draw a resting scrollbar anyway.
+
+     Written as a component class rather than utilities so `lg:grid` and
+     `lg:overflow-visible` from the markup, which sit in a later layer, can
+     switch the whole thing off at desktop without !important.
+  -------------------------------------------------------------------- */
+
+  .rail {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    /* Firefox and the standards track. The ::-webkit- rule below covers
+       Safari and Chrome, which ignore this one. */
+    scrollbar-width: none;
+
+    /* MUST MATCH THE INLINE PADDING THE MARKUP SETS, and without it the rail
+       renders flush to the screen edge with the first card's gutter silently
+       eaten.
+
+       `scroll-snap-align: start` aligns a card to the SNAPPORT, and the
+       snapport is the scrollport inset by scroll-padding — which defaults to
+       zero. So the browser resolved "start" as the border edge, decided the
+       first card at +20px was 20px off its snap position, and scrolled to
+       correct it. The padding was applied correctly the whole time; the
+       scroller was just hiding it. Inset the snapport by the same amount and
+       the resting position becomes the one the padding asks for. */
+    scroll-padding-inline: var(--spacing-margin-mobile);
   }
 
-  .term-panel[data-open] {
-    grid-template-rows: 1fr;
-  }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .term-panel {
-      transition: grid-template-rows 300ms ease-out;
+  /* Tracks `md:ps-margin-desktop` in the markup — see above. */
+  @media (min-width: 48rem) {
+    .rail {
+      scroll-padding-inline: var(--spacing-margin-desktop);
     }
   }
 
-  .term-row {
-    opacity: 0;
-    transform: translate3d(0, 10px, 0);
+  .rail::-webkit-scrollbar {
+    display: none;
   }
 
-  @media (prefers-reduced-motion: no-preference) {
-    /* This rule owns every transition on a tier, which is why the markup
-       carries no transition-* utility: one would replace this whole list
-       rather than add to it. */
-    .term-row {
-      transition:
-        opacity 250ms ease-out,
-        transform 250ms ease-out,
-        background-color 200ms ease-out;
+  .rail > * {
+    scroll-snap-align: start;
+  }
+
+  /* Cancels the flex/scroll behaviour when the markup promotes the rail to a
+     grid. `display` and `overflow` are switched by utilities at the call site;
+     these two have no utility counterpart worth spending, so they are undone
+     here against the same breakpoint. */
+  @media (min-width: 64rem) {
+    .rail {
+      overflow-x: visible;
+      scroll-snap-type: none;
     }
   }
 
-  .term-panel[data-open] .term-row {
-    opacity: 1;
-    transform: none;
-  }
-
-  /* The whole tier is clickable, so the whole tier answers a press — on a
-     phone there is no hover, and a tap on the card away from the button would
-     otherwise give nothing back. Written against the open panel because the
-     rule above also sets transform, and a plain .term-row:active would lose
-     to it. Smaller than the button's own press: a card this size lurches if
-     it moves as far. */
-  .term-panel[data-open] .term-row:active {
-    transform: scale(0.995);
-  }
-
-  /* Stretches the CTA's hit area over the entire tier. The card is the
-     positioned ancestor, so this resolves against it — see TierRow.
-     One link, one focus target, the whole card as the target area. */
+  /* Pricing motion lives in pricing-accordion.css and the Collapse component. */
   .tier-cta::after {
     content: "";
     position: absolute;
     inset: 0;
-  }
-
-  /* Cascade, in markup order. Done with nth-child rather than inline styles
-     so the tiers carry no per-element JavaScript at all. */
-  .term-panel[data-open] .term-row:nth-child(2) {
-    transition-delay: 55ms;
-  }
-  .term-panel[data-open] .term-row:nth-child(3) {
-    transition-delay: 110ms;
-  }
-  .term-panel[data-open] .term-row:nth-child(4) {
-    transition-delay: 165ms;
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .term-panel,
-    .term-row,
-    .term-panel[data-open] .term-row {
-      opacity: 1;
-      transform: none;
-      transition: none;
-    }
   }
 
   /* Paper does not scroll, so nothing would ever trigger a reveal and every
@@ -1041,6 +985,38 @@
   .text-\[11px\] {
     font-size: 12px;
   }
+}
+
+/* Arabic keeps the same industrial system, but uses a typeface designed for
+   connected Arabic forms and removes Latin-only slant/tracking treatments. */
+[dir="rtl"] body,
+[dir="rtl"] .font-display,
+[dir="rtl"] .font-heading,
+[dir="rtl"] .font-mono {
+  font-family: var(--font-noto-kufi), sans-serif;
+  font-style: normal;
+  letter-spacing: 0;
+  line-height: 1.65;
+  font-synthesis: none;
+}
+
+[dir="rtl"] .font-display,
+[dir="rtl"] .font-heading,
+[dir="rtl"] .font-mono,
+[dir="rtl"] [class*="uppercase"] {
+  text-transform: none;
+}
+
+[dir="rtl"] .rtl-flip {
+  transform: scaleX(-1);
+}
+
+[dir="rtl"] input[type="email"],
+[dir="rtl"] input[type="tel"],
+[dir="rtl"] input[inputmode="numeric"],
+[dir="rtl"] [data-ltr] {
+  direction: ltr;
+  text-align: left;
 }
 
 @media (max-width: 767px) {

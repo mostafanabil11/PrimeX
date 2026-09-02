@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { formatPrice } from "@/lib/format";
 import { formatMembershipDate, formatMembershipDateShort } from "@/lib/gym-format";
 import {
@@ -56,7 +56,7 @@ export function MembershipCard({ subscription }: { subscription: Subscription })
         <div>
           <p className="font-display text-5xl leading-none text-primary tabular-nums">{left}</p>
           <p className="mt-1 text-[13px] text-muted-foreground">
-            {left === 1 ? "day left" : "days left"} · ends {formatMembershipDate(subscription.endsAt)}
+            {`${left === 1 ? "day left" : "days left"} · ends ${formatMembershipDate(subscription.endsAt)}`}
           </p>
         </div>
       )}
@@ -112,7 +112,7 @@ export function MembershipCard({ subscription }: { subscription: Subscription })
           </p>
           <Link
             href="/join"
-            className="w-fit bg-primary px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
+            className="ui-action inline-flex w-fit bg-primary px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
           >
             Renew now
           </Link>
@@ -134,13 +134,13 @@ export function NoMembershipCard() {
       <div className="flex flex-wrap gap-3">
         <Link
           href="/join"
-          className="bg-primary px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
+          className="ui-action inline-flex bg-primary px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
         >
           Choose a plan
         </Link>
         <Link
           href="/membership"
-          className="border border-border px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-foreground uppercase"
+          className="ui-action ui-action--outline inline-flex border border-border px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-foreground uppercase"
         >
           Compare plans
         </Link>

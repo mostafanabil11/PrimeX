@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { useQuery } from "@tanstack/react-query";
 import { Plus } from "lucide-react";
@@ -26,7 +26,7 @@ export default function AdminProductsPage() {
         <h1 className="font-heading text-headline-sm font-bold text-foreground">Products</h1>
         <Link
           href="/admin/products/new"
-          className="flex items-center gap-2 bg-primary px-5 py-2.5 text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
+          className="ui-action ui-action--sm flex items-center gap-2 bg-primary px-5 py-2.5 text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
         >
           <Plus className="size-4" strokeWidth={2} />
           New Product
@@ -40,7 +40,7 @@ export default function AdminProductsPage() {
           setPage(1);
         }}
         placeholder="Search products…"
-        className="mb-6 w-full max-w-sm border border-border bg-background px-4 py-2.5 text-sm text-foreground outline-none focus:border-foreground"
+        className="mb-6 w-full max-w-sm border border-input bg-background px-4 py-2.5 text-base md:text-sm text-foreground outline-none focus:border-foreground"
       />
 
       {isLoading || !data ? (
@@ -82,7 +82,7 @@ export default function AdminProductsPage() {
                 type="button"
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="text-muted-foreground underline disabled:opacity-30"
+                className="ui-action ui-action--ghost ui-action--sm inline-flex text-muted-foreground underline disabled:opacity-30"
               >
                 Previous
               </button>
@@ -93,7 +93,7 @@ export default function AdminProductsPage() {
                 type="button"
                 onClick={() => setPage((p) => Math.min(data.pagination.pages, p + 1))}
                 disabled={page === data.pagination.pages}
-                className="text-muted-foreground underline disabled:opacity-30"
+                className="ui-action ui-action--ghost ui-action--sm inline-flex text-muted-foreground underline disabled:opacity-30"
               >
                 Next
               </button>

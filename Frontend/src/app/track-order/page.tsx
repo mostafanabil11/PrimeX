@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { Search, Loader2 } from "lucide-react";
 import { lookupOrder, getOrderToken } from "@/lib/api/orders";
@@ -11,7 +11,7 @@ import { requireShop } from "@/lib/features";
 import { apiErrorStatus } from "@/lib/api-error";
 
 const inputClass =
-  "w-full border border-border bg-background px-4 py-3 text-sm text-foreground outline-none focus:border-foreground";
+  "w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground";
 const labelClass = "mb-2 block font-mono text-[12px] font-semibold tracking-[0.1em] text-foreground uppercase";
 
 // Lets anyone who ordered — guest or member — reach an order with the pair of
@@ -93,7 +93,7 @@ export default function TrackOrderPage() {
           <button
             type="submit"
             disabled={!orderNumber.trim() || !email.trim() || mutation.isPending}
-            className="flex w-full items-center justify-center gap-2 bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
+            className="ui-action flex w-full items-center justify-center gap-2 bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
           >
             {mutation.isPending ? (
               <Loader2 className="size-4 animate-spin" strokeWidth={2} />
@@ -119,7 +119,7 @@ export default function TrackOrderPage() {
           <div className="mx-auto mt-8 max-w-xl">
             <Link
               href="/"
-              className="block w-full bg-primary py-4 text-center text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
+              className="ui-action block w-full bg-primary py-4 text-center text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
             >
               Continue Shopping
             </Link>

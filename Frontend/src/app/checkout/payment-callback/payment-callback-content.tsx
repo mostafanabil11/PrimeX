@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { CheckCircle2, XCircle, Loader2 } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 
 /**
  * Paymob redirects here after the customer completes (or fails) a card payment.
@@ -87,13 +87,13 @@ export function PaymentCallbackContent() {
             <div className="mt-4 flex flex-col gap-3 sm:flex-row">
               <Link
                 href="/checkout"
-                className="rounded-lg bg-primary px-6 py-3 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
+                className="ui-action inline-flex rounded-lg bg-primary px-6 py-3 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
               >
                 Try Again
               </Link>
               <Link
                 href="/cart"
-                className="rounded-lg border border-border px-6 py-3 text-button font-medium tracking-[0.05em] text-foreground uppercase transition-colors hover:bg-muted"
+                className="ui-action ui-action--outline inline-flex rounded-lg border border-border px-6 py-3 text-button font-medium tracking-[0.05em] text-foreground uppercase transition-colors hover:bg-muted"
               >
                 Back to Cart
               </Link>

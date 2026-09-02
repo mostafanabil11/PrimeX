@@ -1,17 +1,17 @@
-import Link from "next/link";
-import { MapPin, Search } from "lucide-react";
+import { Link } from "@/i18n/navigation";
+import { Search } from "lucide-react";
 import { Wordmark } from "./wordmark";
 import { HeaderNav } from "./header-nav";
 import { AccountMenu } from "@/components/layout/account-menu";
-import { TrackedWhatsAppLink } from "@/components/public/tracked-cta";
 import { WhatsAppLink } from "@/components/public/whatsapp";
 import { SOCIAL_LINKS } from "@/components/public/floating-contact";
-import { joinEnquiry } from "@/lib/whatsapp-messages";
 import { SHOP_ENABLED } from "@/lib/features";
 import { BRAND } from "@/lib/brand";
 import { getBranchesServer } from "@/lib/api/gym-server";
-import { fullAddress, mapsUrl, formatEgyptianPhone } from "@/lib/gym-format";
+import { fullAddress, mapsUrl } from "@/lib/gym-format";
 import { MobileNav } from "./mobile-nav";
+import { LanguageSwitcher } from "./language-switcher";
+import { getLocale, getTranslations } from "next-intl/server";
 
 /**
  * The site header, rebuilt to the navbar design in
@@ -38,6 +38,8 @@ import { MobileNav } from "./mobile-nav";
  * bar is a 64px logo-and-join row exactly as it was.
  */
 export async function SiteHeader() {
+  const common = await getTranslations("Common");
+  const locale = await getLocale();
   // Fetched here and handed down rather than looked up inside MobileNav,
   // which is a client component and has no business talking to the API. The
   // same server-fetch cache the footer and /contact read from, so this is not
@@ -52,7 +54,7 @@ export async function SiteHeader() {
         address: fullAddress(branch),
         mapsUrl: mapsUrl(branch),
         phone: branch.phone,
-        hours: "Open 24 hours, seven days a week",
+        hours: common("openAlways"),
       }
     : null;
 
@@ -88,11 +90,12 @@ export async function SiteHeader() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#25D366] opacity-75"></span>
                 <span className="relative inline-flex size-1.5 rounded-full bg-[#25D366]"></span>
               </span>
-              24/7 &bull; ALWAYS OPEN, NO LIMITS
+              {common("openAlways")}
             </span>
           </div>
 
           <div className="flex shrink-0 items-center gap-4 lg:gap-[26px]">
+            <LanguageSwitcher className="text-muted-foreground" />
             {/* The same list the footer and the mobile sheet render, so there
                 is still one definition of where "our Instagram" points. Text
                 here rather than the glyphs — this row is type. Dropped on a
@@ -111,10 +114,10 @@ export async function SiteHeader() {
               </a>
             ))}
             <WhatsAppLink
-              message={`Hi ${BRAND.name}, I have a question.`}
+              message={locale === "ar" ? `مرحباً ${BRAND.name}، لدي استفسار.` : `Hi ${BRAND.name}, I have a question.`}
               className="hidden transition-colors duration-150 hover:text-primary-soft lg:inline"
             >
-              WhatsApp
+              {common("whatsapp")}
             </WhatsAppLink>
           </div>
         </div>
@@ -183,7 +186,7 @@ export async function SiteHeader() {
             <Link
               href="/search"
               aria-label="Search"
-              className="hidden size-[34px] shrink-0 items-center justify-center border border-input text-muted-foreground transition-colors duration-150 hover:border-primary hover:text-foreground lg:flex"
+              className="ui-action ui-action--icon ui-action--ghost hidden size-[34px] shrink-0 items-center justify-center border border-input text-muted-foreground transition-colors duration-150 hover:border-primary hover:text-foreground lg:flex"
             >
               <Search className="size-4" strokeWidth={1.5} />
             </Link>
@@ -205,12 +208,12 @@ export async function SiteHeader() {
             iconOnly
             className="flex size-11 items-center justify-center text-foreground transition-opacity hover:opacity-70 sm:hidden"
           />
-          <TrackedWhatsAppLink
-            message={joinEnquiry()}
-            className="press flex h-11 shrink-0 items-center bg-primary px-3 font-mono text-[11px] font-bold tracking-[0.06em] text-primary-foreground uppercase transition-colors duration-150 hover:bg-primary-hover sm:px-4 sm:text-[12px] sm:tracking-[0.167em] lg:px-[22px]"
+          <Link
+            href="/membership"
+            className="ui-action ui-action--header press flex h-11 shrink-0 items-center bg-primary px-3 font-mono text-[11px] font-bold tracking-[0.06em] text-primary-foreground uppercase transition-colors duration-150 hover:bg-primary-hover sm:px-4 sm:text-[12px] sm:tracking-[0.167em] lg:px-[22px]"
           >
-            Join Now
-          </TrackedWhatsAppLink>
+            {common("joinNow")}
+          </Link>
         </div>
       </div>
     </header>

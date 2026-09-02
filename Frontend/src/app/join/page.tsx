@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getPlansServer, getBranchesServer } from "@/lib/api/gym-server";
-import { pageTitle } from "@/lib/brand";
-import { PageHeader, Section, EmptyState } from "@/components/public/section";
+import { pageTitle, BRAND } from "@/lib/brand";
+import { Section, EmptyState } from "@/components/public/section";
 import { JoinFunnel } from "@/components/join/join-funnel";
 import { ReserveForm } from "@/components/join/reserve-form";
 import { MEMBERSHIP_SALES_ENABLED, MEMBERSHIP_TRACKING_ENABLED } from "@/lib/features";
 import { notFound } from "next/navigation";
+import { getLocale } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: pageTitle("Join"),
   description:
-    "Reserve your membership online and pay at the gym. Pick a plan, choose when you start, and we will confirm on WhatsApp.",
+    "Reserve your membership online. Pick a plan and start date, then the PrimeX team will confirm payment and activation manually on WhatsApp.",
   alternates: { canonical: "/join" },
 };
 
@@ -20,6 +21,7 @@ export default async function JoinPage({
 }: {
   searchParams: Promise<{ plan?: string }>;
 }) {
+  const locale = await getLocale();
   // Two funnels share this route. With card checkout on it is the full
   // four-step JoinFunnel; with only tracking on it is the reservation form,
   // which creates the same pending subscription and invoice but hands off to
@@ -41,17 +43,15 @@ export default async function JoinPage({
 
   return (
     <>
-      <PageHeader
-        eyebrow="Join"
-        title="Start training"
-        body={
-          cardCheckout
-            ? "Four short steps. Nothing renews automatically, and you can pay at the gym if you would rather."
-            : "Tell us who you are and when you want to start. Nothing is charged online — we will confirm on WhatsApp and take payment at the gym."
-        }
-      />
+      {/* The reservation form supplies its own visible heading. */}
+      {(cardCheckout || plans.length === 0 || branches.length === 0) && <h1 className="sr-only">
+        {locale === "ar" ? `اشترك في ${BRAND.name}` : `Join ${BRAND.name}`}
+        {cardCheckout
+          ? locale === "ar" ? " — ثلاث خطوات قصيرة، بدون تجديد تلقائي." : " — three short steps. Nothing renews automatically."
+          : locale === "ar" ? " — احجز عبر الموقع وانتظر تأكيد الفريق." : " — reserve online for staff confirmation."}
+      </h1>}
 
-      <Section>
+      <Section className="pt-6 md:pt-stack-md">
         {plans.length === 0 || branches.length === 0 ? (
           <EmptyState message="Memberships are being updated. Please try again shortly, or get in touch and we will sign you up over the phone." />
         ) : (

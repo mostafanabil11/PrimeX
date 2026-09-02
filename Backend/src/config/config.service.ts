@@ -140,8 +140,4 @@ export class ConfigService {
   get memberAccountsEnabled(): boolean {
     return this.get<boolean>('MEMBER_ACCOUNTS_ENABLED') ?? false;
   }
-
-  get shopEnabled(): boolean {
-    return this.get<boolean>('SHOP_ENABLED') ?? false;
-  }
 }

@@ -1,4 +1,5 @@
-import Link from "next/link";
+import { actionButtonClasses } from "@/components/ui/action-button";
+import { Link } from "@/i18n/navigation";
 import { Reveal } from "./reveal";
 
 // Layout primitives shared across the public pages. Extracted so the vertical
@@ -60,7 +61,11 @@ export function SectionHeader({
   eyebrow?: string;
   title: string;
   body?: string;
-  action?: { href: string; label: string };
+  /**
+   * `shortLabel` is what a phone shows — see the note on the two spans
+   * below. Falls back to `label` when a section has nothing shorter to say.
+   */
+  action?: { href: string; label: string; shortLabel?: string };
   align?: "start" | "center";
 }) {
   const centered = align === "center";
@@ -68,34 +73,67 @@ export function SectionHeader({
   // Reveal replaces the wrapper rather than adding one around it — it renders
   // a single div with whatever className it is handed, so the layout here is
   // untouched and no extra element lands between a flex parent and its items.
+  //
+  // ---------------------------------------------------------------------
+  // THE HEADER IS HALF ITS OLD HEIGHT ON A PHONE, and that is three separate
+  // decisions rather than one:
+  //
+  //   1. The action link sits on the title's baseline from the smallest width,
+  //      not from md. It used to stack under the body copy, which on a phone
+  //      meant "All classes →" was the fourth line of a four-line header.
+  //   2. `body` is dropped below md. It is a genuine sentence and it earns its
+  //      place on desktop, where it sits in the empty half of the header row —
+  //      but on a phone it is ~40px of explanation in front of the thing being
+  //      explained, repeated at every section down the page.
+  //   3. The red rule under the title goes with it. The Eyebrow directly above
+  //      already carries a red bar; two of them 40px apart, on a header this
+  //      compact, reads as a rendering fault rather than as structure.
+  //
+  // Together that is ~95px a section instead of ~190, across five sections on
+  // the homepage alone.
   return (
     <Reveal
-      className={`mb-stack-sm flex flex-col gap-3 ${
-        centered ? "items-center text-center" : "items-start"
-      } ${action ? "md:flex-row md:items-end md:justify-between" : ""}`}
+      className={`mb-4 flex gap-3 md:mb-stack-sm ${
+        centered
+          ? "flex-col items-center text-center"
+          : action
+            ? "flex-row items-end justify-between"
+            : "flex-col items-start"
+      }`}
     >
-      <div className={`flex flex-col gap-3 ${centered ? "items-center" : "items-start"}`}>
+      <div className={`flex flex-col gap-2 md:gap-3 ${centered ? "items-center" : "items-start"}`}>
         {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
         {/* rule-accent draws the short red bar the comps put under every
             section title. It is a pseudo-element on the heading itself, so
             centred headers get a centred bar for free from text-align rather
-            than needing a second variant. */}
+            than needing a second variant. Suppressed below md — see (3). */}
         <h2
-          className={`max-w-3xl font-display text-4xl leading-[0.95] tracking-[-0.02em] text-balance text-foreground uppercase md:text-5xl ${
+          className={`max-w-3xl font-display text-[32px] leading-[0.9] tracking-[-0.03em] text-balance text-foreground uppercase md:text-5xl md:leading-[0.95] md:tracking-[-0.02em] [&::after]:hidden md:[&::after]:block ${
             centered ? "rule-accent [&::after]:mx-auto" : "rule-accent"
           }`}
         >
           {title}
         </h2>
-        {body && <p className="max-w-2xl text-body-md text-muted-foreground">{body}</p>}
+        {body && <p className="hidden max-w-2xl text-body-md text-muted-foreground md:block">{body}</p>}
       </div>
 
       {action && (
+        // -my-3 cancels the padding for layout, so the link sits on the same
+        // baseline it always did and only its hit box grows. It was 18px tall:
+        // this is the link out of every section preview on the site — "All
+        // classes", "Meet the team", "Compare all plans" — so it is the one
+        // control that most often stands between somebody and the page they
+        // actually want.
         <Link
           href={action.href}
-          className="shrink-0 font-mono text-[12px] font-bold tracking-[0.1em] text-primary-soft uppercase hover:underline"
+          className="-my-3 inline-flex min-h-11 shrink-0 items-center py-3 font-mono text-[12px] font-bold tracking-[0.08em] text-primary-soft uppercase hover:underline md:tracking-[0.1em]"
         >
-          {action.label} →
+          {/* Two labels, one link. On a phone the count is the useful half —
+              "All 10" says how much more there is, which is the question a
+              rail with three cards in it provokes. On desktop the grid already
+              shows the set, so the destination is what matters. */}
+          <span className="md:hidden">{`${action.shortLabel ?? action.label} →`}</span>
+          <span className="hidden md:inline">{`${action.label} →`}</span>
         </Link>
       )}
     </Reveal>
@@ -112,54 +150,29 @@ export function PageHeader({
   body?: string;
 }) {
   return (
-    <div className="w-full border-b border-border px-margin-mobile pt-stack-md pb-stack-sm md:px-margin-desktop">
-      <div className="mx-auto flex w-full max-w-(--spacing-container-max) flex-col gap-4">
+    <div className="w-full border-b border-border px-margin-mobile pt-6 pb-stack-sm md:px-margin-desktop md:pt-stack-md">
+      <div className="mx-auto flex w-full max-w-(--spacing-container-max) flex-col gap-3 md:gap-4">
         {eyebrow && <Eyebrow>{eyebrow}</Eyebrow>}
         <h1 className="max-w-4xl font-display text-5xl leading-[0.92] tracking-[-0.02em] text-balance text-foreground uppercase md:text-7xl">
           {title}
         </h1>
-        {body && <p className="max-w-2xl text-body-lg text-muted-foreground">{body}</p>}
+        {/* 16px on a phone, 18 from md. Unlike a SectionHeader's body this one
+            is NOT dropped — it is the page's own introduction, and on /about or
+            /membership it is the only prose there is. But 18px at 1.6 across
+            335px is about six words a line, so a three-sentence intro became
+            seven lines and pushed the content it introduces off the first
+            screen. The body scale reads the same and costs two lines fewer. */}
+        {body && (
+          <p className="max-w-2xl text-body-md text-muted-foreground md:text-body-lg">{body}</p>
+        )}
       </div>
     </div>
   );
 }
 
-// The red is the only loud thing on the page, so it is reserved for the one
-// action a section is actually asking for. Everything else is a quiet outline.
-//
-// Extracted so WhatsAppCta (components/public/whatsapp.tsx) can wear the same
-// visual contract on an <a> instead of a <Link> — the class string is what
-// matters, not which element renders it.
-//
-// Both variants carry a 2px border at rest, transparent on the primary, so a
-// hover that brings a border in is a pure repaint rather than a 4px growth
-// that shoves the neighbouring button sideways.
-//
-// Neither variant changes colour on hover any more, and that is the point.
-// Recolouring a button that is already red has nowhere good to go: darker reads
-// as disabled on a near-black page, brighter just shouts. Two earlier attempts
-// (collapse to #690000, then lift to #ff1f1f) both looked like the control
-// changing identity rather than acknowledging the cursor.
-//
-// So the motion carries the feedback instead, and both treatments come from the
-// design brief rather than being invented. The primary tightens with a 2px
-// inset border — the brief specifies exactly this. The outline takes a red
-// speed line on a 12-degree skew, which is the "forward momentum" the brand
-// asks for and the same diagonal that runs through the wordmark.
-//
-// `:active` still darkens the primary, so press and hover remain distinct
-// gestures. See .cta-inset / .cta-wipe in globals.css.
+// Preserve the existing CTA API while sharing the site's button skin.
 export function ctaClasses(variant: "primary" | "outline" = "primary", className = ""): string {
-  const styles =
-    variant === "primary"
-      ? "cta-inset border-transparent bg-primary text-primary-foreground active:bg-primary-active"
-      : "cta-wipe border-foreground text-foreground hover:border-primary hover:text-primary-foreground";
-
-  // transition-all, not transition-colors: this carries `press`, whose scale
-  // comes from a transform. A narrow colour transition would win over the
-  // .press rule in globals.css — utilities sit in a later layer — and the tap
-  // feedback would land instantly instead of easing. See the note there.
-  return `press inline-flex items-center justify-center border-2 px-6 py-3.5 font-mono text-[13px] font-bold tracking-[0.1em] uppercase transition-all ${styles} ${className}`;
+  return actionButtonClasses({ variant, size: "md", className });
 }
 
 export function CtaButton({

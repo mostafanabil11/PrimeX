@@ -12,15 +12,18 @@
  * membership whose branch cannot be resolved is worse than one at the wrong
  * address.
  *
- *   node scripts/consolidate-to-single-branch.js            # keeps maadi
- *   node scripts/consolidate-to-single-branch.js new-cairo  # keeps that one
+ *   node scripts/consolidate-to-single-branch.js         # keeps faiyum
+ *   node scripts/consolidate-to-single-branch.js other  # keeps that one
  *
  * Idempotent: a second run finds nothing to repoint and no branches to remove.
  */
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-const DEFAULT_KEEP = 'maadi';
+// The surviving branch. Was 'maadi' until relocate-branch-to-faiyum.js renamed
+// that record; a default naming a branch that no longer exists would make a
+// bare run of a script that DELETES branches fail with a confusing error.
+const DEFAULT_KEEP = 'faiyum';
 
 (async () => {
   const keepSlug = (process.argv[2] || DEFAULT_KEEP).trim().toLowerCase();

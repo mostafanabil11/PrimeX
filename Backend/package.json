@@ -20,9 +20,7 @@
     "backup": "node scripts/backup-db.js",
     "restore": "node scripts/restore-db.js",
     "seed:schedule": "ts-node -r tsconfig-paths/register src/database/seeds/schedule.seed.ts",
-    "seed:gym": "ts-node -r tsconfig-paths/register src/database/seeds/gym.seed.ts",
-    "seed:categories": "ts-node -r tsconfig-paths/register src/database/seeds/category.seed.ts",
-    "seed:products": "ts-node -r tsconfig-paths/register src/database/seeds/product.seed.ts"
+    "seed:gym": "ts-node -r tsconfig-paths/register src/database/seeds/gym.seed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.3.0",

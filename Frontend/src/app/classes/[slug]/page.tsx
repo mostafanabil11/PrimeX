@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Photo } from "@/components/public/photo";
 import { notFound } from "next/navigation";
 import { Clock, Users } from "lucide-react";
 import { getClassTypeBySlugServer, getClassTypesServer } from "@/lib/api/gym-server";
 import { pageTitle, BRAND } from "@/lib/brand";
 import { INTENSITY_LABELS } from "@/lib/gym-format";
+// Whether anybody is able to write a review at all. The form inside
+// ClassReviewsSection is gated on a signed-in member, so this flag is what
+// decides whether an empty reviews panel is a genuine empty state or a dead
+// end. Named locally rather than read inline so the JSX below states its
+// intent rather than a flag name that means something broader.
+import { MEMBER_ACCOUNTS_ENABLED as REVIEWS_VISIBLE } from "@/lib/features";
 import { Section, CtaButton } from "@/components/public/section";
 import { WhatsAppCta } from "@/components/public/whatsapp";
 import { classEnquiry } from "@/lib/whatsapp-messages";
@@ -52,7 +58,7 @@ export default async function ClassTypePage({ params }: { params: Promise<Params
         <div className="mx-auto flex w-full max-w-(--spacing-container-max) flex-col gap-4">
           <Link
             href="/classes"
-            className="font-mono text-[11px] font-semibold tracking-[0.16em] text-primary-soft uppercase hover:underline"
+            className="-my-3 inline-flex min-h-11 w-fit items-center py-3 font-mono text-[11px] font-semibold tracking-[0.16em] text-primary-soft uppercase hover:underline"
           >
             ← All classes
           </Link>
@@ -118,7 +124,7 @@ export default async function ClassTypePage({ params }: { params: Promise<Params
                 </dt>
                 <dd className="mt-1 flex items-center gap-2 text-foreground">
                   <Clock className="size-4" strokeWidth={1.5} />
-                  {classType.durationMinutes} minutes
+                  {`${classType.durationMinutes} minutes`}
                 </dd>
               </div>
               <div>
@@ -127,7 +133,7 @@ export default async function ClassTypePage({ params }: { params: Promise<Params
                 </dt>
                 <dd className="mt-1 flex items-center gap-2 text-foreground">
                   <Users className="size-4" strokeWidth={1.5} />
-                  Up to {classType.defaultCapacity}
+                  {`Up to ${classType.defaultCapacity}`}
                 </dd>
               </div>
               <div>
@@ -153,11 +159,28 @@ export default async function ClassTypePage({ params }: { params: Promise<Params
         </div>
       </Section>
 
-      <ClassReviewsSection
-        classTypeId={classType._id}
-        averageRating={classType.averageRating}
-        reviewCount={classType.reviewCount}
-      />
+      {/* Shown only when it can say something.
+          The review form inside this section is gated on a signed-in member,
+          and with MEMBER_ACCOUNTS_ENABLED off nobody can be one — so on every
+          class page it rendered "Reviews / No reviews yet / Be the first to
+          review this class" over most of a phone screen, with no control
+          anywhere to actually be the first. An empty state that cannot be
+          filled is not an empty state, it is a dead end, and it was the last
+          thing a visitor saw before the footer.
+
+          With it gone, the panel above — "Ask about this class" and "See plans
+          and prices" — becomes the end of the page on a phone, which is the
+          right place to leave somebody who has just read about a class.
+
+          The section returns the moment either condition changes: real reviews
+          exist to display, or members can sign in and write one. */}
+      {(REVIEWS_VISIBLE || classType.reviewCount > 0) && (
+        <ClassReviewsSection
+          classTypeId={classType._id}
+          averageRating={classType.averageRating}
+          reviewCount={classType.reviewCount}
+        />
+      )}
     </>
   );
 }

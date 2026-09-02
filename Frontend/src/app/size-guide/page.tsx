@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { requireShop } from "@/lib/features";
+import { pageTitle } from "@/lib/brand";
 
 export const metadata: Metadata = {
-  title: "Size Guide — Valiant",
+  title: pageTitle("Size Guide"),
   description: "Find your size with our body measurement guide.",
 };
 

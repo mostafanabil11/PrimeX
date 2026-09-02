@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { AlertTriangle } from "lucide-react";
@@ -10,7 +10,7 @@ import { changePassword } from "@/lib/api/auth";
 import { apiErrorMessage } from "@/lib/api-error";
 
 const inputBase =
-  "w-full border border-border bg-surface-2 px-3.5 py-3 text-[14px] text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring";
+  "w-full border border-input bg-surface-2 px-3.5 py-3 text-base md:text-[14px] text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring";
 const labelBase = "text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase";
 
 export default function AccountSettingsPage() {
@@ -129,7 +129,7 @@ function SettingsForm({ profile }: { profile: MemberProfile }) {
             </Field>
           </div>
           <p className="text-[12px] text-muted-foreground">
-            Your email is {profile.email}. To change it, talk to the front desk.
+            {`Your email is ${profile.email}. To change it, talk to the front desk.`}
           </p>
         </Section>
 
@@ -166,7 +166,7 @@ function SettingsForm({ profile }: { profile: MemberProfile }) {
           </Field>
           <p className="text-[12px] text-muted-foreground">
             You can clear this at any time. See our{" "}
-            <Link href="/privacy" className="text-primary underline">
+            <Link href="/privacy" className="text-primary-soft underline">
               privacy policy
             </Link>{" "}
             for how it is handled.
@@ -194,7 +194,7 @@ function SettingsForm({ profile }: { profile: MemberProfile }) {
         <button
           type="submit"
           disabled={saveProfile.isPending}
-          className="w-fit bg-primary px-7 py-3.5 text-[13px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
+          className="ui-action inline-flex w-fit bg-primary px-7 py-3.5 text-[13px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
         >
           {saveProfile.isPending ? "Saving…" : "Save changes"}
         </button>
@@ -222,7 +222,7 @@ function SettingsForm({ profile }: { profile: MemberProfile }) {
         <button
           type="submit"
           disabled={savePassword.isPending || !currentPassword || !newPassword}
-          className="w-fit border border-border px-7 py-3.5 text-[13px] font-semibold tracking-[0.08em] text-foreground uppercase disabled:opacity-40"
+          className="ui-action ui-action--outline inline-flex w-fit border border-border px-7 py-3.5 text-[13px] font-semibold tracking-[0.08em] text-foreground uppercase disabled:opacity-40"
         >
           {savePassword.isPending ? "Changing…" : "Change password"}
         </button>

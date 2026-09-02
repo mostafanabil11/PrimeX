@@ -22,26 +22,19 @@ import { TrainersModule } from './trainers/trainers.module';
 import { ClassTypesModule } from './class-types/class-types.module';
 import { ContentModule } from './content/content.module';
 import { EnquiriesModule } from './enquiries/enquiries.module';
+import { PersonalTrainingModule } from './personal-training/personal-training.module';
 import { FunnelModule } from './funnel/funnel.module';
 import { SubscriptionsModule } from './subscriptions/subscriptions.module';
 import { InvoicesModule } from './invoices/invoices.module';
 import { JoinModule } from './join/join.module';
 import { ClassesModule } from './classes/classes.module';
 import { BookingsModule } from './bookings/bookings.module';
-import { CategoriesModule } from './categories/categories.module';
-import { ProductsModule } from './products/products.module';
 import { SettingsModule } from './settings/settings.module';
-import { AddressesModule } from './addresses/addresses.module';
-import { CartModule } from './cart/cart.module';
-import { OrdersModule } from './orders/orders.module';
 import { PaymentModule } from './payment/payment.module';
-import { CouponsModule } from './coupons/coupons.module';
 import { AdminModule } from './admin/admin.module';
 import { CommonModule } from './common/common.module';
 import { ReviewsModule } from './reviews/reviews.module';
-import { WishlistModule } from './wishlist/wishlist.module';
 import { NewsletterModule } from './newsletter/newsletter.module';
-import { BackInStockModule } from './back-in-stock/back-in-stock.module';
 
 @Module({
   imports: [
@@ -53,8 +46,7 @@ import { BackInStockModule } from './back-in-stock/back-in-stock.module';
     ScheduleModule.forRoot(),
     // Baseline for every route that doesn't opt into a stricter or looser
     // tier via @Throttle — see auth.controller.ts (5/min on login, register,
-    // OTP, password reset) and products/categories controllers' public GET
-    // handlers (120/min for normal catalog browsing).
+    // OTP, password reset).
     ThrottlerModule.forRoot([
       {
         name: 'default',
@@ -79,25 +71,18 @@ import { BackInStockModule } from './back-in-stock/back-in-stock.module';
     ClassTypesModule,
     ContentModule,
     EnquiriesModule,
+    PersonalTrainingModule,
     FunnelModule,
     SubscriptionsModule,
     InvoicesModule,
     JoinModule,
     ClassesModule,
     BookingsModule,
-    CategoriesModule,
-    ProductsModule,
     SettingsModule,
-    AddressesModule,
-    CartModule,
-    CouponsModule,
-    OrdersModule,
     PaymentModule,
     AdminModule,
     ReviewsModule,
-    WishlistModule,
     NewsletterModule,
-    BackInStockModule,
   ],
   controllers: [AppController],
   providers: [

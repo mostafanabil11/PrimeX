@@ -128,7 +128,7 @@ export function PaymentSection({
                 aria-checked={isSelected}
                 disabled={disabled}
                 onClick={() => onSelect(option.value)}
-                className={`flex w-full items-center justify-between px-4 py-4 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
+                className={`ui-control flex w-full items-center justify-between px-4 py-4 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-60 ${
                   isSelected ? "bg-[#f4f4f4] dark:bg-muted/40" : "bg-background"
                 }`}
               >

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { useLocale } from "next-intl";
+import { Link } from "@/i18n/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { MapPin, User } from "lucide-react";
@@ -45,11 +46,11 @@ export default function MyClassesPage() {
             {membership.classCredits.remaining}
           </span>
           <span className="text-[13px] text-foreground">
-            {membership.classCredits.remaining === 1 ? "class left" : "classes left"} this month
+            {`${membership.classCredits.remaining === 1 ? "class left" : "classes left"} this month`}
           </span>
           {membership.classCredits.cycleEndsAt && (
             <span className="text-[12px] text-muted-foreground">
-              · resets {formatMembershipDate(membership.classCredits.cycleEndsAt)}
+              {`· resets ${formatMembershipDate(membership.classCredits.cycleEndsAt)}`}
             </span>
           )}
         </div>
@@ -61,7 +62,7 @@ export default function MyClassesPage() {
             key={s}
             type="button"
             onClick={() => setScope(s)}
-            className={`px-4 py-2.5 text-[12px] font-semibold tracking-[0.06em] uppercase transition-colors ${
+            className={`ui-control px-4 py-2.5 text-[12px] font-semibold tracking-[0.06em] uppercase transition-colors ${
               scope === s
                 ? "bg-primary text-primary-foreground"
                 : "border border-border text-muted-foreground hover:text-foreground"
@@ -84,7 +85,7 @@ export default function MyClassesPage() {
           {scope === "upcoming" && (
             <Link
               href="/schedule"
-              className="bg-primary px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase"
+              className="ui-action inline-flex bg-primary px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase"
             >
               Browse the timetable
             </Link>
@@ -103,6 +104,7 @@ export default function MyClassesPage() {
 
 function BookingRow({ booking, scope }: { booking: Booking; scope: "upcoming" | "past" }) {
   const queryClient = useQueryClient();
+  const isArabic = useLocale() === "ar";
   const session = booking.session;
 
   const cancel = useMutation({
@@ -159,7 +161,7 @@ function BookingRow({ booking, scope }: { booking: Booking; scope: "upcoming" | 
             </span>
           )}
           <span className="tabular-nums">
-            until {sessionEndTime(session, TIMEZONE)}
+            {`until ${sessionEndTime(session, TIMEZONE)}`}
           </span>
         </div>
       </div>
@@ -182,9 +184,15 @@ function BookingRow({ booking, scope }: { booking: Booking; scope: "upcoming" | 
             type="button"
             disabled={cancel.isPending}
             onClick={() => {
-              if (confirm(`Cancel your place on ${session.classType.name}?`)) cancel.mutate();
+              // A native confirm() dialog is never in the DOM, so the
+              // Arabic translator (which only rewrites rendered text) can
+              // never reach it — this has to branch on locale directly.
+              const message = isArabic
+                ? `إلغاء حجزك في ${session.classType.name}؟`
+                : `Cancel your place on ${session.classType.name}?`;
+              if (confirm(message)) cancel.mutate();
             }}
-            className="border border-border px-4 py-2.5 text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:border-foreground hover:text-foreground disabled:opacity-40"
+            className="ui-action ui-action--outline inline-flex border border-border px-4 py-2.5 text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:border-foreground hover:text-foreground disabled:opacity-40"
           >
             {cancel.isPending ? "…" : "Cancel"}
           </button>

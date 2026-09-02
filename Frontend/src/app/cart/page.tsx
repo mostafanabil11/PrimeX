@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { Minus, Plus, X } from "lucide-react";
 import { useCart } from "@/hooks/use-cart";
 import { useAppliedCoupon } from "@/hooks/use-applied-coupon";
@@ -28,7 +28,7 @@ export default function CartPage() {
         </p>
         <Link
           href="/"
-          className="bg-primary px-8 py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
+          className="ui-action inline-flex bg-primary px-8 py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
         >
           Continue Shopping
         </Link>
@@ -85,7 +85,7 @@ export default function CartPage() {
                       type="button"
                       onClick={() => removeItem(item.productId, item.size)}
                       aria-label="Remove item"
-                      className="text-muted-foreground transition-colors hover:text-foreground"
+                      className="ui-action ui-action--icon ui-action--ghost inline-flex text-muted-foreground transition-colors hover:text-foreground"
                     >
                       <X className="size-4" strokeWidth={1.5} />
                     </button>
@@ -97,7 +97,7 @@ export default function CartPage() {
                         onClick={() => updateQuantity(item.productId, item.size, item.quantity - 1)}
                         disabled={!item.available}
                         aria-label="Decrease quantity"
-                        className="p-2 text-foreground transition-opacity hover:opacity-70 disabled:opacity-30"
+                        className="ui-action ui-action--icon ui-action--ghost inline-flex p-2 text-foreground transition-opacity hover:opacity-70 disabled:opacity-30"
                       >
                         <Minus className="size-3.5" strokeWidth={1.5} />
                       </button>
@@ -107,7 +107,7 @@ export default function CartPage() {
                         onClick={() => updateQuantity(item.productId, item.size, item.quantity + 1)}
                         disabled={!item.available || item.quantity >= item.availableStock}
                         aria-label="Increase quantity"
-                        className="p-2 text-foreground transition-opacity hover:opacity-70 disabled:opacity-30"
+                        className="ui-action ui-action--icon ui-action--ghost inline-flex p-2 text-foreground transition-opacity hover:opacity-70 disabled:opacity-30"
                       >
                         <Plus className="size-3.5" strokeWidth={1.5} />
                       </button>
@@ -154,7 +154,7 @@ export default function CartPage() {
           <Link
             href="/checkout"
             aria-disabled={!canCheckout}
-            className={`block w-full py-4 text-center text-button font-medium tracking-[0.05em] uppercase transition-colors ${
+            className={`ui-action block w-full py-4 text-center text-button font-medium tracking-[0.05em] uppercase transition-colors ${
               canCheckout
                 ? "bg-primary text-primary-foreground transition-colors hover:bg-primary-hover"
                 : "pointer-events-none bg-primary/40 text-primary-foreground/70"

@@ -23,7 +23,7 @@ export const EMPTY_ADDRESS_FORM: AddressFormValues = {
 };
 
 const inputClass =
-  "w-full border border-border bg-background px-4 py-3 text-sm text-foreground outline-none focus:border-foreground";
+  "w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground";
 const labelClass = "mb-2 block font-mono text-[12px] font-semibold tracking-[0.1em] text-foreground uppercase";
 
 // The delivery fields themselves, with no opinion about what happens to them.

@@ -53,7 +53,7 @@ export function BranchForm({ branch }: { branch?: Branch }) {
   const [description, setDescription] = useState(branch?.description ?? "");
   const [addressLine, setAddressLine] = useState(branch?.addressLine ?? "");
   const [city, setCity] = useState(branch?.city ?? "");
-  const [governorate, setGovernorate] = useState(branch?.governorate ?? "Cairo");
+  const [governorate, setGovernorate] = useState(branch?.governorate ?? "Faiyum");
   const [latitude, setLatitude] = useState<number | null>(branch?.latitude ?? null);
   const [longitude, setLongitude] = useState<number | null>(branch?.longitude ?? null);
   const [googleMapsUrl, setGoogleMapsUrl] = useState(branch?.googleMapsUrl ?? "");
@@ -123,7 +123,7 @@ export function BranchForm({ branch }: { branch?: Branch }) {
       }}
     >
       <FormSection title="Identity">
-        <TextInput label="Name" required value={name} onChange={setName} placeholder="New Cairo" />
+        <TextInput label="Name" required value={name} onChange={setName} placeholder="Faiyum" />
         <TextArea
           label="Description"
           hint="One or two sentences, shown on the locations page."
@@ -212,7 +212,7 @@ export function BranchForm({ branch }: { branch?: Branch }) {
                       type="time"
                       value={h.opensAt}
                       aria-label={`${DAY_LABELS[h.day]} opens at`}
-                      className="ml-2 border border-border bg-surface-2 px-2 py-1.5 text-[12px] text-foreground"
+                      className="ml-2 border border-input bg-surface-2 px-2 py-1.5 text-base md:text-[12px] text-foreground"
                       onChange={(e) => {
                         const next = [...openingHours];
                         next[i] = { ...h, opensAt: e.target.value };
@@ -224,7 +224,7 @@ export function BranchForm({ branch }: { branch?: Branch }) {
                       type="time"
                       value={h.closesAt}
                       aria-label={`${DAY_LABELS[h.day]} closes at`}
-                      className="border border-border bg-surface-2 px-2 py-1.5 text-[12px] text-foreground"
+                      className="border border-input bg-surface-2 px-2 py-1.5 text-base md:text-[12px] text-foreground"
                       onChange={(e) => {
                         const next = [...openingHours];
                         next[i] = { ...h, closesAt: e.target.value };
@@ -249,7 +249,7 @@ export function BranchForm({ branch }: { branch?: Branch }) {
               <select
                 value={w.day}
                 aria-label={`Women-only window ${i + 1} day`}
-                className="border border-border bg-surface-2 px-2 py-1.5 text-[12px] text-foreground"
+                className="border border-input bg-surface-2 px-2 py-1.5 text-base md:text-[12px] text-foreground"
                 onChange={(e) => {
                   const next = [...womenOnly];
                   next[i] = { ...w, day: e.target.value as WomenOnlyWindow["day"] };
@@ -266,7 +266,7 @@ export function BranchForm({ branch }: { branch?: Branch }) {
                 type="time"
                 value={w.startsAt}
                 aria-label={`Women-only window ${i + 1} starts at`}
-                className="border border-border bg-surface-2 px-2 py-1.5 text-[12px] text-foreground"
+                className="border border-input bg-surface-2 px-2 py-1.5 text-base md:text-[12px] text-foreground"
                 onChange={(e) => {
                   const next = [...womenOnly];
                   next[i] = { ...w, startsAt: e.target.value };
@@ -278,7 +278,7 @@ export function BranchForm({ branch }: { branch?: Branch }) {
                 type="time"
                 value={w.endsAt}
                 aria-label={`Women-only window ${i + 1} ends at`}
-                className="border border-border bg-surface-2 px-2 py-1.5 text-[12px] text-foreground"
+                className="border border-input bg-surface-2 px-2 py-1.5 text-base md:text-[12px] text-foreground"
                 onChange={(e) => {
                   const next = [...womenOnly];
                   next[i] = { ...w, endsAt: e.target.value };
@@ -287,7 +287,7 @@ export function BranchForm({ branch }: { branch?: Branch }) {
               />
               <button
                 type="button"
-                className="text-[12px] text-destructive hover:underline"
+                className="ui-action ui-action--sm inline-flex text-[12px] text-destructive hover:underline"
                 onClick={() => setWomenOnly(womenOnly.filter((_, index) => index !== i))}
               >
                 Remove
@@ -296,7 +296,7 @@ export function BranchForm({ branch }: { branch?: Branch }) {
           ))}
           <button
             type="button"
-            className="w-fit text-[12px] font-medium text-primary-soft hover:underline"
+            className="ui-action ui-action--ghost ui-action--sm inline-flex w-fit text-[12px] font-medium text-primary-soft hover:underline"
             onClick={() =>
               setWomenOnly([...womenOnly, { day: "sunday", startsAt: "10:00", endsAt: "13:00" }])
             }
@@ -318,7 +318,7 @@ export function BranchForm({ branch }: { branch?: Branch }) {
           label="Image URLs"
           items={images}
           onChange={setImages}
-          placeholder="/images/branches/new-cairo-1.jpg"
+          placeholder="/images/branch-hero.jpg"
           maxItems={20}
         />
       </FormSection>

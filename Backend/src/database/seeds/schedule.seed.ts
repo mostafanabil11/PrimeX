@@ -60,10 +60,20 @@ function weekdayRun(base: Omit<Slot, 'weekday'>, days: readonly string[]): Slot[
 }
 
 const SLOTS: Slot[] = [
-  // --- New Cairo: the flagship, busiest timetable ---
+  // These three blocks were one branch each — New Cairo, Sheikh Zayed and
+  // Maadi — back when this file seeded three gyms. There is one gym now, so
+  // they are grouped by what they emphasise instead.
+  //
+  // WORTH KNOWING: rules are upserted on (branch, classType, weekday,
+  // startTime), so any two slots that differed only by branch now collide and
+  // the later one wins. The timetable is not smaller than it should be by
+  // accident — it is three timetables folded onto one gym. Prune it to a real
+  // week's schedule when class booking is switched on.
+  //
+  // --- Conditioning-led ---
   ...weekdayRun(
     {
-      branch: 'maadi',
+      branch: 'faiyum',
       classType: 'strength-foundations',
       trainer: 'marcus-vance',
       startTime: '07:00',
@@ -73,7 +83,7 @@ const SLOTS: Slot[] = [
   ),
   ...weekdayRun(
     {
-      branch: 'maadi',
+      branch: 'faiyum',
       classType: 'hiit-inferno',
       trainer: 'tarek-zaki',
       startTime: '18:30',
@@ -84,7 +94,7 @@ const SLOTS: Slot[] = [
   ),
   ...weekdayRun(
     {
-      branch: 'maadi',
+      branch: 'faiyum',
       classType: 'metabolic-conditioning',
       trainer: 'tarek-zaki',
       startTime: '06:30',
@@ -94,7 +104,7 @@ const SLOTS: Slot[] = [
   ),
   ...weekdayRun(
     {
-      branch: 'maadi',
+      branch: 'faiyum',
       classType: 'mobility-core',
       trainer: 'youssef-darwish',
       startTime: '11:00',
@@ -105,7 +115,7 @@ const SLOTS: Slot[] = [
   ),
   ...weekdayRun(
     {
-      branch: 'maadi',
+      branch: 'faiyum',
       classType: 'yoga',
       trainer: 'youssef-darwish',
       startTime: '19:30',
@@ -114,7 +124,7 @@ const SLOTS: Slot[] = [
     ['monday', 'wednesday']
   ),
   {
-    branch: 'maadi',
+    branch: 'faiyum',
     classType: 'boxing',
     trainer: 'omar-hassan',
     weekday: 'saturday',
@@ -122,7 +132,7 @@ const SLOTS: Slot[] = [
     room: 'Studio 2',
   },
   {
-    branch: 'maadi',
+    branch: 'faiyum',
     classType: 'functional-circuit',
     trainer: null,
     weekday: 'saturday',
@@ -130,7 +140,7 @@ const SLOTS: Slot[] = [
     room: 'Studio 1',
   },
   {
-    branch: 'maadi',
+    branch: 'faiyum',
     classType: 'recovery-stretch',
     trainer: 'youssef-darwish',
     weekday: 'friday',
@@ -138,10 +148,10 @@ const SLOTS: Slot[] = [
     room: 'Studio 3',
   },
 
-  // --- Sheikh Zayed: strength-led ---
+  // --- Strength-led ---
   ...weekdayRun(
     {
-      branch: 'maadi',
+      branch: 'faiyum',
       classType: 'olympic-lifting',
       trainer: 'david-kim',
       startTime: '17:00',
@@ -152,7 +162,7 @@ const SLOTS: Slot[] = [
   ),
   ...weekdayRun(
     {
-      branch: 'maadi',
+      branch: 'faiyum',
       classType: 'strength-foundations',
       trainer: 'marcus-vance',
       startTime: '07:30',
@@ -162,7 +172,7 @@ const SLOTS: Slot[] = [
   ),
   ...weekdayRun(
     {
-      branch: 'maadi',
+      branch: 'faiyum',
       classType: 'functional-circuit',
       trainer: 'karim-fahmy',
       startTime: '11:30',
@@ -172,7 +182,7 @@ const SLOTS: Slot[] = [
     ['monday', 'wednesday']
   ),
   {
-    branch: 'maadi',
+    branch: 'faiyum',
     classType: 'boxing',
     trainer: 'omar-hassan',
     weekday: 'saturday',
@@ -180,10 +190,10 @@ const SLOTS: Slot[] = [
     room: 'Studio 2',
   },
 
-  // --- Maadi: smaller, calmer ---
+  // --- Calmer: yoga, mobility, recovery ---
   ...weekdayRun(
     {
-      branch: 'maadi',
+      branch: 'faiyum',
       classType: 'yoga',
       trainer: 'youssef-darwish',
       startTime: '08:00',
@@ -193,7 +203,7 @@ const SLOTS: Slot[] = [
   ),
   ...weekdayRun(
     {
-      branch: 'maadi',
+      branch: 'faiyum',
       classType: 'functional-circuit',
       trainer: 'karim-fahmy',
       startTime: '18:00',
@@ -202,7 +212,7 @@ const SLOTS: Slot[] = [
     ['monday', 'wednesday']
   ),
   {
-    branch: 'maadi',
+    branch: 'faiyum',
     classType: 'boxing',
     trainer: 'omar-hassan',
     weekday: 'tuesday',
@@ -210,7 +220,7 @@ const SLOTS: Slot[] = [
     room: 'Studio',
   },
   {
-    branch: 'maadi',
+    branch: 'faiyum',
     classType: 'recovery-stretch',
     trainer: 'youssef-darwish',
     weekday: 'saturday',
@@ -218,7 +228,7 @@ const SLOTS: Slot[] = [
     room: 'Studio',
   },
   {
-    branch: 'maadi',
+    branch: 'faiyum',
     classType: 'mobility-core',
     trainer: 'karim-fahmy',
     weekday: 'saturday',

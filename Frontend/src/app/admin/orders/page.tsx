@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getAdminOrders } from "@/lib/api/orders";
 import { formatPrice } from "@/lib/format";
@@ -100,7 +100,7 @@ export default function AdminOrdersPage() {
                 type="button"
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="text-muted-foreground underline disabled:opacity-30"
+                className="ui-action ui-action--ghost ui-action--sm inline-flex text-muted-foreground underline disabled:opacity-30"
               >
                 Previous
               </button>
@@ -111,7 +111,7 @@ export default function AdminOrdersPage() {
                 type="button"
                 onClick={() => setPage((p) => Math.min(data.pagination.pages, p + 1))}
                 disabled={page === data.pagination.pages}
-                className="text-muted-foreground underline disabled:opacity-30"
+                className="ui-action ui-action--ghost ui-action--sm inline-flex text-muted-foreground underline disabled:opacity-30"
               >
                 Next
               </button>

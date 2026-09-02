@@ -1,10 +1,109 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
-import { ChevronDown } from "lucide-react";
-import { formatPrice } from "@/lib/format";
+import { useState, useMemo, useRef, useEffect, useLayoutEffect, useId } from "react";
+import { ChevronDown, ChevronRight } from "lucide-react";
+import { formatPrice, formatAmount } from "@/lib/format";
 import { TrackedPlanLink } from "@/components/public/tracked-cta";
 import type { Plan } from "@/types/gym";
+
+/** useLayoutEffect that does not warn when this client component is rendered on
+ *  the server. The measuring below has to happen before paint, so it cannot
+ *  simply be useEffect. */
+const useIsomorphicLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
+
+const DURATION_MS = 440;
+const EASING = "cubic-bezier(0.22, 1, 0.36, 1)";
+
+/**
+ * Keep tiers mounted so repeated opens never pay a render/translation cost.
+ * Animate only the outer clip height; content keeps its natural layout.
+ */
+export function Collapse({
+  id,
+  open,
+  children,
+}: {
+  id: string;
+  open: boolean;
+  children: React.ReactNode;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
+  const animation = useRef<Animation | null>(null);
+  const initialized = useRef(false);
+  const [initialStyle] = useState<React.CSSProperties>(() => ({
+    height: open ? undefined : 0,
+  }));
+
+  useIsomorphicLayoutEffect(() => {
+    const el = ref.current;
+    const inner = innerRef.current;
+    if (!el || !inner) return;
+    let targetHeight = inner.getBoundingClientRect().height;
+
+    const settle = () => {
+      el.style.height = open ? "auto" : "0px";
+      animation.current?.cancel();
+      animation.current = null;
+    };
+    const move = () => {
+      // Read the in-flight visual height before cancelling, so rapid clicks
+      // reverse naturally instead of restarting from fully open/closed.
+      const from = el.getBoundingClientRect().height;
+      targetHeight = inner.getBoundingClientRect().height;
+      const to = open ? targetHeight : 0;
+      animation.current?.cancel();
+      animation.current = null;
+
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches ||
+          Math.abs(from - to) < 1) {
+        settle();
+        return;
+      }
+      el.style.height = `${from}px`;
+      const current = el.animate(
+        [{ height: `${from}px` }, { height: `${to}px` }],
+        { duration: DURATION_MS, easing: EASING, fill: "both" },
+      );
+      animation.current = current;
+      current.onfinish = () => {
+        if (animation.current === current) settle();
+      };
+    };
+
+    if (!initialized.current) {
+      initialized.current = true;
+      settle();
+    } else {
+      move();
+    }
+
+    // Font loading, Arabic translation and responsive changes may alter the
+    // measured target mid-animation. Retarget from the visible height.
+    const observer = new ResizeObserver(() => {
+      if (open && animation.current &&
+          Math.abs(inner.getBoundingClientRect().height - targetHeight) > 1) move();
+    });
+    observer.observe(inner);
+    return () => observer.disconnect();
+  }, [open]);
+
+  useEffect(() => () => animation.current?.cancel(), []);
+
+  return (
+    <div
+      ref={ref}
+      id={id}
+      inert={!open}
+      aria-hidden={!open}
+      data-open={open ? "" : undefined}
+      style={initialStyle}
+      className="term-panel"
+    >
+      <div ref={innerRef} className="term-content">{children}</div>
+    </div>
+  );
+}
 
 /**
  * Pricing as one collapsible section per term, tiers inside.
@@ -13,14 +112,14 @@ import type { Plan } from "@/types/gym";
  * their heads: first decide how long to commit for, then how much gym you
  * want. Showing every tier of every term at once is a page nobody reaches the
  * bottom of on a phone — full-height cards stacked sixteen deep — so only the
- * open term renders its tiers, and those render as compact rows rather than
- * tall cards.
+ * open term reveals its tiers, as compact rows rather than tall cards.
  *
  * The collapsed headers do real work too: each carries its cheapest price and
  * what it saves against paying monthly, so the ladder from monthly to annual
  * is readable without opening anything.
  */
 export function PricingGrid({ plans }: { plans: Plan[] }) {
+  const gridId = useId();
   const terms = useMemo(() => buildTerms(plans), [plans]);
 
   // The shortest term starts open. It is the lowest commitment and the natural
@@ -28,49 +127,22 @@ export function PricingGrid({ plans }: { plans: Plan[] }) {
   // number on the page.
   const [openMonths, setOpenMonths] = useState<number | null>(() => terms[0]?.months ?? null);
 
-  // The term that is currently sliding shut. Its tiers have to stay in the DOM
-  // until the transition finishes, or the panel would empty out in one frame
-  // and collapse instantly instead of easing.
-  const [closingMonths, setClosingMonths] = useState<number | null>(null);
-
-  const toggle = (months: number, open: boolean) => {
-    setClosingMonths(open ? months : openMonths);
-    setOpenMonths(open ? null : months);
-  };
-
-  // Backstop for the unmount below. transitionend is the accurate signal and
-  // usually gets there first, but it never fires at all when the visitor has
-  // asked for reduced motion — there is no transition to end — which would
-  // otherwise leave a closed panel holding its tiers for good.
-  useEffect(() => {
-    if (closingMonths === null) return;
-    const timer = window.setTimeout(() => setClosingMonths(null), 600);
-    return () => window.clearTimeout(timer);
-  }, [closingMonths]);
-
   if (terms.length === 0) return null;
 
   return (
-    <div className="flex flex-col gap-px bg-border">
+    <div className="pricing-accordion flex flex-col">
       {terms.map((term) => {
         const open = term.months === openMonths;
 
-        // Only the open panel and the one easing shut hold their tiers. The
-        // other terms render an empty panel, which is what keeps this cheap on
-        // a phone: animating grid-template-rows relayouts on every frame, and
-        // before this the page carried all sixteen tier rows at once so that
-        // twelve permanently shut panels could animate — work no one ever saw.
-        const mounted = open || term.months === closingMonths;
-
         return (
-          <div key={term.months} className="bg-surface-1">
+          <div key={term.months} className="pricing-term bg-surface-1">
             <h3>
               <button
                 type="button"
                 aria-expanded={open}
-                aria-controls={`term-${term.months}`}
-                onClick={() => toggle(term.months, open)}
-                className={`flex w-full items-center justify-between gap-4 px-5 py-5 text-left transition-colors md:px-7 ${
+                aria-controls={`${gridId}-term-${term.months}`}
+                onClick={() => setOpenMonths(open ? null : term.months)}
+                className={`pricing-term-trigger flex w-full items-center justify-between gap-4 px-5 py-5 text-start transition-colors md:px-7 ${
                   open ? "bg-surface-2" : "hover:bg-surface-2"
                 }`}
               >
@@ -85,7 +157,7 @@ export function PricingGrid({ plans }: { plans: Plan[] }) {
                     {term.label}
                   </span>
                   <span className="text-[12px] text-muted-foreground tabular-nums">
-                    from {formatPrice(term.fromPrice)}
+                    {`from ${formatPrice(term.fromPrice)}`}
                   </span>
                 </span>
 
@@ -100,7 +172,7 @@ export function PricingGrid({ plans }: { plans: Plan[] }) {
                   )}
                   {term.saving > 0 && (
                     <span className="font-mono text-[11px] font-semibold tracking-[0.08em] text-primary-soft uppercase">
-                      Save {term.saving}%
+                      {`Save ${term.saving}%`}
                     </span>
                   )}
                   <ChevronDown
@@ -113,48 +185,13 @@ export function PricingGrid({ plans }: { plans: Plan[] }) {
               </button>
             </h3>
 
-            {/* Opens by moving a grid row between 0fr and 1fr, which animates
-                to the content's real height — transitioning max-height instead
-                needs a guessed ceiling, and the guess either clips the tallest
-                tier or spends the tail easing through empty space.
-
-                The panel stays mounted so there is something to transition;
-                `inert` is what keeps that honest, taking the collapsed links
-                out of the tab order and the accessibility tree rather than
-                just hiding them behind overflow. */}
-            <div
-              id={`term-${term.months}`}
-              inert={!open}
-              onTransitionEnd={(e) => {
-                // Drop the closing panel's tiers once it has finished easing
-                // shut. Guarded on the target because this bubbles from every
-                // transition inside the panel, and on the month because a
-                // quick second click can retarget which panel is closing.
-                if (e.target === e.currentTarget && term.months === closingMonths) {
-                  setClosingMonths(null);
-                }
-              }}
-              data-open={open ? "" : undefined}
-              className="term-panel"
-            >
-              {/* min-h-0 is what lets the row collapse at all — without it a
-                  grid item floors at its min-content height and 0fr does
-                  nothing.
-
-                  contain:layout_paint tells the browser this subtree cannot
-                  affect anything outside it, so each frame of the height
-                  change re-lays-out the panel rather than reconsidering the
-                  rest of the page below it. */}
-              <div className="min-h-0 overflow-hidden [contain:layout_paint]">
-                {mounted && (
-                  <div className="grid gap-px border-t border-border bg-border md:grid-cols-2 xl:grid-cols-4">
-                    {term.tiers.map(({ plan, monthlyPlan }, i) => (
-                      <TierRow key={plan._id} plan={plan} monthlyPlan={monthlyPlan} index={i} />
-                    ))}
-                  </div>
-                )}
+            <Collapse id={`${gridId}-term-${term.months}`} open={open}>
+              <div className="grid gap-px border-t border-border bg-border md:grid-cols-2 xl:grid-cols-4">
+                {term.tiers.map(({ plan, monthlyPlan }) => (
+                  <TierRow key={plan._id} plan={plan} monthlyPlan={monthlyPlan} />
+                ))}
               </div>
-            </div>
+            </Collapse>
           </div>
         );
       })}
@@ -171,7 +208,109 @@ export function PricingGrid({ plans }: { plans: Plan[] }) {
  * actually differs between tiers: the price, the allowance, and the extras —
  * with the prose kept for the tier's own description line.
  */
-function TierRow({ plan, monthlyPlan, index }: { plan: Plan; monthlyPlan: Plan | null; index: number }) {
+function TierRow({ plan, monthlyPlan }: { plan: Plan; monthlyPlan: Plan | null }) {
+  // ONE TIER, TWO SHAPES, and which you get depends on the width and on
+  // whether this is the tier the gym is pushing.
+  //
+  // Four full cards per term, each with its own button, is what the redesign
+  // takes issue with: on a phone that is roughly 800px of accordion for a
+  // single term, and three of those four buttons are asking for a decision the
+  // reader has not made yet. The tier they are most likely to want keeps the
+  // full treatment — description, price, and a button to press. The other
+  // three collapse to a 56px row carrying the only two things that separate
+  // them at this stage, the allowance and the per-month price, with the whole
+  // row as the target.
+  //
+  // Nothing is lost: the compact row links to exactly the same place the
+  // button did, and above md every tier is a full card again, because there
+  // the four sit side by side in a grid and the height was never the problem.
+  //
+  // Rendered as two elements rather than one restructured by CSS. A card and a
+  // row disagree about direction, order and which parts exist at all, and the
+  // class soup needed to morph one into the other would be far harder to read
+  // than two pieces of plain markup — this costs three small hidden rows in
+  // the one term panel that is actually open.
+  if (!plan.isFeatured) {
+    return (
+      <>
+        <CompactTierRow plan={plan} monthlyPlan={monthlyPlan} />
+        {/* max-md:hidden goes on the card itself rather than on a wrapper.
+            These are direct children of the tiers grid, and a wrapper would
+            become the grid item — `display: contents` to undo that fights the
+            `display: none` doing the hiding, and which of the two wins is a
+            question about utility ordering that nobody should have to answer. */}
+        <FullTierCard plan={plan} monthlyPlan={monthlyPlan} className="max-md:hidden" />
+      </>
+    );
+  }
+
+  return <FullTierCard plan={plan} monthlyPlan={monthlyPlan} />;
+}
+
+/**
+ * A non-featured tier on a phone: one 56px row, no button.
+ *
+ * The per-month figure rather than the term total, because that is the number
+ * that makes two tiers comparable — a twelve-month Pro against a twelve-month
+ * Core is 1,387 against 1,025, not 16,644 against 12,300. On a one-month term
+ * the two are the same number and this changes nothing.
+ */
+function CompactTierRow({ plan, monthlyPlan }: { plan: Plan; monthlyPlan: Plan | null }) {
+  const price = plan.pricing?.effectivePriceMinorUnits ?? plan.priceMinorUnits;
+  const months = planMonths(plan);
+  const perMonth = months && months > 1 ? Math.round(price / months) : price;
+  const saving = savingVsMonthly(plan, monthlyPlan);
+
+  return (
+    <TrackedPlanLink
+      planId={plan._id}
+      href={`/join?plan=${plan.slug}`}
+      className="term-row flex min-h-14 items-center justify-between gap-3 bg-surface-1 px-4 py-3.5 transition-colors hover:bg-surface-2 md:hidden"
+    >
+      <span className="min-w-0">
+        <span className="block font-display text-lg leading-none tracking-[-0.02em] text-foreground uppercase">
+          {plan.tier ?? plan.name}
+        </span>
+        <span className="mt-1.5 block text-[13px] text-muted-foreground">
+          {plan.sessionsIncluded === null ? "Unlimited" : `${plan.sessionsIncluded} sessions`}
+          {" · "}
+          {plan.daysPerWeek === null ? "every day" : `${plan.daysPerWeek} days`}
+        </span>
+      </span>
+
+      <span className="flex shrink-0 items-center gap-3">
+        <span className="text-right">
+          {/* The unit is the caption, so the figure drops its currency — see
+              formatAmount. "EGP 1,900" over "EGP / mo" says EGP twice and
+              buries the half that matters. */}
+          <span className="block font-display text-[19px] leading-none text-foreground tabular-nums">
+            {formatAmount(perMonth)}
+          </span>
+          <span className="mt-0.5 block font-mono text-[12px] text-muted-foreground">
+            {months && months > 1 ? "EGP / mo" : "EGP"}
+          </span>
+          {saving !== null && saving > 0 && (
+            <span className="mt-0.5 block font-mono text-[12px] font-semibold tracking-[0.06em] text-primary-soft uppercase">
+              {`Save ${saving}%`}
+            </span>
+          )}
+        </span>
+        <ChevronRight aria-hidden className="size-4 shrink-0 text-input" strokeWidth={2} />
+      </span>
+    </TrackedPlanLink>
+  );
+}
+
+/** The tier as a full card: every tier above md, and the featured one always. */
+function FullTierCard({
+  plan,
+  monthlyPlan,
+  className = "",
+}: {
+  plan: Plan;
+  monthlyPlan: Plan | null;
+  className?: string;
+}) {
   const price = plan.pricing?.effectivePriceMinorUnits ?? plan.priceMinorUnits;
   const listPrice = plan.pricing?.listPriceMinorUnits ?? plan.priceMinorUnits;
   const offer = plan.pricing?.appliedOffer ?? null;
@@ -203,10 +342,9 @@ function TierRow({ plan, monthlyPlan, index }: { plan: Plan; monthlyPlan: Plan |
     // `relative` is load-bearing — it is what the stretched pseudo-element
     // resolves against. Without it the overlay would size itself to the page.
     <div
-      className={`term-row group/tier relative flex cursor-pointer flex-col gap-3 p-5 md:p-6 ${
+      className={`term-row group/tier relative flex cursor-pointer flex-col gap-3 p-4 md:gap-3 md:p-6 ${
         plan.isFeatured ? "bg-surface-2 hover:bg-surface-3" : "bg-surface-1 hover:bg-surface-2"
-      }`}
-      style={{ transitionDelay: `${index * 25}ms` }}
+      } ${className}`}
     >
       <div className="flex items-start justify-between gap-3">
         <span className="min-w-0">
@@ -262,11 +400,11 @@ function TierRow({ plan, monthlyPlan, index }: { plan: Plan; monthlyPlan: Plan |
 
       {perMonth !== null && (
         <p className="text-[12px] text-muted-foreground">
-          {formatPrice(perMonth)} a month
+          {`${formatPrice(perMonth)} a month`}
           {saving !== null && saving > 0 && (
             // --primary-soft, not --primary: #d12028 measures 3.48:1 and this
             // is 12px text. See the note on HoursTable in cards.tsx.
-            <span className="text-primary-soft"> · Save {saving}%</span>
+            <span className="text-primary-soft"> · {`Save ${saving}%`}</span>
           )}
         </p>
       )}
@@ -287,13 +425,13 @@ function TierRow({ plan, monthlyPlan, index }: { plan: Plan; monthlyPlan: Plan |
       <TrackedPlanLink
         planId={plan._id}
         href={`/join?plan=${plan.slug}`}
-        className={`tier-cta mt-auto flex min-h-11 items-center justify-center px-5 py-3.5 text-center font-mono text-[12px] font-semibold tracking-[0.1em] uppercase transition-all ${
+        className={`ui-action tier-cta mt-auto flex min-h-11 items-center justify-center px-5 py-3.5 text-center font-mono text-[12px] font-semibold tracking-[0.1em] uppercase transition-all ${
           plan.isFeatured
             ? "bg-primary text-primary-foreground group-hover/tier:opacity-90"
             : "border border-foreground text-foreground group-hover/tier:border-primary group-hover/tier:bg-primary group-hover/tier:text-primary-foreground"
         }`}
       >
-        Choose {plan.tier ?? plan.name}
+        {`Choose ${plan.tier ?? plan.name}`}
       </TrackedPlanLink>
     </div>
   );
@@ -441,7 +579,7 @@ export function collectTerms(plans: Plan[]) {
  * empty, which is what should happen if the gym stops selling, say, a
  * one-month Elite.
  */
-function buildTerms(plans: Plan[]) {
+export function buildTerms(plans: Plan[]) {
   return collectTerms(plans).map((term) => {
     const atTerm = plans
       .filter((p) => planMonths(p) === term.months)
@@ -476,7 +614,7 @@ function buildTerms(plans: Plan[]) {
  * like-for-like — comparing a discounted annual against a full-price monthly
  * would overstate the saving.
  */
-function savingVsMonthly(plan: Plan, monthlyPlan: Plan | null): number | null {
+export function savingVsMonthly(plan: Plan, monthlyPlan: Plan | null): number | null {
   const months = planMonths(plan);
   if (!monthlyPlan || months === null || months <= 1) return null;
 

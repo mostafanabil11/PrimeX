@@ -9,7 +9,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import { Model, Types } from 'mongoose';
 import { Invoice, InvoiceDocument, InvoiceLine, PaymentMethod } from './schemas/invoice.schema';
-import { Counter, CounterDocument } from '@/orders/schemas/counter.schema';
+import { Counter, CounterDocument } from '@/common/schemas/counter.schema';
 import { Subscription, SubscriptionDocument } from '@/subscriptions/schemas/subscription.schema';
 
 // How long an unpaid card invoice is left alone before the sweeper closes it.

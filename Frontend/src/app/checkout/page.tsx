@@ -237,7 +237,7 @@ export default function CheckoutPage() {
           type="button"
           onClick={() => setSummaryOpen((v) => !v)}
           aria-expanded={summaryOpen}
-          className="flex w-full items-center justify-between px-4 py-4 text-[13px]"
+          className="ui-control flex w-full items-center justify-between px-4 py-4 text-[13px]"
         >
           <span className="flex items-center gap-2 font-medium text-foreground">
             Order Summary
@@ -323,7 +323,7 @@ export default function CheckoutPage() {
                 type="button"
                 onClick={() => placeOrderMutation.mutate()}
                 disabled={!canPlaceOrder}
-                className="w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
+                className="ui-action inline-flex w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {placeOrderMutation.isPending
                   ? "Processing…"

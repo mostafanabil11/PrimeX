@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 // Where the API really lives. Server Components talk to it directly (no browser
 // involved, so no cookie or CORS question), and the rewrite below points at it.
@@ -112,6 +113,15 @@ const nextConfig: NextConfig = {
       { source: "/locations", destination: "/contact", permanent: true },
       { source: "/locations/:slug", destination: "/contact", permanent: true },
 
+      // The nav says "Personal training" and the page is titled that, so
+      // /personal-training is what somebody types or guesses. /trainers stays
+      // the canonical URL — it is already indexed and linked from the homepage,
+      // the footer and every class page, and trading real inbound links for a
+      // tidier path is a bad deal. Permanent, because this one is not a mode
+      // that flips: the coach index lives at /trainers either way.
+      { source: "/personal-training", destination: "/trainers", permanent: true },
+      { source: "/personal-training/:slug", destination: "/trainers/:slug", permanent: true },
+
       // Showcase mode: membership sales and the class timetable are switched
       // off (see lib/features.ts). Not permanent — the flag is meant to flip
       // back, and a 308 would be cached by browsers past that point. The
@@ -132,4 +142,6 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+const withNextIntl = createNextIntlPlugin();
+
+export default withNextIntl(nextConfig);

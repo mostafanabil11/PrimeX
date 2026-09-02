@@ -12,7 +12,7 @@ import type { Offer, OfferInput, OfferType } from "@/types/offer";
 import type { Plan } from "@/types/gym";
 
 const inputClass =
-  "w-full border border-border bg-background px-4 py-2.5 text-sm text-foreground outline-none focus:border-foreground";
+  "w-full border border-input bg-background px-4 py-2.5 text-base md:text-sm text-foreground outline-none focus:border-foreground";
 const labelClass =
   "mb-1.5 block text-[11px] font-semibold tracking-[0.1em] text-foreground uppercase";
 
@@ -264,14 +264,14 @@ export function OfferForm({ offer }: { offer?: Offer }) {
         <button
           type="submit"
           disabled={mutation.isPending}
-          className="bg-primary px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase disabled:opacity-40"
+          className="ui-action ui-action--sm inline-flex bg-primary px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase disabled:opacity-40"
         >
           {mutation.isPending ? "Saving…" : isEdit ? "Save offer" : "Create offer"}
         </button>
         <button
           type="button"
           onClick={() => router.push("/admin/offers")}
-          className="border border-border px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-foreground uppercase"
+          className="ui-action ui-action--outline ui-action--sm inline-flex border border-border px-6 py-3 text-[12px] font-semibold tracking-[0.08em] text-foreground uppercase"
         >
           Cancel
         </button>
@@ -294,7 +294,7 @@ function Chip({
       type="button"
       aria-pressed={selected}
       onClick={onClick}
-      className={`border px-4 py-2 text-[12px] font-semibold tracking-[0.06em] uppercase transition-colors ${
+      className={`ui-control border px-4 py-2 text-[12px] font-semibold tracking-[0.06em] uppercase transition-colors ${
         selected
           ? "border-primary bg-primary text-primary-foreground"
           : "border-border text-muted-foreground hover:border-foreground hover:text-foreground"

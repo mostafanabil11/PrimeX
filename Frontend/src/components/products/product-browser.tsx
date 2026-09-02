@@ -92,7 +92,7 @@ export function ProductBrowser({
           <button
             type="button"
             onClick={() => setFiltersOpen((v) => !v)}
-            className={`flex items-center gap-2 border px-3 py-2 font-mono text-[12px] font-medium tracking-[0.05em] uppercase transition-colors ${
+            className={`ui-control flex items-center gap-2 border px-3 py-2 font-mono text-[12px] font-medium tracking-[0.05em] uppercase transition-colors ${
               hasActiveFilters ? "border-foreground text-foreground" : "border-border text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -103,7 +103,7 @@ export function ProductBrowser({
           <select
             value={sort}
             onChange={(e) => setSort(e.target.value as Sort)}
-            className="border border-border bg-background px-3 py-2 font-mono text-[12px] font-medium tracking-[0.05em] text-foreground uppercase outline-none"
+            className="border border-input bg-background px-3 py-2 font-mono text-base md:text-[12px] font-medium tracking-[0.05em] text-foreground uppercase outline-none"
           >
             {SORT_OPTIONS.map((opt) => (
               <option key={opt.value} value={opt.value}>
@@ -123,7 +123,7 @@ export function ProductBrowser({
             <select
               value={color}
               onChange={(e) => setColor(e.target.value)}
-              className="border border-border bg-background px-3 py-2 text-[13px] text-foreground outline-none focus:border-foreground"
+              className="border border-input bg-background px-3 py-2 text-base md:text-[13px] text-foreground outline-none focus:border-foreground"
             >
               <option value="">Any color</option>
               {(colors ?? []).map((c) => (
@@ -142,7 +142,7 @@ export function ProductBrowser({
               min="0"
               value={minPrice}
               onChange={(e) => setMinPrice(e.target.value)}
-              className="w-28 border border-border bg-background px-3 py-2 text-[13px] text-foreground outline-none focus:border-foreground"
+              className="w-28 border border-input bg-background px-3 py-2 text-base md:text-[13px] text-foreground outline-none focus:border-foreground"
             />
           </div>
           <div>
@@ -154,14 +154,14 @@ export function ProductBrowser({
               min="0"
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
-              className="w-28 border border-border bg-background px-3 py-2 text-[13px] text-foreground outline-none focus:border-foreground"
+              className="w-28 border border-input bg-background px-3 py-2 text-base md:text-[13px] text-foreground outline-none focus:border-foreground"
             />
           </div>
           {hasActiveFilters && (
             <button
               type="button"
               onClick={clearFilters}
-              className="flex items-center gap-1.5 text-[12px] text-muted-foreground underline hover:text-foreground"
+              className="ui-action ui-action--ghost flex items-center gap-1.5 text-[12px] text-muted-foreground underline hover:text-foreground"
             >
               <X className="size-3.5" strokeWidth={1.75} />
               Clear filters
@@ -195,7 +195,7 @@ export function ProductBrowser({
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page <= 1}
                 aria-label="Previous page"
-                className="-m-2 p-2 text-foreground transition-opacity hover:opacity-70 disabled:opacity-30"
+                className="ui-action ui-action--icon ui-action--ghost inline-flex -m-2 p-2 text-foreground transition-opacity hover:opacity-70 disabled:opacity-30"
               >
                 <ChevronLeft className="size-5" strokeWidth={1.5} />
               </button>
@@ -207,7 +207,7 @@ export function ProductBrowser({
                 onClick={() => setPage((p) => Math.min(data.pagination.pages, p + 1))}
                 disabled={page >= data.pagination.pages}
                 aria-label="Next page"
-                className="-m-2 p-2 text-foreground transition-opacity hover:opacity-70 disabled:opacity-30"
+                className="ui-action ui-action--icon ui-action--ghost inline-flex -m-2 p-2 text-foreground transition-opacity hover:opacity-70 disabled:opacity-30"
               >
                 <ChevronRight className="size-5" strokeWidth={1.5} />
               </button>

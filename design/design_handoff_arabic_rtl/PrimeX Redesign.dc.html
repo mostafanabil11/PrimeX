@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anybody:ital,wght@0,400..900;1,400..900&family=Hanken+Grotesk:wght@300..800&family=JetBrains+Mono:wght@500;700&family=Noto+Kufi+Arabic:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  body { margin:0; background:#0a0b0b; color:#fff; font-family:'Hanken Grotesk',sans-serif; }
+  a { color:#ffb4a8; text-decoration:none; }
+  a:hover { color:#fff; }
+  .grain { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E"); }
+  .disp { font-family:'Anybody',sans-serif; font-weight:800; font-style:italic; font-synthesis:none; text-transform:uppercase; }
+  .disp900 { font-weight:900; }
+  .mono { font-family:'JetBrains Mono',monospace; text-transform:uppercase; }
+  .ph { filter:grayscale(0.85) contrast(1.1); }
+  .ar { font-family:'Noto Kufi Arabic',sans-serif; }
+  @keyframes pulsering { 75%,100% { transform:scale(2); opacity:0; } }
+  .ping { animation:pulsering 1.4s cubic-bezier(0,0,0.2,1) infinite; }
+  .rail { display:flex; gap:12px; overflow-x:auto; scroll-snap-type:x mandatory; -webkit-overflow-scrolling:touch; scrollbar-width:none; }
+  .rail::-webkit-scrollbar { display:none; }
+  .rail > * { scroll-snap-align:start; flex:0 0 auto; }
+  .cut { clip-path:polygon(0 0, 100% 0, 100% 100%, 0 100%, 0 24px); }
+</style>
+</helmet>
+
+<section style="display:flex;flex-direction:column;gap:72px;padding:56px 48px 140px;background:#0a0b0b">
+
+  <div style="display:flex;flex-direction:column;gap:12px;max-width:820px">
+    <p class="mono" style="margin:0;display:flex;align-items:center;gap:12px;font-size:11px;font-weight:500;letter-spacing:0.16em;color:#ffb4a8">
+      <span style="display:inline-block;width:24px;height:2px;background:#d12028"></span>Turn 1 · one direction, same design system
+    </p>
+    <h1 class="disp disp900" style="margin:0;font-size:52px;line-height:0.92;letter-spacing:-0.035em">Tighter, and it asks properly</h1>
+    <p style="margin:0;font-size:16px;line-height:1.65;color:#c8c6c5">Nothing new in the palette, the faces or the radius. Every change is structural: what sits above the fold, how much chrome each section spends, and where the price is at the moment someone commits. Ids <a href="#1a">1a</a> mobile home, <a href="#1b">1b</a> membership checkout, <a href="#1c">1c</a> the same checkout in Arabic.</p>
+  </div>
+
+  <!-- ══════════════════════════════ 2a ══════════════════════════════ -->
+  <div id="2a" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:14px">
+      <span class="mono" style="background:#d12028;padding:4px 9px;font-size:11px;font-weight:700;letter-spacing:0.1em;color:#fff7f5">2a</span>
+      <p class="disp" style="margin:0;font-size:22px;letter-spacing:-0.02em;color:#fff">Checkout step 2 — the one I never drew</p>
+      <p class="mono" style="margin:0;font-size:11px;letter-spacing:0.12em;color:#616564">Account + contact · signed-out and signed-in</p>
+    </div>
+
+    <div style="display:flex;gap:36px;align-items:flex-start;flex-wrap:wrap">
+
+      <!-- signed out -->
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <p class="mono" style="margin:0;font-size:11px;letter-spacing:0.12em;color:#474746">Signed out — the hard case</p>
+        <div style="position:relative;width:375px">
+          <div class="grain" style="width:375px;background:#121414;border:1px solid #333535;overflow:hidden">
+
+            <div style="display:flex;height:56px;align-items:center;gap:8px;padding:0 8px 0 4px;border-bottom:1px solid #333535;background:#0f1111">
+              <span style="display:flex;width:48px;height:48px;align-items:center;justify-content:center;color:#c8c6c5"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg></span>
+              <span class="disp" style="font-size:17px;letter-spacing:-0.01em;color:#fff">Join PrimeX</span>
+              <span style="margin-left:auto;display:flex;align-items:center;gap:7px;padding-right:8px">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2"><rect x="4" y="11" width="16" height="10"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+                <span class="mono" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#c8c6c5">Secure</span>
+              </span>
+            </div>
+
+            <div style="padding:14px 20px 0;background:#0f1111">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:9px">
+                <span class="mono" style="font-size:12px;font-weight:700;letter-spacing:0.12em;color:#fff">Step 2 of 3 · Account</span>
+                <span class="mono" style="font-size:12px;letter-spacing:0.08em;color:#616564">1 min</span>
+              </div>
+              <div style="display:flex;gap:3px;padding-bottom:14px">
+                <span style="flex:1;height:3px;background:#d12028"></span>
+                <span style="flex:1;height:3px;background:#d12028"></span>
+                <span style="flex:1;height:3px;background:#333535"></span>
+              </div>
+            </div>
+
+            <div style="padding:24px 20px 20px;border-top:1px solid #333535">
+              <!-- the account wall, stated plainly and with the reason -->
+              <div style="border:1px solid #333535;background:#0f1111;padding:20px">
+                <p style="margin:0 0 16px;font-size:14px;line-height:1.55;color:#c8c6c5">You need an account to hold your membership. It takes a minute, and you come straight back to this step with your plan still selected.</p>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <span class="mono" style="display:flex;min-height:52px;align-items:center;justify-content:center;background:#d12028;font-size:13px;font-weight:700;letter-spacing:0.1em;color:#fff7f5">Create an account</span>
+                  <span class="mono" style="display:flex;min-height:52px;align-items:center;justify-content:center;border:1px solid #616564;font-size:13px;font-weight:700;letter-spacing:0.1em;color:#fff">I already have one</span>
+                </div>
+              </div>
+
+              <!-- the rest is visibly waiting, not hidden -->
+              <div style="margin-top:22px;border-top:1px solid #333535;padding-top:20px;opacity:0.45">
+                <p class="mono" style="margin:0 0 14px;font-size:12px;font-weight:700;letter-spacing:0.12em;color:#c8c6c5">Then your details</p>
+                <div style="display:flex;flex-direction:column;gap:14px">
+                  <div>
+                    <span class="mono" style="display:block;margin-bottom:7px;font-size:12px;font-weight:600;letter-spacing:0.1em;color:#c8c6c5">Your phone</span>
+                    <span style="display:block;border:1px solid #333535;background:#1a1c1c;padding:13px 14px;font-size:14px;color:#474746">+20 100 000 0000</span>
+                  </div>
+                  <div>
+                    <span class="mono" style="display:block;margin-bottom:7px;font-size:12px;font-weight:600;letter-spacing:0.1em;color:#c8c6c5">Emergency contact</span>
+                    <span style="display:block;border:1px solid #333535;background:#1a1c1c;padding:13px 14px;font-size:14px;color:#474746">&nbsp;</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="height:96px"></div>
+            </div>
+          </div>
+
+          <div style="position:absolute;left:1px;right:1px;bottom:1px;background:#1a1c1c;border-top:2px solid #d12028">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 16px 12px">
+              <span style="display:flex;width:48px;height:48px;flex-shrink:0;align-items:center;justify-content:center;margin-left:-8px;color:#c8c6c5"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg></span>
+              <div style="min-width:0">
+                <p class="mono" style="margin:0;font-size:12px;font-weight:600;letter-spacing:0.1em;color:#c8c6c5">Total today</p>
+                <p style="margin:3px 0 0;display:flex;align-items:baseline;gap:7px">
+                  <span class="disp disp900" style="font-size:22px;line-height:1;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0">EGP 22,780</span>
+                </p>
+              </div>
+              <span class="mono" style="margin-left:auto;display:flex;min-height:52px;align-items:center;gap:8px;background:#d12028;padding:0 22px;font-size:13px;font-weight:700;letter-spacing:0.1em;color:#fff7f5;white-space:nowrap;opacity:0.4">
+                Continue
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 6 15 12 9 18"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- signed in -->
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <p class="mono" style="margin:0;font-size:11px;letter-spacing:0.12em;color:#474746">Signed in — the common case</p>
+        <div style="position:relative;width:375px">
+          <div class="grain" style="width:375px;background:#121414;border:1px solid #333535;overflow:hidden">
+
+            <div style="display:flex;height:56px;align-items:center;gap:8px;padding:0 8px 0 4px;border-bottom:1px solid #333535;background:#0f1111">
+              <span style="display:flex;width:48px;height:48px;align-items:center;justify-content:center;color:#c8c6c5"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg></span>
+              <span class="disp" style="font-size:17px;letter-spacing:-0.01em;color:#fff">Join PrimeX</span>
+              <span style="margin-left:auto;display:flex;align-items:center;gap:7px;padding-right:8px">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2"><rect x="4" y="11" width="16" height="10"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+                <span class="mono" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#c8c6c5">Secure</span>
+              </span>
+            </div>
+
+            <div style="padding:14px 20px 0;background:#0f1111">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:9px">
+                <span class="mono" style="font-size:12px;font-weight:700;letter-spacing:0.12em;color:#fff">Step 2 of 3 · Account</span>
+                <span class="mono" style="font-size:12px;letter-spacing:0.08em;color:#616564">1 min</span>
+              </div>
+              <div style="display:flex;gap:3px;padding-bottom:14px">
+                <span style="flex:1;height:3px;background:#d12028"></span>
+                <span style="flex:1;height:3px;background:#d12028"></span>
+                <span style="flex:1;height:3px;background:#333535"></span>
+              </div>
+            </div>
+
+            <div style="padding:24px 20px 20px;border-top:1px solid #333535">
+              <!-- identity confirmed compactly: this is a receipt, not a form field -->
+              <div style="display:flex;align-items:center;gap:12px;border:1px solid #333535;background:#0f1111;padding:14px 16px">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2.4" style="flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>
+                <div style="min-width:0;flex:1">
+                  <p style="margin:0;font-size:14px;font-weight:600;color:#fff">Karim Hassan</p>
+                  <p style="margin:2px 0 0;font-size:13px;color:#c8c6c5;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">karim.hassan@example.com</p>
+                </div>
+                <a class="mono" href="#" style="flex-shrink:0;font-size:12px;font-weight:700;letter-spacing:0.08em;color:#ffb4a8">Not you?</a>
+              </div>
+
+              <p class="mono" style="margin:22px 0 12px;font-size:12px;font-weight:700;letter-spacing:0.12em;color:#c8c6c5">Your details</p>
+              <div style="display:flex;flex-direction:column;gap:16px">
+                <div>
+                  <span class="mono" style="display:block;margin-bottom:7px;font-size:12px;font-weight:600;letter-spacing:0.1em;color:#c8c6c5">Your phone <span style="color:#d12028">*</span></span>
+                  <span style="display:block;border:1px solid #616564;background:#1a1c1c;padding:13px 14px;font-size:16px;color:#fff">+20 100 224 8890</span>
+                </div>
+                <div>
+                  <span class="mono" style="display:block;margin-bottom:7px;font-size:12px;font-weight:600;letter-spacing:0.1em;color:#c8c6c5">Date of birth</span>
+                  <span style="display:flex;align-items:center;justify-content:space-between;border:1px solid #333535;background:#1a1c1c;padding:13px 14px;font-size:16px;color:#474746">
+                    <span>Optional</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#616564" stroke-width="1.6"><rect x="3" y="5" width="18" height="16"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                  </span>
+                </div>
+              </div>
+
+              <!-- emergency contact, given its own ground and a reason -->
+              <div style="margin-top:22px;border-top:1px solid #333535;padding-top:20px">
+                <p class="mono" style="margin:0 0 4px;font-size:12px;font-weight:700;letter-spacing:0.12em;color:#c8c6c5">In case of emergency</p>
+                <p style="margin:0 0 14px;font-size:13px;line-height:1.5;color:#616564">Who we call if something happens on the floor.</p>
+                <div style="display:flex;flex-direction:column;gap:16px">
+                  <div>
+                    <span class="mono" style="display:block;margin-bottom:7px;font-size:12px;font-weight:600;letter-spacing:0.1em;color:#c8c6c5">Their name <span style="color:#d12028">*</span></span>
+                    <span style="display:block;border:1px solid #616564;background:#1a1c1c;padding:13px 14px;font-size:16px;color:#fff">Mona Hassan</span>
+                  </div>
+                  <div>
+                    <span class="mono" style="display:block;margin-bottom:7px;font-size:12px;font-weight:600;letter-spacing:0.1em;color:#c8c6c5">Their phone <span style="color:#d12028">*</span></span>
+                    <span style="display:block;border:1px solid #616564;background:#1a1c1c;padding:13px 14px;font-size:16px;color:#fff">+20 101 552 3374</span>
+                  </div>
+                  <div>
+                    <span class="mono" style="display:block;margin-bottom:7px;font-size:12px;font-weight:600;letter-spacing:0.1em;color:#c8c6c5">Relationship to you</span>
+                    <div style="display:flex;flex-wrap:wrap;gap:8px">
+                      <span class="mono" style="border:1px solid #d12028;background:#1a1c1c;padding:10px 14px;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#fff">Partner</span>
+                      <span class="mono" style="border:1px solid #333535;background:#0f1111;padding:10px 14px;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#c8c6c5">Parent</span>
+                      <span class="mono" style="border:1px solid #333535;background:#0f1111;padding:10px 14px;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#c8c6c5">Sibling</span>
+                      <span class="mono" style="border:1px solid #333535;background:#0f1111;padding:10px 14px;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#c8c6c5">Friend</span>
+                      <span class="mono" style="border:1px solid #333535;background:#0f1111;padding:10px 14px;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#c8c6c5">Other</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div style="height:96px"></div>
+            </div>
+          </div>
+
+          <div style="position:absolute;left:1px;right:1px;bottom:1px;background:#1a1c1c;border-top:2px solid #d12028">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 16px 12px">
+              <span style="display:flex;width:48px;height:48px;flex-shrink:0;align-items:center;justify-content:center;margin-left:-8px;color:#c8c6c5"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg></span>
+              <div style="min-width:0">
+                <p class="mono" style="margin:0;font-size:12px;font-weight:600;letter-spacing:0.1em;color:#c8c6c5">Total today</p>
+                <p style="margin:3px 0 0;display:flex;align-items:baseline;gap:7px">
+                  <span class="disp disp900" style="font-size:22px;line-height:1;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0">EGP 22,780</span>
+                </p>
+              </div>
+              <span class="mono" style="margin-left:auto;display:flex;min-height:52px;align-items:center;gap:8px;background:#d12028;padding:0 22px;font-size:13px;font-weight:700;letter-spacing:0.1em;color:#fff7f5;white-space:nowrap">
+                Continue
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 6 15 12 9 18"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="max-width:320px;display:flex;flex-direction:column;gap:22px;padding-top:34px">
+        <p class="mono" style="margin:0;font-size:11px;font-weight:700;letter-spacing:0.14em;color:#d12028">Decisions here</p>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">The signed-out state is the design</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">This is the only step that can bounce someone to another page and back. The copy promises the return trip and that the plan survives it, because the unspoken fear is losing the selection. Worth verifying the round trip actually preserves it — the funnel keeps plan state in the component, so a full navigation to <code style="font-family:'JetBrains Mono',monospace;font-size:12px">/signup</code> and back may not.</p></div>
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">Fields stay visible while locked</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">Dimmed at 45% rather than hidden, so the length of the step is honest before you commit to the detour. Hiding them makes signing up feel like it leads somewhere unknown.</p></div>
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">Identity is a receipt, not a field</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">Name and email confirmed in one 60px row with a green check and a quiet "Not you?" — the current build spends a five-line panel on this. The email truncates rather than wraps.</p></div>
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">Emergency contact gets a reason</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">"Who we call if something happens on the floor." One line, and it converts an intrusive-feeling demand into an obviously sensible one. It's also the honest answer.</p></div>
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">Relationship becomes chips</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">Five taps instead of a free-text field whose placeholder already listed the answers. Keep "Other" opening a text input. This is a small API question: the field is a free string today, so chips write the same string.</p></div>
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">Inputs at 16px</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">The codebase already does this (<code style="font-family:'JetBrains Mono',monospace;font-size:12px">text-base md:text-[14px]</code>) — anything smaller makes iOS Safari zoom on focus and the user has to pinch back out mid-form. Worth stating so it survives a future tidy-up.</p></div>
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">Back appears in the bar</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">From step 2 onward the sticky bar carries a 48px back arrow before the total. Already built in <code style="font-family:'JetBrains Mono',monospace;font-size:12px">StickyTotal</code>; shown here so the spacing is checkable.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 1a ══════════════════════════════ -->
+  <div id="1a" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:14px">
+      <span class="mono" style="background:#d12028;padding:4px 9px;font-size:11px;font-weight:700;letter-spacing:0.1em;color:#fff7f5">1a</span>
+      <p class="disp" style="margin:0;font-size:22px;letter-spacing:-0.02em;color:#fff">Homepage — mobile</p>
+      <p class="mono" style="margin:0;font-size:11px;letter-spacing:0.12em;color:#616564">375 × 812 · ~3,400px total, was ~7,800</p>
+    </div>
+
+    <div style="display:flex;gap:36px;align-items:flex-start;flex-wrap:wrap">
+      <div style="position:relative;width:375px;flex:0 0 375px">
+        <div class="grain" style="width:375px;background:#121414;border:1px solid #333535;overflow:hidden">
+
+          <!-- ── header: one row, 60px. Strip folded in. ── -->
+          <div style="position:relative;z-index:20;display:flex;height:60px;align-items:center;justify-content:space-between;gap:8px;padding:0 14px;background:rgba(15,17,17,0.92);backdrop-filter:blur(12px);border-bottom:1px solid #333535">
+            <div style="display:flex;align-items:center;gap:2px;min-width:0">
+              <span style="display:flex;width:44px;height:44px;align-items:center;justify-content:center;color:#fff;flex:0 0 44px">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="14" y2="17"/></svg>
+              </span>
+              <img src="assets/primex-lockup.png" alt="PrimeX" style="height:52px;width:auto;margin-left:-14px;flex-shrink:0">
+            </div>
+            <div style="display:flex;align-items:center;gap:2px;flex-shrink:0">
+              <span style="display:flex;width:44px;height:44px;align-items:center;justify-content:center;color:#c8c6c5">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6 8-6s8 2 8 6"/></svg>
+              </span>
+              <span class="mono" style="display:flex;height:38px;align-items:center;padding:0 14px;background:#d12028;font-size:12px;font-weight:700;letter-spacing:0.08em;color:#fff7f5;white-space:nowrap">Join</span>
+            </div>
+          </div>
+
+          <!-- ── hero: photo band + solid copy panel. Headline and both CTAs above the fold. ── -->
+          <div style="position:relative">
+            <div style="position:relative;height:206px;width:100%;overflow:hidden">
+              <img src="assets/hero-home.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 38%;filter:grayscale(0.85) contrast(1.15) brightness(0.62)">
+              <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(18,20,20,0.15) 0%,rgba(18,20,20,0) 45%,rgba(18,20,20,0.95) 100%)"></div>
+              <span class="mono" style="position:absolute;left:20px;top:16px;display:flex;align-items:center;gap:8px;font-size:12px;font-weight:500;letter-spacing:0.14em;color:#fff">
+                <span style="position:relative;display:flex;width:8px;height:8px;align-items:center;justify-content:center">
+                  <span class="ping" style="position:absolute;width:100%;height:100%;border-radius:9999px;background:#25D366;opacity:0.75"></span>
+                  <span style="position:relative;width:6px;height:6px;border-radius:9999px;background:#25D366"></span>
+                </span>Open now · 24/7
+              </span>
+            </div>
+
+            <!-- solid ground for the copy: no scrim compromise, full-strength photo above -->
+            <div style="position:relative;margin-top:-24px;background:#121414;padding:0 20px 26px">
+              <div style="width:56px;height:3px;background:#d12028;margin-bottom:18px"></div>
+              <p class="mono" style="margin:0 0 12px;font-size:12px;font-weight:500;letter-spacing:0.16em;color:#ffb4a8">Industrial strength discipline</p>
+              <h1 class="disp disp900" style="margin:0 0 12px;font-size:46px;line-height:0.86;letter-spacing:-0.035em;color:#fff">Commit<br>to be fit</h1>
+              <p style="margin:0 0 20px;font-size:16px;line-height:1.5;color:#c8c6c5">Strength, conditioning and coaching in New Maadi. Open every hour of every day.</p>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <span class="mono" style="display:flex;min-height:52px;align-items:center;justify-content:center;gap:10px;background:#d12028;font-size:13px;font-weight:700;letter-spacing:0.1em;color:#fff7f5">
+                  <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.02c-.24.68-1.4 1.3-1.94 1.35-.53.05-1.03.24-3.48-.72-2.95-1.16-4.79-4.22-4.93-4.42-.15-.2-1.16-1.55-1.16-2.96 0-1.4.73-2.09 1-2.38.26-.29.58-.36.77-.36.19 0 .39.01.56.01.19 0 .43-.06.66.5.24.58.82 1.98.89 2.13.07.15.12.32.02.51-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.44.29.15.46.12.63-.07.17-.19.73-.85.93-1.14.19-.29.39-.24.66-.15.26.1 1.67.79 1.96.94.29.15.48.22.55.34.07.13.07.72-.17 1.4z"/></svg>
+                  Join on WhatsApp
+                </span>
+                <span class="mono" style="display:flex;min-height:52px;align-items:center;justify-content:center;border:2px solid #fff;font-size:13px;font-weight:700;letter-spacing:0.1em;color:#fff">Plans from EGP 1,400</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- fold marker -->
+          <div style="position:relative;height:0">
+            <div style="position:absolute;left:0;right:0;top:0;height:1px;background:repeating-linear-gradient(to right,#d12028 0 8px,transparent 8px 16px)"></div>
+            <span class="mono" style="position:absolute;right:8px;top:4px;font-size:9px;letter-spacing:0.12em;color:#d12028">fold · 812</span>
+          </div>
+
+          <!-- ── proof strip: three facts, one band. Replaces nothing; adds the trust the page had none of. ── -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:#333535;margin-top:26px;border-top:1px solid #333535;border-bottom:1px solid #333535">
+            <div style="background:#0f1111;padding:16px 12px;text-align:center">
+              <p class="disp disp900" style="margin:0;font-size:26px;line-height:1;color:#fff">24/7</p>
+              <p class="mono" style="margin:6px 0 0;font-size:12px;font-weight:500;letter-spacing:0.1em;color:#c8c6c5">Open</p>
+            </div>
+            <div style="background:#0f1111;padding:16px 12px;text-align:center">
+              <p class="disp disp900" style="margin:0;font-size:26px;line-height:1;color:#fff">9</p>
+              <p class="mono" style="margin:6px 0 0;font-size:12px;font-weight:500;letter-spacing:0.1em;color:#c8c6c5">Coaches</p>
+            </div>
+            <div style="background:#0f1111;padding:16px 12px;text-align:center">
+              <p class="disp disp900" style="margin:0;font-size:26px;line-height:1;color:#fff">10</p>
+              <p class="mono" style="margin:6px 0 0;font-size:12px;font-weight:500;letter-spacing:0.1em;color:#c8c6c5">Classes</p>
+            </div>
+          </div>
+
+          <!-- ── pricing: header on two lines, no body paragraph. Collapsed rows carry per-month. ── -->
+          <div style="padding:40px 20px 0">
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:18px">
+              <div>
+                <p class="mono" style="margin:0 0 8px;display:flex;align-items:center;gap:10px;font-size:12px;font-weight:500;letter-spacing:0.16em;color:#ffb4a8"><span style="display:inline-block;width:20px;height:2px;background:#d12028"></span>Membership</p>
+                <h2 class="disp disp900" style="margin:0;font-size:32px;line-height:0.9;letter-spacing:-0.03em;color:#fff">Choose<br>your path</h2>
+              </div>
+              <a class="mono" href="#" style="flex-shrink:0;font-size:12px;font-weight:700;letter-spacing:0.08em;color:#ffb4a8;padding-bottom:4px">All plans →</a>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:1px;background:#333535">
+              <!-- open row -->
+              <div style="background:#1a1c1c">
+                <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-left:3px solid #d12028">
+                  <span style="display:flex;align-items:baseline;gap:10px;min-width:0">
+                    <span class="disp" style="font-size:22px;line-height:1;letter-spacing:-0.02em;color:#fff">1 Month</span>
+                    <span style="font-size:13px;color:#c8c6c5;font-variant-numeric:tabular-nums;white-space:nowrap">from 1,400</span>
+                  </span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" style="transform:rotate(180deg);flex-shrink:0"><polyline points="6 9 12 15 18 9"/></svg>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:1px;background:#333535;border-top:1px solid #333535">
+                  <!-- featured tier -->
+                  <div style="position:relative;background:#222424;padding:16px">
+                    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+                      <div style="min-width:0">
+                        <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                          <span class="disp" style="font-size:20px;line-height:1;letter-spacing:-0.02em;color:#fff">Elite</span>
+                          <span class="mono" style="background:#d12028;padding:3px 7px;font-size:12px;font-weight:700;letter-spacing:0.06em;color:#fff7f5">Popular</span>
+                        </div>
+                        <p style="margin:8px 0 0;font-size:13px;line-height:1.45;color:#c8c6c5"><span style="color:#fff;font-weight:600">Unlimited</span> · every day · gym + fitness</p>
+                        <p style="margin:4px 0 0;font-size:13px;line-height:1.45;color:#c8c6c5">2 guest invites · 1 month freeze · no joining fee</p>
+                      </div>
+                      <div style="flex-shrink:0;text-align:right">
+                        <p class="disp disp900" style="margin:0;font-size:24px;line-height:1;color:#fff;font-variant-numeric:tabular-nums">2,600</p>
+                        <p class="mono" style="margin:4px 0 0;font-size:12px;letter-spacing:0.06em;color:#c8c6c5">EGP / mo</p>
+                      </div>
+                    </div>
+                    <span class="mono" style="margin-top:14px;display:flex;min-height:48px;align-items:center;justify-content:center;background:#d12028;font-size:12px;font-weight:700;letter-spacing:0.1em;color:#fff7f5">Choose Elite</span>
+                  </div>
+                  <!-- compact tiers: no button until tapped; the row is the target -->
+                  <div style="background:#0f1111;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px">
+                    <div style="min-width:0">
+                      <span class="disp" style="font-size:18px;line-height:1;letter-spacing:-0.02em;color:#fff">Pro</span>
+                      <p style="margin:5px 0 0;font-size:13px;color:#c8c6c5">20 sessions · 5 days</p>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
+                      <div style="text-align:right">
+                        <p class="disp" style="margin:0;font-size:19px;line-height:1;color:#fff;font-variant-numeric:tabular-nums">1,900</p>
+                        <p class="mono" style="margin:3px 0 0;font-size:12px;color:#c8c6c5">EGP / mo</p>
+                      </div>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#616564" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg>
+                    </div>
+                  </div>
+                  <div style="background:#0f1111;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:56px">
+                    <div style="min-width:0">
+                      <span class="disp" style="font-size:18px;line-height:1;letter-spacing:-0.02em;color:#fff">Core</span>
+                      <p style="margin:5px 0 0;font-size:13px;color:#c8c6c5">12 sessions · 3 days</p>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
+                      <div style="text-align:right">
+                        <p class="disp" style="margin:0;font-size:19px;line-height:1;color:#fff;font-variant-numeric:tabular-nums">1,400</p>
+                        <p class="mono" style="margin:3px 0 0;font-size:12px;color:#c8c6c5">EGP / mo</p>
+                      </div>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#616564" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- collapsed rows, 52px each, each carrying its own saving -->
+              <div style="background:#0f1111;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;min-height:52px">
+                <span style="display:flex;align-items:baseline;gap:10px"><span class="disp" style="font-size:22px;line-height:1;letter-spacing:-0.02em;color:#fff">3 Months</span><span style="font-size:13px;color:#c8c6c5;font-variant-numeric:tabular-nums">from 1,267/mo</span></span>
+                <span style="display:flex;align-items:center;gap:10px;flex-shrink:0"><span class="mono" style="font-size:12px;font-weight:700;letter-spacing:0.06em;color:#ffb4a8">−10%</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#616564" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+              </div>
+              <div style="background:#0f1111;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;min-height:52px">
+                <span style="display:flex;align-items:baseline;gap:10px"><span class="disp" style="font-size:22px;line-height:1;letter-spacing:-0.02em;color:#fff">6 Months</span><span style="font-size:13px;color:#c8c6c5;font-variant-numeric:tabular-nums">from 1,183/mo</span></span>
+                <span style="display:flex;align-items:center;gap:10px;flex-shrink:0"><span class="mono" style="font-size:12px;font-weight:700;letter-spacing:0.06em;color:#ffb4a8">−16%</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#616564" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+              </div>
+              <div style="background:#0f1111;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;min-height:52px">
+                <span style="display:flex;align-items:baseline;gap:10px"><span class="disp" style="font-size:22px;line-height:1;letter-spacing:-0.02em;color:#fff">1 Year</span><span style="font-size:13px;color:#c8c6c5;font-variant-numeric:tabular-nums">from 1,025/mo</span></span>
+                <span style="display:flex;align-items:center;gap:10px;flex-shrink:0"><span class="mono" style="background:#d12028;padding:3px 7px;font-size:12px;font-weight:700;letter-spacing:0.06em;color:#fff7f5">−27%</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#616564" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- ── facilities: 2×2, icon-free, 14px. Was four full-width tiles. ── -->
+          <div style="padding:40px 20px 0">
+            <p class="mono" style="margin:0 0 8px;display:flex;align-items:center;gap:10px;font-size:12px;font-weight:500;letter-spacing:0.16em;color:#ffb4a8"><span style="display:inline-block;width:20px;height:2px;background:#d12028"></span>What you get</p>
+            <h2 class="disp disp900" style="margin:0 0 18px;font-size:32px;line-height:0.9;letter-spacing:-0.03em;color:#fff">The experience</h2>
+            <ul style="margin:0;padding:0;list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#333535;border:1px solid #333535">
+              <li style="background:#121414;padding:16px 14px;font-size:14px;line-height:1.4;color:#fff"><span style="display:block;margin-bottom:12px;width:24px;height:2px;background:#d12028"></span>Free-weight floor with competition platforms</li>
+              <li style="background:#121414;padding:16px 14px;font-size:14px;line-height:1.4;color:#fff"><span style="display:block;margin-bottom:12px;width:24px;height:2px;background:#d12028"></span>Two studios for classes and mobility</li>
+              <li style="background:#121414;padding:16px 14px;font-size:14px;line-height:1.4;color:#fff"><span style="display:block;margin-bottom:12px;width:24px;height:2px;background:#d12028"></span>Sauna, showers and lockers included</li>
+              <li style="background:#121414;padding:16px 14px;font-size:14px;line-height:1.4;color:#fff"><span style="display:block;margin-bottom:12px;width:24px;height:2px;background:#d12028"></span>Coached floor most of the day</li>
+            </ul>
+          </div>
+
+          <!-- ── classes: horizontal rail, bleeds to the edge. A preview that reads as one. ── -->
+          <div style="padding:40px 0 0">
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:0 20px;margin-bottom:16px">
+              <div>
+                <p class="mono" style="margin:0 0 8px;display:flex;align-items:center;gap:10px;font-size:12px;font-weight:500;letter-spacing:0.16em;color:#ffb4a8"><span style="display:inline-block;width:20px;height:2px;background:#d12028"></span>Classes</p>
+                <h2 class="disp disp900" style="margin:0;font-size:32px;line-height:0.9;letter-spacing:-0.03em;color:#fff">Train with<br>a coach</h2>
+              </div>
+              <a class="mono" href="#" style="flex-shrink:0;font-size:12px;font-weight:700;letter-spacing:0.08em;color:#ffb4a8;padding-bottom:4px">All 10 →</a>
+            </div>
+            <div class="rail" style="padding:0 20px 4px">
+              <div style="width:232px;border:1px solid #333535;background:#0f1111">
+                <div style="position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;border-bottom:1px solid #333535;background:#1a1c1c">
+                  <img class="ph" src="assets/class-hiit-inferno.jpg" alt="HIIT Inferno" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+                  <span class="mono" style="position:absolute;left:0;bottom:0;background:#121414;padding:5px 9px;font-size:12px;font-weight:700;letter-spacing:0.08em;color:#fff">40 min</span>
+                </div>
+                <div style="padding:14px">
+                  <h3 class="disp" style="margin:0;font-size:18px;letter-spacing:-0.02em;color:#fff">HIIT Inferno</h3>
+                  <div style="display:flex;align-items:center;gap:8px;margin-top:10px">
+                    <span style="display:flex;gap:3px"><span style="width:4px;height:10px;background:#d12028"></span><span style="width:4px;height:10px;background:#d12028"></span><span style="width:4px;height:10px;background:#d12028"></span><span style="width:4px;height:10px;background:#d12028"></span><span style="width:4px;height:10px;background:#222424"></span></span>
+                    <span class="mono" style="font-size:12px;letter-spacing:0.06em;color:#c8c6c5">Cap 16</span>
+                  </div>
+                </div>
+              </div>
+              <div style="width:232px;border:1px solid #333535;background:#0f1111">
+                <div style="position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;border-bottom:1px solid #333535;background:#1a1c1c">
+                  <img class="ph" src="assets/class-strength-foundations.jpg" alt="Strength Foundations" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+                  <span class="mono" style="position:absolute;left:0;bottom:0;background:#121414;padding:5px 9px;font-size:12px;font-weight:700;letter-spacing:0.08em;color:#fff">60 min</span>
+                </div>
+                <div style="padding:14px">
+                  <h3 class="disp" style="margin:0;font-size:18px;letter-spacing:-0.02em;color:#fff">Strength Found.</h3>
+                  <div style="display:flex;align-items:center;gap:8px;margin-top:10px">
+                    <span style="display:flex;gap:3px"><span style="width:4px;height:10px;background:#d12028"></span><span style="width:4px;height:10px;background:#d12028"></span><span style="width:4px;height:10px;background:#d12028"></span><span style="width:4px;height:10px;background:#222424"></span><span style="width:4px;height:10px;background:#222424"></span></span>
+                    <span class="mono" style="font-size:12px;letter-spacing:0.06em;color:#c8c6c5">Cap 12</span>
+                  </div>
+                </div>
+              </div>
+              <div style="width:232px;border:1px solid #333535;background:#0f1111">
+                <div style="position:relative;width:100%;aspect-ratio:4/3;overflow:hidden;border-bottom:1px solid #333535;background:#1a1c1c">
+                  <img class="ph" src="assets/class-boxing.jpg" alt="Boxing" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+                  <span class="mono" style="position:absolute;left:0;bottom:0;background:#121414;padding:5px 9px;font-size:12px;font-weight:700;letter-spacing:0.08em;color:#fff">45 min</span>
+                </div>
+                <div style="padding:14px">
+                  <h3 class="disp" style="margin:0;font-size:18px;letter-spacing:-0.02em;color:#fff">Boxing</h3>
+                  <div style="display:flex;align-items:center;gap:8px;margin-top:10px">
+                    <span style="display:flex;gap:3px"><span style="width:4px;height:10px;background:#d12028"></span><span style="width:4px;height:10px;background:#d12028"></span><span style="width:4px;height:10px;background:#d12028"></span><span style="width:4px;height:10px;background:#d12028"></span><span style="width:4px;height:10px;background:#222424"></span></span>
+                    <span class="mono" style="font-size:12px;letter-spacing:0.06em;color:#c8c6c5">Cap 14</span>
+                  </div>
+                </div>
+              </div>
+              <a href="#" class="mono" style="width:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:1px dashed #474746;font-size:12px;font-weight:700;letter-spacing:0.1em;color:#ffb4a8;text-align:center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg>See all
+              </a>
+            </div>
+          </div>
+
+          <!-- ── trainers: same rail, portrait crop ── -->
+          <div style="padding:40px 0 0">
+            <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:0 20px;margin-bottom:16px">
+              <div>
+                <p class="mono" style="margin:0 0 8px;display:flex;align-items:center;gap:10px;font-size:12px;font-weight:500;letter-spacing:0.16em;color:#ffb4a8"><span style="display:inline-block;width:20px;height:2px;background:#d12028"></span>Personal training</p>
+                <h2 class="disp disp900" style="margin:0;font-size:32px;line-height:0.9;letter-spacing:-0.03em;color:#fff">The team</h2>
+              </div>
+              <a class="mono" href="#" style="flex-shrink:0;font-size:12px;font-weight:700;letter-spacing:0.08em;color:#ffb4a8;padding-bottom:4px">All 9 →</a>
+            </div>
+            <div class="rail" style="padding:0 20px 4px">
+              <div style="width:172px;border:1px solid #333535;background:#0f1111">
+                <div style="position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;border-bottom:1px solid #333535;background:#1a1c1c">
+                  <img class="ph" src="assets/trainer-karim.jpg" alt="Karim Hassan" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 25%">
+                </div>
+                <div style="padding:12px 14px">
+                  <h3 class="disp" style="margin:0;font-size:16px;letter-spacing:-0.02em;color:#fff">Karim Hassan</h3>
+                  <p class="mono" style="margin:5px 0 0;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#ffb4a8">Strength · 11 yrs</p>
+                </div>
+              </div>
+              <div style="width:172px;border:1px solid #333535;background:#0f1111">
+                <div style="position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;border-bottom:1px solid #333535;background:#1a1c1c">
+                  <img class="ph" src="assets/trainer-nour.jpg" alt="Nour Adel" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 25%">
+                </div>
+                <div style="padding:12px 14px">
+                  <h3 class="disp" style="margin:0;font-size:16px;letter-spacing:-0.02em;color:#fff">Nour Adel</h3>
+                  <p class="mono" style="margin:5px 0 0;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#ffb4a8">Conditioning · 7 yrs</p>
+                </div>
+              </div>
+              <div style="width:172px;border:1px solid #333535;background:#0f1111">
+                <div style="position:relative;width:100%;aspect-ratio:4/5;overflow:hidden;border-bottom:1px solid #333535;background:#1a1c1c">
+                  <img class="ph" src="assets/trainer-sarah.jpg" alt="Sarah Mahmoud" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 25%">
+                </div>
+                <div style="padding:12px 14px">
+                  <h3 class="disp" style="margin:0;font-size:16px;letter-spacing:-0.02em;color:#fff">Sarah Mahmoud</h3>
+                  <p class="mono" style="margin:5px 0 0;font-size:12px;font-weight:600;letter-spacing:0.06em;color:#ffb4a8">Mobility · 6 yrs</p>
+                </div>
+              </div>
+              <a href="#" class="mono" style="width:110px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:1px dashed #474746;font-size:12px;font-weight:700;letter-spacing:0.1em;color:#ffb4a8;text-align:center">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 6 15 12 9 18"/></svg>See all
+              </a>
+            </div>
+          </div>
+
+          <!-- ── closing: folded into the footer's top edge. The standalone "No excuses" block is gone. ── -->
+          <div style="margin-top:48px;border-top:2px solid #d12028;background:#0f1111">
+            <div style="padding:32px 20px 24px;border-bottom:1px solid #333535">
+              <h2 class="disp disp900" style="margin:0 0 10px;font-size:34px;line-height:0.88;letter-spacing:-0.035em;color:#fff">No excuses</h2>
+              <p style="margin:0 0 18px;font-size:15px;line-height:1.5;color:#c8c6c5">Come and see the place before you decide. Somebody at the desk will tell you honestly which tier fits.</p>
+              <a href="#" style="display:flex;min-height:48px;align-items:center;justify-content:space-between;gap:12px;border:1px solid #333535;background:#121414;padding:0 16px;text-decoration:none">
+                <span style="display:flex;align-items:flex-start;gap:10px">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#d12028" stroke-width="1.8" style="margin-top:2px;flex-shrink:0"><path d="M12 21s7-6.3 7-11a7 7 0 1 0-14 0c0 4.7 7 11 7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>
+                  <span style="font-size:14px;line-height:1.35;color:#fff">15 Street 270, New Maadi<br><span class="mono" style="font-size:12px;letter-spacing:0.08em;color:#c8c6c5">Open now · directions</span></span>
+                </span>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#616564" stroke-width="2" style="flex-shrink:0"><polyline points="9 6 15 12 9 18"/></svg>
+              </a>
+            </div>
+
+            <div style="padding:24px 20px 96px">
+              <img src="assets/primex-lockup.png" alt="PrimeX" style="height:64px;width:auto;display:block">
+              <div style="display:flex;align-items:center;gap:2px;margin:14px 0 20px;margin-left:-10px">
+                <span style="display:flex;width:44px;height:44px;align-items:center;justify-content:center;border-radius:9999px;background:#1a1c1c;color:#fff"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect width="20" height="20" x="2" y="2" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg></span>
+                <span style="display:flex;width:44px;height:44px;align-items:center;justify-content:center;border-radius:9999px;background:#1a1c1c;color:#fff"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M15.12 5.32H17V2.14A26.11 26.11 0 0 0 14.26 2C11.54 2 9.68 3.66 9.68 6.7v2.62H6.61v3.56h3.07V22h3.68v-9.12h3.06l.46-3.56h-3.52V7.05c0-1.05.28-1.73 1.76-1.73Z"/></svg></span>
+                <span style="display:flex;width:44px;height:44px;align-items:center;justify-content:center;border-radius:9999px;background:#1a1c1c;color:#fff"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/></svg></span>
+              </div>
+              <!-- links as two columns of mono, unchanged in voice, tighter in rhythm -->
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 24px;border-top:1px solid #333535;padding-top:8px">
+                <a class="mono" href="#" style="display:flex;min-height:44px;align-items:center;font-size:12px;font-weight:500;letter-spacing:0.1em;color:#c8c6c5">Membership</a>
+                <a class="mono" href="#" style="display:flex;min-height:44px;align-items:center;font-size:12px;font-weight:500;letter-spacing:0.1em;color:#c8c6c5">Contact</a>
+                <a class="mono" href="#" style="display:flex;min-height:44px;align-items:center;font-size:12px;font-weight:500;letter-spacing:0.1em;color:#c8c6c5">Training</a>
+                <a class="mono" href="#" style="display:flex;min-height:44px;align-items:center;font-size:12px;font-weight:500;letter-spacing:0.1em;color:#c8c6c5">Privacy</a>
+                <a class="mono" href="#" style="display:flex;min-height:44px;align-items:center;font-size:12px;font-weight:500;letter-spacing:0.1em;color:#c8c6c5">FAQ</a>
+                <a class="mono" href="#" style="display:flex;min-height:44px;align-items:center;font-size:12px;font-weight:500;letter-spacing:0.1em;color:#c8c6c5">Terms</a>
+              </div>
+              <p class="mono" style="margin:16px 0 0;font-size:12px;letter-spacing:0.1em;color:#616564">© 2026 PrimeX</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- sticky action bar, pinned over the frame -->
+        <div style="position:absolute;left:1px;right:1px;bottom:1px;display:flex;align-items:stretch;gap:1px;background:#333535;border-top:1px solid #333535">
+          <a href="#" class="mono" style="flex:1;display:flex;min-height:56px;align-items:center;justify-content:center;gap:9px;background:#d12028;font-size:13px;font-weight:700;letter-spacing:0.1em;color:#fff7f5">
+            <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38c1.45.79 3.08 1.21 4.79 1.21 5.46 0 9.91-4.45 9.91-9.91C21.95 6.45 17.5 2 12.04 2zm5.8 14.02c-.24.68-1.4 1.3-1.94 1.35-.53.05-1.03.24-3.48-.72-2.95-1.16-4.79-4.22-4.93-4.42-.15-.2-1.16-1.55-1.16-2.96 0-1.4.73-2.09 1-2.38.26-.29.58-.36.77-.36.19 0 .39.01.56.01.19 0 .43-.06.66.5.24.58.82 1.98.89 2.13.07.15.12.32.02.51-.1.19-.15.31-.29.48-.15.17-.31.38-.44.51-.15.15-.3.31-.13.6.17.29.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.34 1.44.29.15.46.12.63-.07.17-.19.73-.85.93-1.14.19-.29.39-.24.66-.15.26.1 1.67.79 1.96.94.29.15.48.22.55.34.07.13.07.72-.17 1.4z"/></svg>
+            Join now
+          </a>
+          <a href="#" class="mono" style="flex:0 0 132px;display:flex;min-height:56px;align-items:center;justify-content:center;background:#1a1c1c;font-size:12px;font-weight:700;letter-spacing:0.08em;color:#fff">Call gym</a>
+        </div>
+      </div>
+
+      <div style="max-width:320px;display:flex;flex-direction:column;gap:22px;padding-top:6px">
+        <p class="mono" style="margin:0;font-size:11px;font-weight:700;letter-spacing:0.14em;color:#d12028">What changed</p>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">The offer is above the fold</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">The photo band drops to 206px and the copy sits on a solid panel that overlaps it by 24px — full-strength photograph, no scrim, and the headline plus both buttons land inside 812px. Second CTA now carries the entry price instead of "See plans".</p></div>
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">Chrome cut from ~150px to 60</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">Utility strip and marquee gone on mobile; the "open now" pip moves onto the hero photo where it reads against the image. Logo 52px in a 60px bar, no overhang.</p></div>
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">Section headers halved</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">Eyebrow, a 32px two-line title, and the "all" link on the same baseline as the title. The explanatory paragraph is cut on mobile — it earns its place on desktop, not here. ~95px each instead of ~190.</p></div>
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">Previews are rails, not indexes</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">Snap-scrolling rails that bleed off the right edge, ending in a "see all" card. Three classes and three coaches visible in 300px instead of 1,600. Same cards, same crop rules.</p></div>
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">Prices comparable at a glance</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">Every term row shows a per-month figure, so the ladder from 1,400 to 1,025 reads without opening anything. Non-featured tiers collapse to 56px rows; only the popular tier keeps a button.</p></div>
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">One persistent action</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">The floating WhatsApp circle becomes a two-part bar: Join, and Call gym. It replaces the circle, so nothing overlaps the footer and the page no longer reserves 88px for it.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 1b ══════════════════════════════ -->
+  <div id="1b" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:14px">
+      <span class="mono" style="background:#d12028;padding:4px 9px;font-size:11px;font-weight:700;letter-spacing:0.1em;color:#fff7f5">1b</span>
+      <p class="disp" style="margin:0;font-size:22px;letter-spacing:-0.02em;color:#fff">Membership checkout — mobile</p>
+      <p class="mono" style="margin:0;font-size:11px;letter-spacing:0.12em;color:#616564">3 steps, was 4 · total always visible</p>
+    </div>
+
+    <div style="display:flex;gap:36px;align-items:flex-start;flex-wrap:wrap">
+
+      <!-- STEP 1 -->
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <p class="mono" style="margin:0;font-size:11px;letter-spacing:0.12em;color:#474746">Step 1 — Plan &amp; start</p>
+        <div style="position:relative;width:375px">
+          <div class="grain" style="width:375px;background:#121414;border:1px solid #333535;overflow:hidden">
+
+            <!-- checkout chrome: no nav, no marquee. An exit, a title, a progress bar. -->
+            <div style="display:flex;height:56px;align-items:center;gap:8px;padding:0 8px 0 4px;border-bottom:1px solid #333535;background:#0f1111">
+              <span style="display:flex;width:48px;height:48px;align-items:center;justify-content:center;color:#c8c6c5"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg></span>
+              <span class="disp" style="font-size:17px;letter-spacing:-0.01em;color:#fff">Join PrimeX</span>
+              <span style="margin-left:auto;display:flex;align-items:center;gap:7px;padding-right:8px">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2"><rect x="4" y="11" width="16" height="10"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+                <span class="mono" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#c8c6c5">Secure</span>
+              </span>
+            </div>
+
+            <!-- progress: one line, 3 segments -->
+            <div style="padding:14px 20px 0;background:#0f1111">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:9px">
+                <span class="mono" style="font-size:12px;font-weight:700;letter-spacing:0.12em;color:#fff">Step 1 of 3 · Plan &amp; start</span>
+                <span class="mono" style="font-size:12px;letter-spacing:0.08em;color:#616564">2 min</span>
+              </div>
+              <div style="display:flex;gap:3px;padding-bottom:14px">
+                <span style="flex:1;height:3px;background:#d12028"></span>
+                <span style="flex:1;height:3px;background:#333535"></span>
+                <span style="flex:1;height:3px;background:#333535"></span>
+              </div>
+            </div>
+
+            <div style="padding:24px 20px 20px;border-top:1px solid #333535">
+              <!-- term: 2×2, each carrying its saving. Was 4 cramped tabs. -->
+              <p class="mono" style="margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:0.12em;color:#c8c6c5">How long for</p>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#333535;border:1px solid #333535">
+                <div style="background:#0f1111;padding:12px 14px;min-height:60px;display:flex;flex-direction:column;justify-content:center">
+                  <span class="mono" style="font-size:13px;font-weight:700;letter-spacing:0.06em;color:#c8c6c5">1 Month</span>
+                  <span class="mono" style="margin-top:4px;font-size:12px;letter-spacing:0.04em;color:#616564">Full price</span>
+                </div>
+                <div style="background:#0f1111;padding:12px 14px;min-height:60px;display:flex;flex-direction:column;justify-content:center">
+                  <span class="mono" style="font-size:13px;font-weight:700;letter-spacing:0.06em;color:#c8c6c5">3 Months</span>
+                  <span class="mono" style="margin-top:4px;font-size:12px;letter-spacing:0.04em;color:#ffb4a8">Save 10%</span>
+                </div>
+                <div style="background:#0f1111;padding:12px 14px;min-height:60px;display:flex;flex-direction:column;justify-content:center">
+                  <span class="mono" style="font-size:13px;font-weight:700;letter-spacing:0.06em;color:#c8c6c5">6 Months</span>
+                  <span class="mono" style="margin-top:4px;font-size:12px;letter-spacing:0.04em;color:#ffb4a8">Save 16%</span>
+                </div>
+                <div style="background:#d12028;padding:12px 14px;min-height:60px;display:flex;flex-direction:column;justify-content:center">
+                  <span class="mono" style="font-size:13px;font-weight:700;letter-spacing:0.06em;color:#fff7f5">1 Year</span>
+                  <span class="mono" style="margin-top:4px;font-size:12px;font-weight:700;letter-spacing:0.04em;color:#fff7f5">Save 27% · best</span>
+                </div>
+              </div>
+
+              <!-- tiers: per-month price is the headline number, total is the caption -->
+              <p class="mono" style="margin:24px 0 10px;font-size:12px;font-weight:700;letter-spacing:0.12em;color:#c8c6c5">Which tier</p>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <label style="display:block;position:relative;border:2px solid #d12028;background:#1a1c1c;padding:16px">
+                  <span class="mono" style="position:absolute;inset-inline-end:0;top:0;background:#d12028;padding:4px 8px;font-size:12px;font-weight:700;letter-spacing:0.06em;color:#fff7f5">Popular</span>
+                  <span style="display:flex;align-items:flex-start;gap:14px">
+                    <span style="margin-top:3px;width:18px;height:18px;flex-shrink:0;border-radius:9999px;border:5px solid #d12028;background:#fff;box-sizing:border-box"></span>
+                    <span style="min-width:0;flex:1">
+                      <span class="disp" style="display:block;font-size:21px;letter-spacing:-0.02em;color:#fff">Elite</span>
+                      <span style="display:block;margin-top:8px;font-size:14px;line-height:1.45;color:#fff">Unlimited sessions, every day</span>
+                      <span style="display:block;margin-top:3px;font-size:13px;line-height:1.45;color:#c8c6c5">Gym + fitness · 2 guest invites · 1 month freeze</span>
+                      <span style="display:flex;align-items:baseline;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid #333535">
+                        <span class="disp disp900" style="font-size:26px;line-height:1;color:#fff;font-variant-numeric:tabular-nums">1,898</span>
+                        <span class="mono" style="font-size:12px;letter-spacing:0.06em;color:#c8c6c5">EGP / month</span>
+                        <span style="margin-left:auto;font-size:13px;color:#c8c6c5;font-variant-numeric:tabular-nums">22,780 total</span>
+                      </span>
+                    </span>
+                  </span>
+                </label>
+                <label style="display:flex;align-items:center;gap:14px;border:1px solid #333535;background:#0f1111;padding:16px;min-height:64px">
+                  <span style="width:18px;height:18px;flex-shrink:0;border-radius:9999px;border:1px solid #616564;box-sizing:border-box"></span>
+                  <span style="min-width:0;flex:1">
+                    <span class="disp" style="display:block;font-size:18px;letter-spacing:-0.02em;color:#fff">Pro</span>
+                    <span style="display:block;margin-top:4px;font-size:13px;color:#c8c6c5">20 sessions · 5 days a week</span>
+                  </span>
+                  <span style="flex-shrink:0;text-align:right">
+                    <span class="disp" style="display:block;font-size:20px;line-height:1;color:#fff;font-variant-numeric:tabular-nums">1,387</span>
+                    <span class="mono" style="display:block;margin-top:3px;font-size:12px;color:#c8c6c5">EGP / mo</span>
+                  </span>
+                </label>
+                <label style="display:flex;align-items:center;gap:14px;border:1px solid #333535;background:#0f1111;padding:16px;min-height:64px">
+                  <span style="width:18px;height:18px;flex-shrink:0;border-radius:9999px;border:1px solid #616564;box-sizing:border-box"></span>
+                  <span style="min-width:0;flex:1">
+                    <span class="disp" style="display:block;font-size:18px;letter-spacing:-0.02em;color:#fff">Core</span>
+                    <span style="display:block;margin-top:4px;font-size:13px;color:#c8c6c5">12 sessions · 3 days a week</span>
+                  </span>
+                  <span style="flex-shrink:0;text-align:right">
+                    <span class="disp" style="display:block;font-size:20px;line-height:1;color:#fff;font-variant-numeric:tabular-nums">1,025</span>
+                    <span class="mono" style="display:block;margin-top:3px;font-size:12px;color:#c8c6c5">EGP / mo</span>
+                  </span>
+                </label>
+              </div>
+
+              <!-- the old step 2, folded in. One field does not deserve a screen. -->
+              <div style="margin-top:24px;border-top:1px solid #333535;padding-top:20px">
+                <p class="mono" style="margin:0 0 10px;font-size:12px;font-weight:700;letter-spacing:0.12em;color:#c8c6c5">When you start</p>
+                <div style="display:flex;gap:1px;background:#333535;border:1px solid #333535">
+                  <span class="mono" style="flex:1;padding:14px 10px;background:#222424;font-size:12px;font-weight:700;letter-spacing:0.06em;color:#fff;text-align:center">Today</span>
+                  <span class="mono" style="flex:1;padding:14px 10px;background:#0f1111;font-size:12px;font-weight:700;letter-spacing:0.06em;color:#c8c6c5;text-align:center">1 Oct</span>
+                  <span class="mono" style="flex:1;padding:14px 10px;background:#0f1111;font-size:12px;font-weight:700;letter-spacing:0.06em;color:#c8c6c5;text-align:center">Pick date</span>
+                </div>
+              </div>
+
+              <div style="height:96px"></div>
+            </div>
+          </div>
+
+          <!-- sticky footer: the number is never off-screen at the moment of commitment -->
+          <div style="position:absolute;left:1px;right:1px;bottom:1px;background:#1a1c1c;border-top:2px solid #d12028">
+            <div style="display:flex;align-items:center;gap:12px;padding:10px 16px 12px">
+              <div style="min-width:0">
+                <p class="mono" style="margin:0;font-size:12px;font-weight:600;letter-spacing:0.1em;color:#c8c6c5">Total today</p>
+                <p style="margin:3px 0 0;display:flex;align-items:baseline;gap:7px">
+                  <span class="disp disp900" style="font-size:24px;line-height:1;color:#fff;font-variant-numeric:tabular-nums;white-space:nowrap;flex-shrink:0">EGP 22,780</span>
+                  <span style="font-size:12px;color:#616564">incl. VAT</span>
+                </p>
+              </div>
+              <span class="mono" style="margin-left:auto;display:flex;min-height:52px;align-items:center;gap:8px;background:#d12028;padding:0 22px;font-size:13px;font-weight:700;letter-spacing:0.1em;color:#fff7f5;white-space:nowrap">
+                Continue
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="9 6 15 12 9 18"/></svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <p class="mono" style="margin:0;font-size:11px;letter-spacing:0.12em;color:#474746">Step 3 — Review &amp; pay</p>
+        <div style="position:relative;width:375px">
+          <div class="grain" style="width:375px;background:#121414;border:1px solid #333535;overflow:hidden">
+
+            <div style="display:flex;height:56px;align-items:center;gap:8px;padding:0 8px 0 4px;border-bottom:1px solid #333535;background:#0f1111">
+              <span style="display:flex;width:48px;height:48px;align-items:center;justify-content:center;color:#c8c6c5"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg></span>
+              <span class="disp" style="font-size:17px;letter-spacing:-0.01em;color:#fff">Join PrimeX</span>
+              <span style="margin-left:auto;display:flex;align-items:center;gap:7px;padding-right:8px">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2"><rect x="4" y="11" width="16" height="10"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+                <span class="mono" style="font-size:12px;font-weight:600;letter-spacing:0.08em;color:#c8c6c5">Secure</span>
+              </span>
+            </div>
+
+            <div style="padding:14px 20px 0;background:#0f1111">
+              <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:9px">
+                <span class="mono" style="font-size:12px;font-weight:700;letter-spacing:0.12em;color:#fff">Step 3 of 3 · Review &amp; pay</span>
+                <span class="mono" style="font-size:12px;letter-spacing:0.08em;color:#616564">Last one</span>
+              </div>
+              <div style="display:flex;gap:3px;padding-bottom:14px">
+                <span style="flex:1;height:3px;background:#d12028"></span>
+                <span style="flex:1;height:3px;background:#d12028"></span>
+                <span style="flex:1;height:3px;background:#d12028"></span>
+              </div>
+            </div>
+
+            <div style="padding:24px 20px 20px;border-top:1px solid #333535">
+              <!-- what you're buying, with an edit affordance rather than a stepper move -->
+              <div style="border:1px solid #333535;background:#0f1111">
+                <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:16px;border-bottom:1px solid #333535">
+                  <div style="min-width:0">
+                    <p class="disp" style="margin:0;font-size:20px;letter-spacing:-0.02em;color:#fff">Elite · 1 Year</p>
+                    <p style="margin:6px 0 0;font-size:13px;line-height:1.45;color:#c8c6c5">Unlimited sessions, every day<br>Starts today, 1 Sep 2026 · New Maadi</p>
+                  </div>
+                  <a class="mono" href="#" style="flex-shrink:0;font-size:12px;font-weight:700;letter-spacing:0.08em;color:#ffb4a8">Edit</a>
+                </div>
+                <div style="padding:16px;display:flex;flex-direction:column;gap:9px;font-size:14px;font-variant-numeric:tabular-nums">
+                  <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:#c8c6c5">Membership · 12 months</span><span style="color:#fff">24,000</span></div>
+                  <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:#c8c6c5">Annual saving</span><span style="color:#ffb4a8">− 6,480</span></div>
+                  <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:#c8c6c5">Joining fee</span><span style="color:#c8c6c5">Waived</span></div>
+                  <div style="display:flex;justify-content:space-between;gap:16px"><span style="color:#c8c6c5">VAT</span><span style="color:#fff">3,046</span></div>
+                  <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-top:5px;border-top:1px solid #333535;padding-top:13px">
+                    <span class="mono" style="font-size:12px;font-weight:700;letter-spacing:0.12em;color:#c8c6c5">Total</span>
+                    <span class="disp disp900" style="font-size:26px;line-height:1;color:#fff">EGP 22,780</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- payment: card marks make it read as a real gateway, not a placeholder -->
+              <p class="mono" style="margin:22px 0 10px;font-size:12px;font-weight:700;letter-spacing:0.12em;color:#c8c6c5">How you will pay</p>
+              <div style="border:1px solid #333535;background:#0f1111">
+                <div style="display:flex;align-items:center;gap:14px;padding:16px;border-bottom:1px solid #333535">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#d12028" stroke-width="1.6" style="flex-shrink:0"><rect x="2" y="5" width="20" height="14"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                  <div style="min-width:0;flex:1">
+                    <p style="margin:0;font-size:14px;font-weight:600;color:#fff">Card</p>
+                    <p style="margin:3px 0 0;font-size:13px;line-height:1.4;color:#c8c6c5">Taken to Paymob when you continue</p>
+                  </div>
+                  <span style="display:flex;gap:5px;flex-shrink:0">
+                    <span class="mono" style="display:flex;height:20px;align-items:center;border:1px solid #474746;padding:0 5px;font-size:10px;font-weight:700;letter-spacing:0.04em;color:#c8c6c5">VISA</span>
+                    <span class="mono" style="display:flex;height:20px;align-items:center;border:1px solid #474746;padding:0 5px;font-size:10px;font-weight:700;letter-spacing:0.04em;color:#c8c6c5">MC</span>
+                    <span class="mono" style="display:flex;height:20px;align-items:center;border:1px solid #474746;padding:0 5px;font-size:10px;font-weight:700;letter-spacing:0.04em;color:#c8c6c5">MEEZA</span>
+                  </span>
+                </div>
+                <!-- the offline route, surfaced instead of hidden on another page -->
+                <a href="#" style="display:flex;align-items:center;gap:14px;padding:16px;text-decoration:none">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#616564" stroke-width="1.6" style="flex-shrink:0"><path d="M3 7h18v12H3z"/><circle cx="12" cy="13" r="2.5"/></svg>
+                  <div style="min-width:0;flex:1">
+                    <p style="margin:0;font-size:14px;font-weight:600;color:#fff">Pay at the gym instead</p>
+                    <p style="margin:3px 0 0;font-size:13px;line-height:1.4;color:#c8c6c5">We hold your place and confirm on WhatsApp</p>
+                  </div>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#616564" stroke-width="2" style="flex-shrink:0"><polyline points="9 6 15 12 9 18"/></svg>
+                </a>
+              </div>
+
+              <label style="display:flex;align-items:flex-start;gap:12px;margin-top:20px;border-top:1px solid #333535;padding-top:20px">
+                <span style="margin-top:2px;display:flex;width:20px;height:20px;flex-shrink:0;align-items:center;justify-content:center;background:#d12028;box-sizing:border-box"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff7f5" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></span>
+                <span style="font-size:13px;line-height:1.55;color:#c8c6c5">I accept the <a href="#" style="color:#ffb4a8;text-decoration:underline">membership agreement</a> and <a href="#" style="color:#ffb4a8;text-decoration:underline">privacy policy</a>.</span>
+              </label>
+
+              <!-- three reassurances, on the screen where they matter -->
+              <div style="display:flex;flex-direction:column;gap:9px;margin-top:20px;border-top:1px solid #333535;padding-top:18px">
+                <p style="margin:0;display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.45;color:#c8c6c5"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2.4" style="margin-top:2px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>Nothing renews automatically — we remind you before it ends</p>
+                <p style="margin:0;display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.45;color:#c8c6c5"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2.4" style="margin-top:2px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>Freeze up to 30 days, once, at no cost</p>
+                <p style="margin:0;display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.45;color:#c8c6c5"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2.4" style="margin-top:2px;flex-shrink:0"><polyline points="20 6 9 17 4 12"/></svg>Change your mind within 7 days for a full refund</p>
+              </div>
+
+              <div style="height:100px"></div>
+            </div>
+          </div>
+
+          <div style="position:absolute;left:1px;right:1px;bottom:1px;background:#1a1c1c;border-top:2px solid #d12028">
+            <div style="padding:12px 16px 14px">
+              <span class="mono" style="display:flex;min-height:56px;align-items:center;justify-content:center;gap:10px;background:#d12028;font-size:14px;font-weight:700;letter-spacing:0.08em;color:#fff7f5">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="4" y="11" width="16" height="10"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+                Pay EGP 22,780
+              </span>
+              <p class="mono" style="margin:9px 0 0;text-align:center;font-size:12px;letter-spacing:0.08em;color:#616564">Secured by Paymob · 3-D Secure</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="max-width:320px;display:flex;flex-direction:column;gap:22px;padding-top:34px">
+        <p class="mono" style="margin:0;font-size:11px;font-weight:700;letter-spacing:0.14em;color:#d12028">What changed</p>
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">The total is pinned</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">A sticky footer carries "Total today" and Continue on every step, so the figure is on screen at the moment of the tap. The order summary aside stays, but only where it fits — desktop.</p></div>
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">Four steps became three</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">The start date was a screen for one field; it now sits under the tier as Today / next month / pick a date. Account and contact details are step 2.</p></div>
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">Progress on one line</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">"Step 1 of 3 · Plan &amp; start" plus a three-segment rule replaces the wrapping four-item stepper — ~40px instead of ~70, and it never reflows.</p></div>
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">Nav gone, exit kept</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">Checkout drops the site header, marquee and floating button — six ways to leave mid-purchase. What's left is a back arrow, the title, and a lock.</p></div>
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">Prices are comparable</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">Per-month is the large figure and the term total the caption, so a 12-month Elite reads as 1,898/mo rather than 22,780. The term grid shows each saving instead of hiding it behind a tab.</p></div>
+          <div><p class="disp" style="margin:0 0 5px;font-size:15px;letter-spacing:-0.01em;color:#fff">Reassurance where it counts</p><p style="margin:0;font-size:14px;line-height:1.6;color:#c8c6c5">Card marks, the Paymob line under the button, three plain promises above it, and the pay-at-the-gym route surfaced as a second option rather than living on a separate URL.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════ 1c ══════════════════════════════ -->
+  <div id="1c" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:baseline;gap:14px">
+      <span class="mono" style="background:#d12028;padding:4px 9px;font-size:11px;font-weight:700;letter-spacing:0.1em;color:#fff7f5">1c</span>
+      <p class="disp" style="margin:0;font-size:22px;letter-spacing:-0.02em;color:#fff">Same checkout, Arabic</p>
+      <p class="mono" style="margin:0;font-size:11px;letter-spacing:0.12em;color:#616564">dir=rtl · Noto Kufi Arabic</p>
+    </div>
+
+    <div style="display:flex;gap:36px;align-items:flex-start;flex-wrap:wrap">
+      <div style="position:relative;width:375px">
+        <div class="grain ar" dir="rtl" style="width:375px;background:#121414;border:1px solid #333535;overflow:hidden">
+
+          <div style="display:flex;height:56px;align-items:center;gap:8px;padding:0 4px 0 8px;border-bottom:1px solid #333535;background:#0f1111">
+            <span style="display:flex;width:48px;height:48px;align-items:center;justify-content:center;color:#c8c6c5"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="transform:scaleX(-1)"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg></span>
+            <span style="font-size:16px;font-weight:800;color:#fff">انضم إلى برايم إكس</span>
+            <span style="margin-inline-start:auto;display:flex;align-items:center;gap:7px;padding-inline-end:8px">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#25D366" stroke-width="2"><rect x="4" y="11" width="16" height="10"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+              <span style="font-size:12px;font-weight:600;color:#c8c6c5">آمن</span>
+            </span>
+          </div>
+
+          <div style="padding:14px 20px 0;background:#0f1111">
+            <div style="display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:9px">
+              <span style="font-size:12px;font-weight:600;color:#fff">الخطوة ١ من ٣ · الخطة والبداية</span>
+              <span style="font-size:12px;color:#616564">دقيقتان</span>
+            </div>
+            <div style="display:flex;gap:3px;padding-bottom:14px">
+              <span style="flex:1;height:3px;background:#d12028"></span>
+              <span style="flex:1;height:3px;background:#333535"></span>
+              <span style="flex:1;height:3px;background:#333535"></span>
+            </div>
+          </div>
+
+          <div style="padding:24px 20px 20px;border-top:1px solid #333535">
+            <p style="margin:0 0 10px;font-size:12px;font-weight:600;color:#c8c6c5">مدة الاشتراك</p>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#333535;border:1px solid #333535">
+              <div style="background:#0f1111;padding:12px 14px;min-height:62px;display:flex;flex-direction:column;justify-content:center">
+                <span style="font-size:13px;font-weight:600;color:#c8c6c5">شهر واحد</span>
+                <span style="margin-top:4px;font-size:12px;color:#616564">السعر الكامل</span>
+              </div>
+              <div style="background:#0f1111;padding:12px 14px;min-height:62px;display:flex;flex-direction:column;justify-content:center">
+                <span style="font-size:13px;font-weight:600;color:#c8c6c5">٣ أشهر</span>
+                <span style="margin-top:4px;font-size:12px;color:#ffb4a8">خصم ١٠٪</span>
+              </div>
+              <div style="background:#0f1111;padding:12px 14px;min-height:62px;display:flex;flex-direction:column;justify-content:center">
+                <span style="font-size:13px;font-weight:600;color:#c8c6c5">٦ أشهر</span>
+                <span style="margin-top:4px;font-size:12px;color:#ffb4a8">خصم ١٦٪</span>
+              </div>
+              <div style="background:#d12028;padding:12px 14px;min-height:62px;display:flex;flex-direction:column;justify-content:center">
+                <span style="font-size:13px;font-weight:600;color:#fff7f5">سنة كاملة</span>
+                <span style="margin-top:4px;font-size:12px;font-weight:600;color:#fff7f5">خصم ٢٧٪ · الأفضل</span>
+              </div>
+            </div>
+
+            <p style="margin:24px 0 10px;font-size:12px;font-weight:600;color:#c8c6c5">اختر الفئة</p>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <label style="display:block;position:relative;border:2px solid #d12028;background:#1a1c1c;padding:16px">
+                <span style="position:absolute;inset-inline-end:0;top:0;background:#d12028;padding:4px 8px;font-size:12px;font-weight:600;color:#fff7f5">الأكثر اختيارًا</span>
+                <span style="display:flex;align-items:flex-start;gap:14px">
+                  <span style="margin-top:3px;width:18px;height:18px;flex-shrink:0;border-radius:9999px;border:5px solid #d12028;background:#fff;box-sizing:border-box"></span>
+                  <span style="min-width:0;flex:1">
+                    <span style="display:block;font-size:20px;font-weight:800;color:#fff">إيليت</span>
+                    <span style="display:block;margin-top:8px;font-size:14px;line-height:1.6;color:#fff">حصص غير محدودة، كل يوم</span>
+                    <span style="display:block;margin-top:3px;font-size:13px;line-height:1.6;color:#c8c6c5">جيم + فتنس · دعوتان لضيوف · تجميد شهر</span>
+                    <span style="display:flex;align-items:baseline;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid #333535">
+                      <span class="disp disp900" style="font-size:26px;line-height:1;color:#fff;font-variant-numeric:tabular-nums" dir="ltr">1,898</span>
+                      <span style="font-size:12px;color:#c8c6c5">جنيه / شهر</span>
+                      <span style="margin-inline-start:auto;font-size:13px;color:#c8c6c5">الإجمالي ٢٢٬٧٨٠</span>
+                    </span>
+                  </span>
+                </span>
+              </label>
+              <label style="display:flex;align-items:center;gap:14px;border:1px solid #333535;background:#0f1111;padding:16px;min-height:66px">
+                <span style="width:18px;height:18px;flex-shrink:0;border-radius:9999px;border:1px solid #616564;box-sizing:border-box"></span>
+                <span style="min-width:0;flex:1">
+                  <span style="display:block;font-size:17px;font-weight:800;color:#fff">برو</span>
+                  <span style="display:block;margin-top:4px;font-size:13px;color:#c8c6c5">٢٠ حصة · ٥ أيام أسبوعيًا</span>
+                </span>
+                <span style="flex-shrink:0;text-align:start">
+                  <span class="disp" style="display:block;font-size:20px;line-height:1;color:#fff" dir="ltr">1,387</span>
+                  <span style="display:block;margin-top:3px;font-size:12px;color:#c8c6c5">جنيه / شهر</span>
+                </span>
+              </label>
+              <label style="display:flex;align-items:center;gap:14px;border:1px solid #333535;background:#0f1111;padding:16px;min-height:66px">
+                <span style="width:18px;height:18px;flex-shrink:0;border-radius:9999px;border:1px solid #616564;box-sizing:border-box"></span>
+                <span style="min-width:0;flex:1">
+                  <span style="display:block;font-size:17px;font-weight:800;color:#fff">كور</span>
+                  <span style="display:block;margin-top:4px;font-size:13px;color:#c8c6c5">١٢ حصة · ٣ أيام أسبوعيًا</span>
+                </span>
+                <span style="flex-shrink:0;text-align:start">
+                  <span class="disp" style="display:block;font-size:20px;line-height:1;color:#fff" dir="ltr">1,025</span>
+                  <span style="display:block;margin-top:3px;font-size:12px;color:#c8c6c5">جنيه / شهر</span>
+                </span>
+              </label>
+            </div>
+
+            <div style="margin-top:24px;border-top:1px solid #333535;padding-top:20px">
+              <p style="margin:0 0 10px;font-size:12px;font-weight:600;color:#c8c6c5">موعد البداية</p>
+              <div style="display:flex;gap:1px;background:#333535;border:1px solid #333535">
+                <span style="flex:1;padding:14px 10px;background:#222424;font-size:13px;font-weight:600;color:#fff;text-align:center">اليوم</span>
+                <span style="flex:1;padding:14px 10px;background:#0f1111;font-size:13px;font-weight:600;color:#c8c6c5;text-align:center">١ أكتوبر</span>
+                <span style="flex:1;padding:14px 10px;background:#0f1111;font-size:13px;font-weight:600;color:#c8c6c5;text-align:center">تاريخ آخر</span>
+              </div>
+            </div>
+
+            <div style="height:96px"></div>
+          </div>
+        </div>
+
+        <div dir="rtl" class="ar" style="position:absolute;left:1px;right:1px;bottom:1px;background:#1a1c1c;border-top:2px solid #d12028">
+          <div style="display:flex;align-items:center;gap:12px;padding:10px 16px 12px">
+            <div style="min-width:0">
+              <p style="margin:0;font-size:12px;font-weight:600;color:#c8c6c5">الإجمالي اليوم</p>
+              <p style="margin:3px 0 0;display:flex;align-items:baseline;gap:7px">
+                <span class="disp disp900" style="font-size:23px;line-height:1;color:#fff" dir="ltr">EGP 22,780</span>
+                <span style="font-size:12px;color:#616564">شامل الضريبة</span>
+              </p>
+            </div>
+            <span style="margin-inline-start:auto;display:flex;min-height:52px;align-items:center;gap:8px;background:#d12028;padding:0 22px;font-size:14px;font-weight:600;color:#fff7f5;white-space:nowrap">
+              متابعة
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" style="transform:scaleX(-1)"><polyline points="9 6 15 12 9 18"/></svg>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div style="max-width:320px;display:flex;flex-direction:column;gap:22px;padding-top:6px">
+        <p class="mono" style="margin:0;font-size:11px;font-weight:700;letter-spacing:0.14em;color:#d12028">Notes on the RTL port</p>
+        <p style="margin:0;font-size:14px;line-height:1.65;color:#c8c6c5">Every offset here is a logical property — <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffb4a8">margin-inline-start</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffb4a8">inset-inline-start</code>, <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffb4a8">text-align:start</code> — so the layout mirrors with no second stylesheet. Your codebase already writes them this way.</p>
+        <p style="margin:0;font-size:14px;line-height:1.65;color:#c8c6c5">Three things do not mirror. Chevrons and the back arrow are flipped explicitly with <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffb4a8">scaleX(-1)</code>. Latin currency figures keep <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffb4a8">dir="ltr"</code> so "EGP 22,780" does not reorder. The brand lockup stays as drawn.</p>
+        <p style="margin:0;font-size:14px;line-height:1.65;color:#c8c6c5">Anybody has no Arabic coverage, so the display voice needs a second face. Noto Kufi Arabic at 800 is the closest match in weight and squareness — upright rather than slanted, because a synthesised Arabic italic reads as a rendering fault. Body and label text share it, which keeps the Arabic page to one family instead of three.</p>
+        <p style="margin:0;font-size:14px;line-height:1.65;color:#c8c6c5">Arabic-Indic numerals in prose, Latin in prices. That mix is what Egyptian sites do in practice and it is worth confirming with the gym before it ships.</p>
+      </div>
+    </div>
+  </div>
+
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}"></script>
+</body>
+</html>

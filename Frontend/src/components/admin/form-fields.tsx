@@ -14,7 +14,7 @@ import { Plus, X } from "lucide-react";
 // overwrite fields the admin never touched.
 
 const inputBase =
-  "w-full border border-border bg-surface-2 px-3 py-2 text-[13px] text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring";
+  "w-full border border-input bg-surface-2 px-3 py-2 text-base md:text-[13px] text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring";
 
 interface FieldProps {
   label: string;
@@ -313,7 +313,7 @@ export function StringList({
             <button
               type="button"
               aria-label={`Remove ${label} ${i + 1}`}
-              className="-m-1 shrink-0 p-1 text-muted-foreground hover:text-destructive"
+              className="ui-action ui-action--icon ui-action--ghost ui-action--sm inline-flex -m-1 shrink-0 p-1 text-muted-foreground hover:text-destructive"
               onClick={() => onChange(items.filter((_, index) => index !== i))}
             >
               <X className="size-4" strokeWidth={1.5} />
@@ -325,7 +325,7 @@ export function StringList({
       {items.length < maxItems && (
         <button
           type="button"
-          className="mt-1 flex w-fit items-center gap-1.5 text-[12px] font-medium text-primary-soft hover:underline"
+          className="ui-action ui-action--ghost ui-action--sm mt-1 flex w-fit items-center gap-1.5 text-[12px] font-medium text-primary-soft hover:underline"
           onClick={() => onChange([...items, ""])}
         >
           <Plus className="size-3.5" strokeWidth={2} />
@@ -392,7 +392,7 @@ export function PerkList({
             <button
               type="button"
               aria-label={`Remove ${label} ${i + 1}`}
-              className="-m-1 shrink-0 p-1 text-muted-foreground hover:text-destructive"
+              className="ui-action ui-action--icon ui-action--ghost ui-action--sm inline-flex -m-1 shrink-0 p-1 text-muted-foreground hover:text-destructive"
               onClick={() => onChange(items.filter((_, index) => index !== i))}
             >
               <X className="size-4" strokeWidth={1.5} />
@@ -404,7 +404,7 @@ export function PerkList({
       {items.length < maxItems && (
         <button
           type="button"
-          className="mt-1 flex w-fit items-center gap-1.5 text-[12px] font-medium text-primary-soft hover:underline"
+          className="ui-action ui-action--ghost ui-action--sm mt-1 flex w-fit items-center gap-1.5 text-[12px] font-medium text-primary-soft hover:underline"
           onClick={() => onChange([...items, { label: "", value: 1 }])}
         >
           <Plus className="size-3.5" strokeWidth={2} />
@@ -447,18 +447,18 @@ export function FormActions({
   destructive?: { label: string; onClick: () => void };
 }) {
   return (
-    <div className="sticky bottom-0 flex items-center gap-3 border-t border-border bg-background py-4">
+    <div className="sticky bottom-0 flex flex-wrap items-center gap-3 border-t border-border bg-background py-4">
       <button
         type="submit"
         disabled={isSaving}
-        className="bg-primary px-6 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
+        className="ui-action ui-action--sm inline-flex bg-primary px-6 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
       >
         {isSaving ? "Saving…" : saveLabel}
       </button>
       <button
         type="button"
         onClick={onCancel}
-        className="px-4 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground"
+        className="ui-action ui-action--ghost ui-action--sm inline-flex px-4 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground"
       >
         Cancel
       </button>
@@ -466,7 +466,7 @@ export function FormActions({
         <button
           type="button"
           onClick={destructive.onClick}
-          className="ml-auto px-4 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-destructive uppercase hover:underline"
+          className="ui-action ui-action--sm inline-flex ms-auto px-4 py-2.5 text-[12px] font-semibold tracking-[0.06em] text-destructive uppercase hover:underline"
         >
           {destructive.label}
         </button>

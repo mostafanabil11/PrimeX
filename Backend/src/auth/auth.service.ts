@@ -23,7 +23,8 @@ import { GoogleProfile } from './interfaces/google-profile.interface';
 import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { DeviceInfo } from './interfaces/device-info.interface';
 import { parseDurationToMs } from '@/common/utils/duration.util';
-import { Counter, CounterDocument } from '@/orders/schemas/counter.schema';
+import { normalizePhone } from '@/common/utils/phone.util';
+import { Counter, CounterDocument } from '@/common/schemas/counter.schema';
 
 import { EventEmitter2 } from '@nestjs/event-emitter';
 
@@ -78,6 +79,70 @@ export class AuthService {
     }
 
     return counter.seq;
+  }
+
+  /**
+   * The member behind a phone number, creating one if this is a new face.
+   *
+   * Lives here rather than on JoinService, which is where it started, because
+   * it is no longer only the membership reservation that needs it — a personal
+   * training request creates or matches a member the same way, and a second
+   * copy of this is the one way two paths could disagree about whether the
+   * person messaging is already known to the gym. Same argument as
+   * nextMemberNumber above.
+   *
+   * The account is real but passwordless in practice: a random hash nobody
+   * holds, and `isEmailVerified` set so a later password reset is the way in
+   * rather than a verification email nobody is expecting. That is deliberate —
+   * these are people who filled a form at a gym, not people who signed up for
+   * an account, and asking them to verify an address to reserve a session
+   * would lose most of them.
+   */
+  async findOrCreateMemberByPhone(input: {
+    firstName: string;
+    lastName: string;
+    phone: string;
+    email?: string | null;
+  }): Promise<UserDocument> {
+    const phoneNormalized = normalizePhone(input.phone);
+    if (!phoneNormalized) {
+      throw new BadRequestException('That phone number does not look right');
+    }
+
+    const byPhone = await this.userModel.findOne({ phoneNormalized });
+    if (byPhone) return byPhone;
+
+    // Falls back to email so a returning member who changed their number is
+    // recognised rather than duplicated — the same fallback googleLogin uses
+    // when a Google account matches an existing local one.
+    if (input.email) {
+      const byEmail = await this.userModel.findOne({ email: input.email });
+      if (byEmail) {
+        try {
+          byEmail.phone = input.phone;
+          byEmail.phoneNormalized = phoneNormalized;
+          await byEmail.save();
+        } catch (error) {
+          // That number is already on someone else's record. Keep the member
+          // we found — the membership is theirs either way — and leave the
+          // conflicting number for staff to sort out.
+          if ((error as { code?: number }).code !== 11000) throw error;
+        }
+        return byEmail;
+      }
+    }
+
+    return this.userModel.create({
+      email: input.email ?? null,
+      password: await bcrypt.hash(crypto.randomBytes(16).toString('hex'), 10),
+      firstName: input.firstName,
+      lastName: input.lastName,
+      phone: input.phone,
+      phoneNormalized,
+      isEmailVerified: true,
+      memberNumber: await this.nextMemberNumber(),
+      role: 'member',
+    });
   }
 
   async register(registerDto: RegisterDto) {

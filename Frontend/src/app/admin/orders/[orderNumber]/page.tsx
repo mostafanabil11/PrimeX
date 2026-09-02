@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -124,7 +124,7 @@ export default function AdminOrderDetailPage() {
                 <input
                   value={trackingNumber}
                   onChange={(e) => setTrackingNumber(e.target.value)}
-                  className="mb-2 w-full border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-foreground"
+                  className="mb-2 w-full border border-input bg-background px-3 py-2 text-base md:text-sm text-foreground outline-none focus:border-foreground"
                 />
                 <button
                   type="button"
@@ -135,7 +135,7 @@ export default function AdminOrderDetailPage() {
                     })
                   }
                   disabled={statusMutation.isPending}
-                  className="w-full bg-primary py-2.5 text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
+                  className="ui-action ui-action--sm inline-flex w-full bg-primary py-2.5 text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
                 >
                   Mark as Shipped
                 </button>
@@ -147,7 +147,7 @@ export default function AdminOrderDetailPage() {
                 type="button"
                 onClick={() => statusMutation.mutate({ fulfillmentStatus: "delivered" })}
                 disabled={statusMutation.isPending}
-                className="mb-3 w-full bg-primary py-2.5 text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
+                className="ui-action ui-action--sm inline-flex mb-3 w-full bg-primary py-2.5 text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
               >
                 Mark as Delivered
               </button>
@@ -162,7 +162,7 @@ export default function AdminOrderDetailPage() {
                   }
                 }}
                 disabled={statusMutation.isPending}
-                className="w-full border border-destructive py-2.5 text-[12px] font-medium tracking-[0.05em] text-destructive uppercase hover:bg-destructive/10 disabled:opacity-50"
+                className="ui-action ui-action--sm inline-flex w-full border border-destructive py-2.5 text-[12px] font-medium tracking-[0.05em] text-destructive uppercase hover:bg-destructive/10 disabled:opacity-50"
               >
                 Mark as Refunded
               </button>

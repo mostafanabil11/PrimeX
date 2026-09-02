@@ -5,7 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { User, UserSchema } from './schemas/user.schema';
-import { Counter, CounterSchema } from '@/orders/schemas/counter.schema';
+import { Counter, CounterSchema } from '@/common/schemas/counter.schema';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { GoogleStrategy } from './strategies/google.strategy';
 import { ConfigService } from '@/config/config.service';

@@ -1,0 +1,151 @@
+.visitSection,
+.followSection {
+  position: relative;
+  isolation: isolate;
+  scroll-margin-top: 11rem;
+}
+
+.visitSection::before,
+.followSection::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  content: "";
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, color-mix(in srgb, var(--primary) 7%, transparent), transparent 68%);
+}
+
+.visitCard {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  max-width: 1080px;
+  margin-inline: auto;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--primary) 30%, var(--border));
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--surface-1), color-mix(in srgb, var(--primary) 5%, var(--background)));
+  box-shadow: 0 16px 65px -32px color-mix(in srgb, var(--primary) 42%, transparent);
+}
+
+.mapPanel {
+  position: relative;
+  min-height: 460px;
+  background: var(--surface-2);
+}
+
+.mapFrame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  filter: grayscale(1) invert(.9) contrast(.88);
+}
+
+.visitDetails { padding: 42px 44px; }
+
+.eyebrow {
+  color: var(--primary-soft);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .16em;
+  text-transform: uppercase;
+}
+
+.heading {
+  margin-top: 12px;
+  color: var(--foreground);
+  font-size: clamp(32px, 3.5vw, 46px);
+  line-height: 1.1;
+  letter-spacing: -.025em;
+  text-transform: uppercase;
+}
+
+.accent { color: var(--primary); }
+.rule { display: block; width: 36px; height: 2px; margin-block: 20px 24px; background: var(--primary); }
+
+.address,
+.phone {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  color: var(--muted-foreground);
+  font-size: 15px;
+  font-style: normal;
+  line-height: 1.7;
+}
+
+.address svg,
+.phone svg { flex-shrink: 0; margin-top: 4px; color: var(--primary-soft); }
+.phone { min-height: 44px; align-items: center; margin-top: 8px; width: fit-content; transition: color 160ms ease; }
+.phone svg { margin-top: 0; }
+.phone:hover { color: var(--foreground); }
+.phone:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; }
+
+.hours { margin-block: 24px; padding-top: 22px; border-top: 1px solid var(--border); }
+.hoursRow { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 12px; color: var(--foreground); font-size: 14px; }
+.hoursBadge { color: var(--foreground); background: var(--surface-2); border: 1px solid var(--border); padding: 4px 9px; font-size: 12px; font-weight: 700; }
+.hours p { margin-top: 7px; color: var(--muted-foreground); font-size: 13px; }
+.directions { border-radius: 5px; }
+
+.followSection { padding-top: 24px; padding-bottom: 16px; }
+.followInner { max-width: 780px; margin-inline: auto; text-align: center; }
+.followInner .rule { margin-inline: auto; margin-bottom: 18px; }
+.followCopy { color: var(--muted-foreground); font-size: 15px; line-height: 1.65; max-width: 48ch; margin-inline: auto; }
+.socialGrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(92px, 1fr)); gap: 20px; margin-top: 36px; }
+
+.socialCard {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 186px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  border: 1px solid color-mix(in srgb, var(--primary) 32%, var(--border));
+  border-radius: 12px;
+  background: linear-gradient(145deg, color-mix(in srgb, var(--primary) 6%, var(--surface-1)), var(--background));
+  box-shadow: 0 8px 28px -18px color-mix(in srgb, var(--primary) 45%, transparent);
+  color: var(--foreground);
+  transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
+}
+
+.socialCard:hover,
+.socialCard:focus-visible {
+  transform: translateY(-4px);
+  border-color: var(--primary-soft);
+  box-shadow: 0 10px 38px -20px color-mix(in srgb, var(--primary) 75%, transparent);
+}
+.socialCard:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; }
+.socialIcon svg { width: 56px; height: 56px; }
+.socialLabel { font-size: 12px; font-weight: 600; letter-spacing: .09em; text-transform: uppercase; }
+.externalArrow { position: absolute; inset-block-start: 14px; inset-inline-end: 14px; width: 16px; height: 16px; color: var(--muted-foreground); }
+:global([dir="rtl"]) .externalArrow { transform: scaleX(-1); }
+
+@media (max-width: 767px) {
+  .visitCard { grid-template-columns: 1fr; border-radius: 10px; }
+  .mapPanel { min-height: 280px; }
+  .visitDetails { padding: 28px 24px; }
+  .heading { font-size: 32px; }
+  .rule { margin-block: 16px 20px; }
+  .eyebrow { font-size: 12px; }
+  .followSection { padding-top: 12px; }
+  .followCopy { font-size: 14px; }
+  .socialGrid { gap: 10px; margin-top: 26px; }
+  .socialCard { min-height: 140px; gap: 18px; border-radius: 9px; }
+  .socialIcon svg { width: 36px; height: 36px; }
+  .socialLabel { font-size: 12px; letter-spacing: 0; }
+  .externalArrow { inset-block-start: 10px; inset-inline-end: 10px; width: 13px; height: 13px; }
+}
+
+@media (max-width: 359px) {
+  .visitDetails { padding-inline: 20px; }
+  .socialGrid { gap: 8px; grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .socialCard { transition: none; }
+  .socialCard:hover,
+  .socialCard:focus-visible { transform: none; }
+}

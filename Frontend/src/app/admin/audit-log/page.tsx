@@ -50,7 +50,7 @@ export default function AdminAuditLogPage() {
                 type="button"
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="text-muted-foreground underline disabled:opacity-30"
+                className="ui-action ui-action--ghost ui-action--sm inline-flex text-muted-foreground underline disabled:opacity-30"
               >
                 Previous
               </button>
@@ -61,7 +61,7 @@ export default function AdminAuditLogPage() {
                 type="button"
                 onClick={() => setPage((p) => Math.min(data.pagination.pages, p + 1))}
                 disabled={page === data.pagination.pages}
-                className="text-muted-foreground underline disabled:opacity-30"
+                className="ui-action ui-action--ghost ui-action--sm inline-flex text-muted-foreground underline disabled:opacity-30"
               >
                 Next
               </button>

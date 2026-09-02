@@ -124,7 +124,7 @@ export default function AdminStaffPage() {
         <button
           type="button"
           onClick={() => setAdding(true)}
-          className="mb-8 bg-primary px-5 py-3 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
+          className="ui-action ui-action--sm inline-flex mb-8 bg-primary px-5 py-3 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
         >
           Add staff member
         </button>
@@ -166,7 +166,7 @@ export default function AdminStaffPage() {
                       reset.mutate(member);
                     }
                   }}
-                  className="flex items-center gap-1.5 border border-border px-3 py-2 text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground disabled:opacity-40"
+                  className="ui-action ui-action--outline ui-action--sm flex items-center gap-1.5 border border-border px-3 py-2 text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground disabled:opacity-40"
                 >
                   <KeyRound className="size-3.5" strokeWidth={1.5} />
                   Reset password
@@ -186,7 +186,7 @@ export default function AdminStaffPage() {
                       toggle.mutate({ id: member._id, isActive: next });
                     }
                   }}
-                  className={`px-3 py-2 text-[11px] font-semibold tracking-[0.06em] uppercase disabled:opacity-40 ${
+                  className={`ui-action ui-action--sm inline-flex px-3 py-2 text-[11px] font-semibold tracking-[0.06em] uppercase disabled:opacity-40 ${
                     member.isActive
                       ? "border border-destructive text-destructive hover:bg-destructive hover:text-background"
                       : "bg-primary text-primary-foreground transition-colors hover:bg-primary-hover"
@@ -235,7 +235,7 @@ function IssuedPassword({
           setCopied(true);
           window.setTimeout(() => setCopied(false), 2000);
         }}
-        className="flex items-center gap-3 border border-border bg-background px-5 py-3 text-xl tracking-[0.1em] text-foreground hover:border-foreground"
+        className="ui-action ui-action--code ui-action--sm flex items-center gap-3 border border-border bg-background px-5 py-3 text-xl tracking-[0.1em] text-foreground hover:border-foreground"
       >
         {issued.password}
         {copied ? (
@@ -248,7 +248,7 @@ function IssuedPassword({
       <button
         type="button"
         onClick={onDismiss}
-        className="mt-4 block text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground"
+        className="ui-action ui-action--ghost ui-action--sm mt-4 block text-[12px] font-semibold tracking-[0.06em] text-muted-foreground uppercase hover:text-foreground"
       >
         I have saved it
       </button>

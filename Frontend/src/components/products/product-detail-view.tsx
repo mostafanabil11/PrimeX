@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { toast } from "sonner";
 import { useCart } from "@/hooks/use-cart";
 import { formatPrice } from "@/lib/format";
@@ -74,7 +74,7 @@ export function ProductDetailView({ product }: { product: ProductDetail }) {
                 key={img}
                 type="button"
                 onClick={() => setActiveImage(i)}
-                className={`relative aspect-3/4 w-20 overflow-hidden bg-muted transition-opacity ${
+                className={`ui-control relative aspect-3/4 w-20 overflow-hidden bg-muted transition-opacity ${
                   i === activeImage ? "opacity-100 ring-1 ring-foreground" : "opacity-60 hover:opacity-100"
                 }`}
               >
@@ -134,7 +134,7 @@ export function ProductDetailView({ product }: { product: ProductDetail }) {
                 aria-disabled={s.stock === 0}
                 disabled={s.stock === 0}
                 onClick={() => setSelectedSize(s.size)}
-                className={`flex h-12 w-14 items-center justify-center border text-sm font-medium transition-colors ${
+                className={`ui-control flex h-12 w-14 items-center justify-center border text-sm font-medium transition-colors ${
                   s.stock === 0
                     ? "cursor-not-allowed border-border text-muted-foreground/40 line-through"
                     : selectedSize === s.size
@@ -148,7 +148,7 @@ export function ProductDetailView({ product }: { product: ProductDetail }) {
             ))}
           </div>
           {selectedSize && selectedStock > 0 && selectedStock <= 3 && (
-            <p className="mt-2 text-[12px] text-muted-foreground">Only {selectedStock} left</p>
+            <p className="mt-2 text-[12px] text-muted-foreground">{`Only ${selectedStock} left`}</p>
           )}
         </div>
 
@@ -156,7 +156,7 @@ export function ProductDetailView({ product }: { product: ProductDetail }) {
           <button
             type="button"
             onClick={handleAddToBag}
-            className="flex-1 bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
+            className="ui-action inline-flex flex-1 bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
           >
             Add to Bag
           </button>

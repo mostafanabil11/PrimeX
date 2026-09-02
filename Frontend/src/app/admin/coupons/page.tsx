@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Plus, Trash2 } from "lucide-react";
@@ -33,7 +33,7 @@ export default function AdminCouponsPage() {
         <h1 className="font-heading text-headline-sm font-bold text-foreground">Coupons</h1>
         <Link
           href="/admin/coupons/new"
-          className="flex items-center gap-2 bg-primary px-5 py-2.5 text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
+          className="ui-action ui-action--sm flex items-center gap-2 bg-primary px-5 py-2.5 text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
         >
           <Plus className="size-4" strokeWidth={2} />
           New Coupon
@@ -63,7 +63,7 @@ export default function AdminCouponsPage() {
                 onClick={() => {
                   if (confirm(`Delete coupon "${c.code}"?`)) deleteMutation.mutate(c._id);
                 }}
-                className="shrink-0 p-2 text-muted-foreground hover:text-destructive"
+                className="ui-action ui-action--icon ui-action--ghost ui-action--sm inline-flex shrink-0 p-2 text-muted-foreground hover:text-destructive"
                 aria-label="Delete coupon"
               >
                 <Trash2 className="size-4" strokeWidth={1.5} />

@@ -6,39 +6,34 @@ import {
   getBranchesServer,
   getTrainersServer,
   getClassTypesServer,
-  getTestimonialsServer,
 } from "@/lib/api/gym-server";
 import { contentText, contentList } from "@/types/gym";
 import { BRAND, siteUrl } from "@/lib/brand";
 import { OrganizationSchema } from "@/components/public/structured-data";
 import { Section, SectionHeader, CtaButton } from "@/components/public/section";
-import { Rail } from "@/components/public/rail";
+import { ExpandingCards } from "@/components/public/expanding-cards";
 import { WhatsAppCta } from "@/components/public/whatsapp";
-import { joinEnquiry } from "@/lib/whatsapp-messages";
 import { PricingGrid } from "@/components/public/pricing-grid";
-import { Reveal } from "@/components/public/reveal";
-import { TrainerCard, ClassTypeCard, TestimonialCard } from "@/components/public/cards";
 import { formatPrice } from "@/lib/format";
-import { fullAddress, mapsUrl } from "@/lib/gym-format";
-import { MapPin, ChevronRight } from "lucide-react";
+import { getLocale } from "next-intl/server";
+import { FollowUsSection, VisitUsSection } from "@/components/public/home-connect";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
 export default async function Home() {
+  const locale = await getLocale();
   // One round of parallel fetches rather than a waterfall — every section is
   // independent, and awaiting them in sequence would add up to a slow page for
   // no reason.
-  const [content, plans, branches, trainers, classTypes, testimonials] = await Promise.all([
-    getContentServer(),
+  const [content, plans, branches, trainers, classTypes] = await Promise.all([
+    getContentServer(locale === "ar" ? "ar" : "en"),
     getPlansServer(),
-    // Still fetched, but for the structured data rather than a section: one
-    // address is a fact search engines want and not a page worth building.
+    // Shared by structured data and the homepage's Visit Us section.
     getBranchesServer(),
     getTrainersServer(),
     getClassTypesServer(),
-    getTestimonialsServer(),
   ]);
 
   // Show the highlighted plans if any are marked, otherwise the first three, so
@@ -170,21 +165,16 @@ export default async function Home() {
               className="motion-rise flex w-full flex-col gap-2.5 lg:mt-2 lg:w-auto lg:flex-row lg:flex-wrap lg:gap-3"
               style={{ animationDelay: "270ms" }}
             >
-              <WhatsAppCta message={joinEnquiry()} className="max-lg:w-full max-lg:py-4">
-                Join on WhatsApp
-              </WhatsAppCta>
-              {/* The second button carries the entry price rather than "See
-                  plans and prices". A label that answers the question is worth
-                  more than one promising an answer — and "from EGP 1,400" is
-                  the fact that decides whether the next tap happens at all.
-                  The old label survives at lg, where the button sits beside a
-                  headline rather than under one. */}
-              <CtaButton href="/membership" variant="outline" className="max-lg:w-full max-lg:py-4">
-                <span className="lg:hidden">
-                  {entryPrice !== null ? `Plans from ${formatPrice(entryPrice)}` : "See plans"}
-                </span>
-                <span className="max-lg:hidden">See plans and prices</span>
+              <CtaButton href="/membership" className="max-lg:w-full max-lg:py-4">
+                {entryPrice !== null ? `Plans from ${formatPrice(entryPrice)}` : "See plans"}
               </CtaButton>
+              <WhatsAppCta
+                message={`Hi ${BRAND.name}, I have a question about membership.`}
+                variant="outline"
+                className="max-lg:w-full max-lg:py-4"
+              >
+                Ask on WhatsApp
+              </WhatsAppCta>
             </div>
           </div>
         </div>
@@ -289,29 +279,20 @@ export default async function Home() {
               shortLabel: `All ${classTypes.length}`,
             }}
           />
-          {/* A rail on a phone, the grid it always was at lg. See
-              components/public/rail.tsx.
-
-              What this replaces was four cards CSS-clipped to two below sm —
-              which is not a preview, it is a truncated index, and stacked
-              full-width it was a large part of why this page ran to nearly
-              twelve thousand pixels on a phone. Three cards side by side show
-              more of the catalogue in a quarter of the height, and the fourth
-              cut off by the edge of the screen says "there is more" better
-              than the link does.
-
-              Still sliced to four rather than mapping the lot: the hidden
-              cards used to cost nothing because a next/image inside a
-              display:none element never intersects and so is never fetched.
-              In a rail they are merely off to the right, which DOES intersect
-              — so the limit has to be real now, not a CSS trick. */}
-          <Rail seeAll={{ href: "/classes" }}>
-            {classTypes.slice(0, 4).map((classType, i) => (
-              <Reveal key={classType._id} delay={i * 80} className="w-full">
-                <ClassTypeCard classType={classType} preview />
-              </Reveal>
-            ))}
-          </Rail>
+          <ExpandingCards
+            kind="class"
+            locale={locale}
+            items={classTypes.slice(0, 4).map((item) => ({
+              id: item._id,
+              title: item.name,
+              image: item.image,
+              href: `/classes/${item.slug}`,
+              description: item.description,
+              meta: locale === "ar"
+                ? [`${item.durationMinutes} دقيقة`, `السعة ${item.defaultCapacity}`, `الشدة ${item.intensity}/5`]
+                : [`${item.durationMinutes} min`, `${item.defaultCapacity} places`, `Intensity ${item.intensity}/5`],
+            }))}
+          />
         </Section>
       )}
 
@@ -328,30 +309,25 @@ export default async function Home() {
               shortLabel: `All ${trainers.length}`,
             }}
           />
-          {/* Narrower cards than the classes rail — these are portrait crops,
-              so the same 232px would make them nearly 300px tall and only two
-              would fit on screen. See the note on the classes rail above. */}
-          <Rail item="trainer" seeAll={{ href: "/trainers" }}>
-            {trainers.slice(0, 4).map((trainer, i) => (
-              <Reveal key={trainer._id} delay={i * 80} className="w-full">
-                <TrainerCard trainer={trainer} preview />
-              </Reveal>
-            ))}
-          </Rail>
+          <ExpandingCards
+            kind="trainer"
+            locale={locale}
+            items={trainers.slice(0, 4).map((item) => ({
+              id: item._id,
+              title: item.name,
+              image: item.photo,
+              href: `/trainers/${item.slug}`,
+              subtitle: item.headline,
+              description: item.specialties.join(" · "),
+              meta: item.yearsOfExperience > 0
+                ? [locale === "ar" ? `${item.yearsOfExperience} سنة خبرة` : `${item.yearsOfExperience} years of experience`]
+                : [],
+            }))}
+          />
         </Section>
       )}
 
-      {/* Closing CTA
-          Left-aligned and tightened on a phone, centred as it was from md.
-
-          A centred block is a poster shape: it wants width either side of it
-          to read as deliberate, and at 375px there is none, so every line
-          broke somewhere different and the whole thing read as ragged rather
-          than composed. It also loses the one thing this block should end on —
-          the address — which the design adds here as a row rather than leaving
-          it to the footer, because "come and see the place" followed by no
-          indication of where the place is was an instruction with no next
-          step. */}
+      {/* Membership CTA, followed by the full location and social sections. */}
       <Section>
         <div className="flex flex-col items-start gap-4 border-t-2 border-primary bg-surface-1 px-5 py-7 md:items-center md:gap-6 md:px-6 md:py-stack-md md:text-center">
           <h2 className="max-w-2xl font-display text-[34px] leading-[0.88] tracking-[-0.035em] text-balance text-foreground uppercase md:text-5xl md:leading-[0.95] md:tracking-[-0.02em]">
@@ -366,49 +342,18 @@ export default async function Home() {
               See plans and prices
             </CtaButton>
             <WhatsAppCta
-              message={joinEnquiry()}
+              message={`Hi ${BRAND.name}, I have a question about membership.`}
               variant="outline"
               className="max-md:w-full max-md:py-4"
             >
               Talk to us
             </WhatsAppCta>
           </div>
-
-          {/* The address as a row rather than a paragraph: it is a
-              destination, so it gets a chevron and a 48px hit box and opens
-              the map. Dropped entirely if the API is unreachable — the footer
-              still carries the same address, so nothing is lost, and a row
-              that says "15 Street 270" with nothing behind it is worse than
-              no row. */}
-          {branch && (
-            <a
-              href={mapsUrl(branch)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="press flex min-h-12 w-full items-center justify-between gap-3 border border-border bg-background px-4 transition-colors hover:border-foreground md:max-w-md md:text-left"
-            >
-              <span className="flex items-start gap-2.5">
-                <MapPin
-                  aria-hidden
-                  className="mt-0.5 size-4 shrink-0 text-primary"
-                  strokeWidth={1.8}
-                />
-                <span className="text-[14px] leading-[1.35] text-foreground">
-                  {fullAddress(branch)}
-                  <span className="block font-mono text-[12px] tracking-[0.08em] text-muted-foreground uppercase">
-                    Open now &middot; directions
-                  </span>
-                </span>
-              </span>
-              <ChevronRight
-                aria-hidden
-                className="size-4 shrink-0 text-muted-foreground"
-                strokeWidth={2}
-              />
-            </a>
-          )}
         </div>
       </Section>
+
+      <VisitUsSection branch={branch} locale={locale} />
+      <FollowUsSection locale={locale} />
     </>
   );
 }

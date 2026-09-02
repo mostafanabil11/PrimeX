@@ -63,7 +63,7 @@ export function AddressSection({
               role="radio"
               aria-checked={selectedId === address._id}
               onClick={() => onSelect(address._id)}
-              className={`block w-full border p-4 text-left text-sm transition-colors ${
+              className={`ui-control block w-full border p-4 text-left text-sm transition-colors ${
                 selectedId === address._id ? "border-foreground" : "border-border hover:border-foreground/50"
               }`}
             >
@@ -86,7 +86,7 @@ export function AddressSection({
             <button
               type="button"
               onClick={() => setShowForm(true)}
-              className="text-[13px] font-semibold text-foreground underline"
+              className="ui-action ui-action--ghost inline-flex text-[13px] font-semibold text-foreground underline"
             >
               + Use a different address
             </button>
@@ -107,7 +107,7 @@ export function AddressSection({
             <button
               type="submit"
               disabled={createMutation.isPending}
-              className="bg-primary px-6 py-3 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
+              className="ui-action inline-flex bg-primary px-6 py-3 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
             >
               {createMutation.isPending ? "Saving…" : "Save Address"}
             </button>
@@ -115,7 +115,7 @@ export function AddressSection({
               <button
                 type="button"
                 onClick={() => setShowForm(false)}
-                className="px-6 py-3 text-button font-medium tracking-[0.05em] text-foreground uppercase transition-colors hover:opacity-70"
+                className="ui-action ui-action--ghost inline-flex px-6 py-3 text-button font-medium tracking-[0.05em] text-foreground uppercase transition-colors hover:opacity-70"
               >
                 Cancel
               </button>

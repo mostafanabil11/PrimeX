@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { notFound, usePathname, useRouter } from "next/navigation";
 import { LayoutDashboard, CalendarDays, CreditCard, Receipt, User } from "lucide-react";
 import { useCurrentUser } from "@/hooks/use-current-user";

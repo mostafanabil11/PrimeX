@@ -20,6 +20,12 @@ export class ContentBlock {
   @Prop({ type: [String], default: undefined })
   values?: string[];
 
+  @Prop({ type: String, default: null })
+  valueAr: string | null = null;
+
+  @Prop({ type: [String], default: undefined })
+  valuesAr?: string[];
+
   createdAt?: Date;
   updatedAt?: Date;
 }

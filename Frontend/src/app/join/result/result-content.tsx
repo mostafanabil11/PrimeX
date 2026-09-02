@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { Check, Clock, X } from "lucide-react";
@@ -158,7 +158,7 @@ export function JoinResultContent() {
       </div>
       <p className="text-[13px] text-muted-foreground">
         You can also{" "}
-        <Link href="/join" className="text-primary underline">
+        <Link href="/join" className="text-primary-soft underline">
           reserve a place and pay at the gym
         </Link>{" "}
         instead.

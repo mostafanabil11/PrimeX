@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -9,6 +9,7 @@ import { BRAND } from "@/lib/brand";
 import { resetPassword } from "@/lib/api/auth";
 import { apiErrorMessage } from "@/lib/api-error";
 import { AuthPanel } from "@/components/public/auth-panel";
+import { Wordmark } from "@/components/layout/wordmark";
 
 export function ResetPasswordContent() {
   const router = useRouter();
@@ -44,11 +45,19 @@ export function ResetPasswordContent() {
 
       <div className="flex flex-col items-center justify-center px-margin-mobile py-stack-xl md:px-margin-desktop">
         <div className="w-full max-w-sm">
+          {/* The lockup, not the name set in the headline face.
+              Every other surface in this app shows the real mark — the header,
+              the footer, the mobile menu — and a typographic stand-in on the
+              one screen where somebody is being asked to trust the site with a
+              password reads as an oversight, because it is one. This is the
+              same substitution that was removed from the mobile menu; it had
+              simply survived over here. */}
           <Link
             href="/"
-            className="mb-10 block text-center font-display text-3xl tracking-[-0.02em] text-foreground uppercase"
+            aria-label={`${BRAND.name} — home`}
+            className="mb-10 flex justify-center"
           >
-            {BRAND.name}
+            <Wordmark className="h-16 w-auto" width={128} />
           </Link>
 
           {!token ? (
@@ -61,7 +70,7 @@ export function ResetPasswordContent() {
               </p>
               <Link
                 href="/forgot-password"
-                className="block w-full bg-primary py-4 text-center text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
+                className="ui-action block w-full bg-primary py-4 text-center text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
               >
                 Request New Link
               </Link>
@@ -90,7 +99,7 @@ export function ResetPasswordContent() {
                     minLength={6}
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
-                    className="w-full border border-border bg-background px-4 py-3 text-sm text-foreground outline-none focus:border-foreground"
+                    className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
                   />
                   <p className="mt-2 text-[12px] text-muted-foreground">
                     At least 6 characters, with an uppercase letter, a lowercase letter, and a number.
@@ -111,14 +120,14 @@ export function ResetPasswordContent() {
                     minLength={6}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
-                    className="w-full border border-border bg-background px-4 py-3 text-sm text-foreground outline-none focus:border-foreground"
+                    className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={mutation.isPending}
-                  className="w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
+                  className="ui-action inline-flex w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
                 >
                   {mutation.isPending ? "Resetting…" : "Reset Password"}
                 </button>

@@ -50,7 +50,7 @@ export default function AdminReviewsPage() {
             key={t.value}
             type="button"
             onClick={() => setTab(t.value)}
-            className={`px-4 py-2.5 text-[12px] font-medium tracking-[0.05em] uppercase transition-colors ${
+            className={`ui-control px-4 py-2.5 text-[12px] font-medium tracking-[0.05em] uppercase transition-colors ${
               tab === t.value ? "border-b-2 border-foreground text-foreground" : "text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -86,7 +86,7 @@ export default function AdminReviewsPage() {
                     <button
                       type="button"
                       onClick={() => moderateMutation.mutate({ id: review._id, status: "approved" })}
-                      className="border border-foreground px-4 py-1.5 text-[11px] font-medium tracking-[0.05em] text-foreground uppercase hover:border-primary hover:bg-primary/10"
+                      className="ui-action ui-action--sm inline-flex border border-foreground px-4 py-1.5 text-[11px] font-medium tracking-[0.05em] text-foreground uppercase hover:border-primary hover:bg-primary/10"
                     >
                       Approve
                     </button>
@@ -95,7 +95,7 @@ export default function AdminReviewsPage() {
                     <button
                       type="button"
                       onClick={() => moderateMutation.mutate({ id: review._id, status: "rejected" })}
-                      className="border border-border px-4 py-1.5 text-[11px] font-medium tracking-[0.05em] text-muted-foreground uppercase hover:bg-muted"
+                      className="ui-action ui-action--outline ui-action--sm inline-flex border border-border px-4 py-1.5 text-[11px] font-medium tracking-[0.05em] text-muted-foreground uppercase hover:bg-muted"
                     >
                       Reject
                     </button>
@@ -105,7 +105,7 @@ export default function AdminReviewsPage() {
                     onClick={() => {
                       if (confirm("Delete this review permanently?")) deleteMutation.mutate(review._id);
                     }}
-                    className="p-1.5 text-muted-foreground hover:text-destructive"
+                    className="ui-action ui-action--icon ui-action--ghost ui-action--sm inline-flex p-1.5 text-muted-foreground hover:text-destructive"
                     aria-label="Delete review"
                   >
                     <Trash2 className="size-4" strokeWidth={1.5} />

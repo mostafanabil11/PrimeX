@@ -1,0 +1,147 @@
+.form {
+  display: grid;
+  gap: 24px;
+  width: 100%;
+  max-width: 1040px;
+  margin-inline: auto;
+  padding-bottom: calc(144px + env(safe-area-inset-bottom));
+}
+
+.intro { display: grid; gap: 10px; }
+
+.summary {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 18px;
+  align-self: start;
+  border: 1px solid #3d4444;
+  border-radius: 10px;
+  background: #171b1b;
+  padding: 16px;
+}
+
+.summary .changePlan {
+  display: inline-flex;
+  flex-shrink: 0;
+  padding: 6px 8px;
+  margin-block: -6px;
+  margin-inline-end: -8px;
+}
+
+.planOverview { display: grid; gap: 12px; }
+.summaryNote {
+  display: flex;
+  gap: 8px;
+  margin-top: 2px;
+  padding-top: 14px;
+  border-top: 1px solid #333a3a;
+  color: var(--muted-foreground);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.breakdown { display: grid; gap: 8px; font-size: 13px; color: var(--muted-foreground); }
+.breakdown > div { display: flex; justify-content: space-between; gap: 16px; }
+.breakdown dd { flex-shrink: 0; font-variant-numeric: tabular-nums; }
+
+.details { display: flex; min-width: 0; flex-direction: column; gap: 18px; }
+.nameFields { display: grid; gap: 16px; }
+.input {
+  min-width: 0;
+  min-height: 48px;
+  border: 1px solid #586060;
+  border-radius: 8px;
+  background: #111515;
+  padding: 11px 13px;
+  color-scheme: dark;
+  scroll-margin-block: 90px 160px;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+.input:hover { border-color: #788383; }
+.input:focus-visible {
+  border-color: #a7b4b4;
+  outline: 2px solid #a7b4b4;
+  outline-offset: 2px;
+  background: #171c1c;
+}
+.payment { min-width: 0; padding: 0; border: 0; margin-top: 4px; }
+.payment .paymentOption {
+  display: flex;
+  min-width: 0;
+  min-height: 84px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px;
+  border: 1px solid #505b5b;
+  border-radius: 8px;
+  background: #111515;
+  color: var(--foreground);
+  text-align: start;
+}
+.payment .paymentOption[aria-pressed="true"] {
+  border-color: #91a2a0;
+  background: #242c2b;
+}
+.selectionMark {
+  display: flex;
+  width: 17px;
+  height: 17px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #7f8b8b;
+  border-radius: 50%;
+}
+.paymentOption[aria-pressed="true"] .selectionMark { background: #dce6e4; border-color: #dce6e4; color: #172321; }
+.consent { scroll-margin-block: 100px 170px; }
+.consent:focus-visible { outline: 2px solid #e4eded; outline-offset: 4px; }
+
+.mobileBar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 40;
+  padding-bottom: env(safe-area-inset-bottom);
+  border-top: 1px solid #414949;
+  background: #191e1e;
+  box-shadow: 0 -8px 24px rgb(0 0 0 / 14%);
+}
+.mobileBarInner {
+  display: grid;
+  max-width: 720px;
+  margin-inline: auto;
+  gap: 10px;
+  padding: 10px 20px 12px;
+}
+.mobilePrice { display: flex; min-width: 0; justify-content: space-between; align-items: center; gap: 14px; }
+.noPayment { color: var(--muted-foreground); font-size: 11px; text-align: end; }
+.mobileBar .mobileSubmit { display: flex; width: 100%; min-height: 48px; }
+
+@media (min-width: 420px) {
+  .nameFields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 360px) {
+  .planOverview { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 16px; }
+}
+
+@media (min-width: 600px) {
+  .summary { padding: 24px; }
+  .mobileBarInner { grid-template-columns: minmax(0, 1fr) auto; align-items: center; padding-block: 14px; }
+  .mobilePrice { display: block; }
+  .noPayment { margin-top: 4px; text-align: start; }
+}
+
+@media (min-width: 1024px) {
+  .form { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); column-gap: 56px; row-gap: 32px; padding-bottom: 0; }
+  .intro { grid-column: 1 / -1; }
+  .summary { position: sticky; top: 80px; }
+  .planOverview { grid-template-columns: 1fr; gap: 24px; }
+  .details { gap: 20px; }
+  .mobileBar { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .input { transition: none; }
+}

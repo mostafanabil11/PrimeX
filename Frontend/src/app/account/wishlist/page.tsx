@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import Image from "next/image";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { X } from "lucide-react";
@@ -56,7 +56,7 @@ export default function WishlistPage() {
           <p className="mb-6 text-body-md text-muted-foreground">Nothing saved yet.</p>
           <Link
             href="/"
-            className="bg-primary px-8 py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
+            className="ui-action inline-flex bg-primary px-8 py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
           >
             Continue Shopping
           </Link>
@@ -69,7 +69,7 @@ export default function WishlistPage() {
                 type="button"
                 onClick={() => removeMutation.mutate(product._id)}
                 aria-label="Remove from wishlist"
-                className="absolute top-2 right-2 z-10 flex size-8 items-center justify-center bg-background/90 text-foreground transition-colors hover:text-destructive"
+                className="ui-action ui-action--icon ui-action--ghost absolute top-2 right-2 z-10 flex size-8 items-center justify-center bg-background/90 text-foreground transition-colors hover:text-destructive"
               >
                 <X className="size-4" strokeWidth={1.5} />
               </button>

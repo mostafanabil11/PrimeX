@@ -20,7 +20,8 @@ export class ContentService {
 
   private resolve(
     definitions: ContentDefinition[],
-    stored: Map<string, ContentBlockDocument>
+    stored: Map<string, ContentBlockDocument>,
+    locale: 'en' | 'ar' = 'en'
   ): ResolvedContent {
     const out: ResolvedContent = {};
 
@@ -35,12 +36,16 @@ export class ContentService {
       if (definition.type === 'list') {
         // An explicitly emptied list is a real editorial choice and must
         // survive; only an absent one falls back.
-        out[definition.key] = row.values ?? (definition.default as string[]);
+        out[definition.key] = locale === 'ar'
+          ? row.valuesAr?.length ? row.valuesAr : row.values ?? (definition.default as string[])
+          : row.values ?? (definition.default as string[]);
       } else {
         // A blank string means the same thing — someone cleared the field on
         // purpose — but an empty headline would render as a gap, so blank
         // falls back to the default rather than shipping a hole.
-        out[definition.key] = row.value?.trim() ? row.value : (definition.default as string);
+        out[definition.key] = locale === 'ar' && row.valueAr?.trim()
+          ? row.valueAr
+          : row.value?.trim() ? row.value : (definition.default as string);
       }
     }
 
@@ -49,14 +54,14 @@ export class ContentService {
 
   // Public: the whole site's copy in one request, so a page render is a single
   // round trip rather than one per block.
-  async getAllContent() {
+  async getAllContent(locale: 'en' | 'ar' = 'en') {
     const rows = await this.blockModel.find().lean();
     const stored = new Map(rows.map(r => [r.key, r as unknown as ContentBlockDocument]));
 
     return {
       success: true,
       message: 'Content retrieved successfully',
-      data: this.resolve(CONTENT_DEFINITIONS, stored),
+      data: this.resolve(CONTENT_DEFINITIONS, stored, locale),
     };
   }
 
@@ -74,6 +79,9 @@ export class ContentService {
       data: CONTENT_DEFINITIONS.map(definition => ({
         ...definition,
         current: resolved[definition.key],
+        currentAr: definition.type === 'list'
+          ? stored.get(definition.key)?.valuesAr ?? []
+          : stored.get(definition.key)?.valueAr ?? '',
         isOverridden: stored.has(definition.key),
       })),
     };
@@ -91,10 +99,10 @@ export class ContentService {
       }
 
       if (definition.type === 'list') {
-        if (block.values === undefined) {
-          throw new BadRequestException(`"${block.key}" is a list — send a values array`);
+        if (block.values === undefined && block.valuesAr === undefined) {
+          throw new BadRequestException(`"${block.key}" is a list — send an English or Arabic values array`);
         }
-        const tooLong = block.values.find(v => v.length > definition.maxLength);
+        const tooLong = [...(block.values ?? []), ...(block.valuesAr ?? [])].find(v => v.length > definition.maxLength);
         if (tooLong) {
           throw new BadRequestException(
             `An item in "${block.key}" is longer than ${definition.maxLength} characters`
@@ -103,16 +111,19 @@ export class ContentService {
         return {
           updateOne: {
             filter: { key: block.key },
-            update: { $set: { values: block.values, value: null } },
+            update: { $set: {
+              ...(block.values !== undefined ? { values: block.values, value: null } : {}),
+              ...(block.valuesAr !== undefined ? { valuesAr: block.valuesAr, valueAr: null } : {}),
+            } },
             upsert: true,
           },
         };
       }
 
-      if (block.value === undefined || block.value === null) {
-        throw new BadRequestException(`"${block.key}" is text — send a value`);
+      if ((block.value === undefined || block.value === null) && (block.valueAr === undefined || block.valueAr === null)) {
+        throw new BadRequestException(`"${block.key}" is text — send an English or Arabic value`);
       }
-      if (block.value.length > definition.maxLength) {
+      if ((block.value?.length ?? 0) > definition.maxLength || (block.valueAr?.length ?? 0) > definition.maxLength) {
         throw new BadRequestException(
           `"${block.key}" is longer than ${definition.maxLength} characters`
         );
@@ -121,7 +132,10 @@ export class ContentService {
       return {
         updateOne: {
           filter: { key: block.key },
-          update: { $set: { value: block.value, values: undefined } },
+          update: { $set: {
+            ...(block.value !== undefined ? { value: block.value, values: undefined } : {}),
+            ...(block.valueAr !== undefined ? { valueAr: block.valueAr, valuesAr: undefined } : {}),
+          } },
           upsert: true,
         },
       };

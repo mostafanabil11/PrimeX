@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { WhatsAppLink } from "./whatsapp";
 import { trackCtaClick } from "@/lib/api/funnel";
 

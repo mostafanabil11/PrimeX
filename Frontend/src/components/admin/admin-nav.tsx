@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { usePathname } from "next/navigation";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { SHOP_ENABLED, MEMBERSHIP_TRACKING_ENABLED, CLASS_BOOKING_ENABLED } from "@/lib/features";
@@ -25,6 +25,16 @@ import {
   BadgePercent,
   ShieldCheck,
 } from "lucide-react";
+import { stripLocalePrefix } from "@/i18n/config";
+import { useLocale } from "next-intl";
+
+const ADMIN_LABELS_AR: Record<string, string> = {
+  Dashboard: "لوحة التحكم", "Class Types": "أنواع الحصص", Trainers: "المدربون", Enquiries: "الاستفسارات",
+  "Personal Training": "التدريب الشخصي", Branches: "الفروع", Plans: "خطط الاشتراك", Offers: "العروض",
+  "Website Content": "محتوى الموقع", Reviews: "التقييمات", Members: "الأعضاء", Settings: "الإعدادات",
+  "Audit Log": "سجل النشاط", Staff: "فريق العمل", Memberships: "الاشتراكات", Schedule: "الجدول",
+  Products: "المنتجات", Categories: "التصنيفات", Orders: "الطلبات", "Promo Codes": "أكواد الخصم",
+};
 
 // The gym sections, in the order the sidebar shows them.
 //
@@ -38,6 +48,10 @@ const STAFF_NAV_ITEMS = [
   { href: "/admin/class-types", label: "Class Types", icon: Dumbbell },
   { href: "/admin/trainers", label: "Trainers", icon: UserSquare },
   { href: "/admin/enquiries", label: "Enquiries", icon: Inbox },
+  // Sits beside Enquiries rather than beside Trainers: staff work it from
+  // an inbox mindset — somebody is waiting for a reply — not from a
+  // content-editing one.
+  { href: "/admin/personal-training", label: "Personal Training", icon: Dumbbell },
   { href: "/admin/branches", label: "Branches", icon: MapPin },
   { href: "/admin/plans", label: "Plans", icon: CreditCard },
   { href: "/admin/offers", label: "Offers", icon: BadgePercent },
@@ -74,15 +88,28 @@ const SHOP_NAV_ITEMS = [
   { href: "/admin/coupons", label: "Promo Codes", icon: Tag },
 ];
 
-export function AdminNav() {
-  const pathname = usePathname();
+export interface AdminNavItem {
+  href: string;
+  label: string;
+  icon: typeof LayoutDashboard;
+}
+
+/**
+ * The nav list this role and this configuration should see.
+ *
+ * Extracted from AdminNav so the desktop sidebar and the mobile drawer are
+ * driven by one list rather than two that can drift — the same argument
+ * lib/nav.ts makes about the public header, footer and mobile sheet. The
+ * mobile bar also reads it to name the page you are currently on.
+ */
+export function useAdminNavItems(): AdminNavItem[] {
   const { data: user } = useCurrentUser();
   const isAdmin = user?.role === "admin";
 
   // Dashboard first, then Memberships — the two screens the desk lives in —
   // and the rest after, with the flag-gated sections last. The dormant shop
   // stays admin-only; it is not front-desk work.
-  const items = [
+  return [
     STAFF_NAV_ITEMS[0],
     ...(MEMBERSHIP_TRACKING_ENABLED ? MEMBERSHIP_TRACKING_NAV_ITEMS : []),
     ...STAFF_NAV_ITEMS.slice(1),
@@ -90,6 +117,19 @@ export function AdminNav() {
     ...(CLASS_BOOKING_ENABLED ? CLASS_BOOKING_NAV_ITEMS : []),
     ...(SHOP_ENABLED && isAdmin ? SHOP_NAV_ITEMS : []),
   ];
+}
+
+/** Whether this row is the page currently being shown. Exported because the
+ *  mobile bar needs the same answer to label itself. */
+export function isAdminNavItemActive(href: string, pathname: string): boolean {
+  pathname = stripLocalePrefix(pathname);
+  return href === "/admin" ? pathname === "/admin" : pathname.startsWith(href);
+}
+
+export function AdminNav({ onNavigate }: { onNavigate?: () => void } = {}) {
+  const pathname = usePathname();
+  const items = useAdminNavItems();
+  const locale = useLocale();
 
   // The active row is marked with a red bar down its leading edge, not a
   // filled block. The old treatment was `bg-foreground text-background`, an
@@ -103,14 +143,15 @@ export function AdminNav() {
   return (
     <nav className="flex flex-col">
       {items.map((item) => {
-        const isActive = item.href === "/admin" ? pathname === "/admin" : pathname.startsWith(item.href);
+        const isActive = isAdminNavItemActive(item.href, pathname);
         const Icon = item.icon;
         return (
           <Link
             key={item.href}
             href={item.href}
             aria-current={isActive ? "page" : undefined}
-            className={`flex items-center gap-3 border-l-2 px-4 py-2.5 text-[12px] font-medium tracking-[0.06em] uppercase transition-colors ${
+            onClick={onNavigate}
+            className={`flex min-h-11 items-center gap-3 border-s-2 px-4 py-2.5 text-[12px] font-medium tracking-[0.06em] uppercase transition-colors ${
               isActive
                 ? "border-primary bg-surface-2 text-foreground"
                 : "border-transparent text-muted-foreground hover:bg-surface-2 hover:text-foreground"
@@ -120,7 +161,7 @@ export function AdminNav() {
               className={`size-4 shrink-0 ${isActive ? "text-primary" : ""}`}
               strokeWidth={1.5}
             />
-            {item.label}
+            {locale === "ar" ? ADMIN_LABELS_AR[item.label] ?? item.label : item.label}
           </Link>
         );
       })}

@@ -39,12 +39,12 @@ export function NotifyBackInStock({ productId, size }: { productId: string; size
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Email for a restock alert"
-        className="min-w-0 flex-1 border border-border bg-background px-4 py-3 text-sm text-foreground outline-none focus:border-foreground"
+        className="min-w-0 flex-1 border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
       />
       <button
         type="submit"
         disabled={mutation.isPending}
-        className="shrink-0 border border-foreground px-6 py-3 font-mono text-[12px] font-medium tracking-[0.05em] text-foreground uppercase transition-colors hover:border-primary hover:bg-primary/10 disabled:opacity-50"
+        className="ui-action inline-flex shrink-0 border border-foreground px-6 py-3 font-mono text-[12px] font-medium tracking-[0.05em] text-foreground uppercase transition-colors hover:border-primary hover:bg-primary/10 disabled:opacity-50"
       >
         {mutation.isPending ? "…" : "Notify Me"}
       </button>

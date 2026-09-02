@@ -22,8 +22,6 @@ import { SubscriptionDocument } from '@/subscriptions/schemas/subscription.schem
 import { InvoiceDocument } from '@/invoices/schemas/invoice.schema';
 import { AuthService } from '@/auth/auth.service';
 import { normalizePhone } from '@/common/utils/phone.util';
-import * as bcrypt from 'bcryptjs';
-import { randomBytes } from 'crypto';
 
 interface Pricing {
   // The plan's undiscounted price. Billed on the invoice line, with the offer
@@ -160,57 +158,22 @@ export class JoinService {
    * so that a member who later wants access can claim it by resetting their
    * password rather than being stuck behind an unverified-account error.
    */
+  /**
+   * Delegated to AuthService, which owns the user model and the member-number
+   * counter and now also owns this.
+   *
+   * It used to live here, and moved when personal training started creating
+   * members the same way. Two copies of "is this person already known to the
+   * gym" is the one way the membership desk and the PT desk could disagree
+   * about whether to raise a second account for the same phone number.
+   */
   private async findOrCreateMemberByPhone(input: {
     firstName: string;
     lastName: string;
     phone: string;
     email?: string | null;
   }): Promise<UserDocument> {
-    const phoneNormalized = normalizePhone(input.phone);
-    if (!phoneNormalized) {
-      throw new BadRequestException('That phone number does not look right');
-    }
-
-    const byPhone = await this.userModel.findOne({ phoneNormalized });
-    if (byPhone) return byPhone;
-
-    // Falls back to email so a returning member who changed their number is
-    // recognised rather than duplicated — the same fallback googleLogin uses
-    // when a Google account matches an existing local one.
-    if (input.email) {
-      const byEmail = await this.userModel.findOne({ email: input.email });
-      if (byEmail) {
-        try {
-          byEmail.phone = input.phone;
-          byEmail.phoneNormalized = phoneNormalized;
-          await byEmail.save();
-        } catch (error) {
-          // That number is already on someone else's record. Keep the member
-          // we found — the membership is theirs either way — and leave the
-          // conflicting number for staff to sort out.
-          if ((error as { code?: number }).code !== 11000) throw error;
-          this.logger.warn(
-            `Phone ${phoneNormalized} already belongs to another member; left ${byEmail._id} unchanged`
-          );
-        }
-        return byEmail;
-      }
-    }
-
-    const created = await this.userModel.create({
-      email: input.email ?? null,
-      password: await bcrypt.hash(randomBytes(16).toString('hex'), 10),
-      firstName: input.firstName,
-      lastName: input.lastName,
-      phone: input.phone,
-      phoneNormalized,
-      isEmailVerified: true,
-      memberNumber: await this.authService.nextMemberNumber(),
-      role: 'member',
-    });
-
-    this.logger.log(`Created member ${created.memberNumber} from phone ${phoneNormalized}`);
-    return created;
+    return this.authService.findOrCreateMemberByPhone(input);
   }
 
   /** The single active branch, for the paths where the member never picks one. */

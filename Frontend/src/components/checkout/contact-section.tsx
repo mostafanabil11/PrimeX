@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { usePathname } from "next/navigation";
 
 const inputClass =
-  "w-full border border-border bg-background px-4 py-3 text-sm text-foreground outline-none focus:border-foreground";
+  "w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground";
 
 // Contact collapses to a read-only line once we know who the customer is, and
 // asks for an email when we don't. Signing in is offered, never required —

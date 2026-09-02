@@ -30,7 +30,10 @@ function AlertDialogOverlay({
     <AlertDialogPrimitive.Backdrop
       data-slot="alert-dialog-overlay"
       className={cn(
-        "fixed inset-0 isolate z-50 bg-black/10 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
+        // bg-black/65 — see the note on SheetOverlay. An alert dialog is the
+        // one moment the page should be unambiguously behind glass, and 10%
+        // black over a near-black page is very nearly nothing at all.
+        "fixed inset-0 isolate z-50 bg-black/65 duration-100 supports-backdrop-filter:backdrop-blur-xs data-open:animate-in data-open:fade-in-0 data-closed:animate-out data-closed:fade-out-0",
         className
       )}
       {...props}

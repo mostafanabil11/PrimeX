@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { XCircle, Loader2 } from "lucide-react";
 
@@ -48,13 +48,13 @@ export function CheckoutResultContent() {
       <div className="flex flex-col gap-3 sm:flex-row">
         <Link
           href="/checkout"
-          className="bg-primary px-8 py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
+          className="ui-action inline-flex bg-primary px-8 py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
         >
           Try Again
         </Link>
         <Link
           href="/cart"
-          className="border border-border px-8 py-4 text-button font-medium tracking-[0.05em] text-foreground uppercase transition-colors hover:bg-muted"
+          className="ui-action ui-action--outline inline-flex border border-border px-8 py-4 text-button font-medium tracking-[0.05em] text-foreground uppercase transition-colors hover:bg-muted"
         >
           Back to Bag
         </Link>

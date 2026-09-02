@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { Clock, MapPin, User, Users } from "lucide-react";
@@ -93,14 +93,14 @@ export function Timetable({
             type="button"
             onClick={() => goToWeek(addLocalDays(from, -DAYS_SHOWN))}
             disabled={from <= today}
-            className="border border-border px-3.5 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
+            className="ui-action ui-action--outline inline-flex border border-border px-3.5 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
           >
             ← Earlier
           </button>
           <button
             type="button"
             onClick={() => goToWeek(addLocalDays(from, DAYS_SHOWN))}
-            className="border border-border px-3.5 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase"
+            className="ui-action ui-action--outline inline-flex border border-border px-3.5 py-2.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase"
           >
             Later →
           </button>
@@ -127,7 +127,7 @@ export function Timetable({
               <h2 className="font-display text-xl tracking-[-0.02em] text-foreground uppercase">
                 {formatLocalDate(day.localDate)}
                 {day.localDate === today && (
-                  <span className="ms-3 bg-primary px-2 py-1 align-middle text-[10px] font-semibold tracking-[0.08em] text-primary-foreground">
+                  <span className="ms-3 bg-primary px-2 py-1 align-middle text-[11px] font-semibold tracking-[0.06em] text-primary-foreground">
                     Today
                   </span>
                 )}
@@ -176,12 +176,12 @@ function SessionRow({ session, timezone }: { session: ClassSession; timezone: st
         <div className="flex flex-wrap items-center gap-2">
           <Link
             href={`/classes/${session.classType.slug}`}
-            className="text-[15px] font-semibold text-foreground hover:text-primary"
+            className="text-[15px] font-semibold text-foreground hover:text-primary-soft"
           >
             {session.classType.name}
           </Link>
           {session.womenOnly && (
-            <span className="bg-surface-3 px-2 py-0.5 font-mono text-[10px] font-semibold tracking-[0.08em] text-foreground uppercase">
+            <span className="bg-surface-3 px-2 py-0.5 font-mono text-[11px] font-semibold tracking-[0.06em] text-foreground uppercase">
               Women only
             </span>
           )}
@@ -203,7 +203,7 @@ function SessionRow({ session, timezone }: { session: ClassSession; timezone: st
           {session.classType.durationMinutes && (
             <span className="flex items-center gap-1.5">
               <Clock className="size-3.5" strokeWidth={1.5} />
-              {session.classType.durationMinutes} min
+              {`${session.classType.durationMinutes} min`}
             </span>
           )}
           <span className="flex items-center gap-1.5">
@@ -215,7 +215,7 @@ function SessionRow({ session, timezone }: { session: ClassSession; timezone: st
 
       <div className="flex shrink-0 items-center gap-3">
         <span
-          className={`px-2.5 py-1 font-mono text-[10px] font-semibold tracking-[0.08em] uppercase ${TONE_STYLES[state.tone]}`}
+          className={`px-2.5 py-1 font-mono text-[11px] font-semibold tracking-[0.06em] uppercase ${TONE_STYLES[state.tone]}`}
         >
           {state.label}
         </span>
@@ -226,7 +226,7 @@ function SessionRow({ session, timezone }: { session: ClassSession; timezone: st
         {!user ? (
           <Link
             href="/join"
-            className="border border-border px-4 py-2.5 font-mono text-[11px] font-semibold tracking-[0.06em] text-foreground uppercase hover:border-foreground"
+            className="ui-action ui-action--outline inline-flex border border-border px-4 py-2.5 font-mono text-[11px] font-semibold tracking-[0.06em] text-foreground uppercase hover:border-foreground"
           >
             Join to book
           </Link>
@@ -239,7 +239,7 @@ function SessionRow({ session, timezone }: { session: ClassSession; timezone: st
             type="button"
             disabled={book.isPending || book.isSuccess}
             onClick={() => book.mutate()}
-            className="bg-primary px-4 py-2.5 font-mono text-[11px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
+            className="ui-action inline-flex bg-primary px-4 py-2.5 font-mono text-[11px] font-semibold tracking-[0.06em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
           >
             {book.isSuccess ? "Booked" : book.isPending ? "…" : "Book"}
           </button>

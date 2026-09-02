@@ -9,7 +9,13 @@ import { PageHeader, Section, SectionHeader, CtaButton } from "@/components/publ
 import { Reveal } from "@/components/public/reveal";
 import { EnquiryForm } from "@/components/public/enquiry-form";
 import { WhatsAppIcon, WhatsAppLink, WhatsAppCta } from "@/components/public/whatsapp";
-import { joinEnquiry } from "@/lib/whatsapp-messages";
+import { getLocale } from "next-intl/server";
+
+// One definition of "a thing on this panel you can tap". min-h-11 is the touch
+// floor; the border and surface are what tell a finger there is something there
+// at all, which a bare inline anchor never did.
+const contactRowClasses =
+  "flex min-h-11 items-center gap-3 border border-border bg-surface-2 px-3.5 py-2 text-[14px] text-foreground transition-colors hover:border-foreground hover:text-primary-soft";
 
 export const metadata: Metadata = {
   title: pageTitle("Contact"),
@@ -26,7 +32,8 @@ export const metadata: Metadata = {
  * branch's own details moved here and /locations now redirects (next.config.ts).
  */
 export default async function ContactPage() {
-  const [branches, content] = await Promise.all([getBranchesServer(), getContentServer()]);
+  const locale = await getLocale();
+  const [branches, content] = await Promise.all([getBranchesServer(), getContentServer(locale === "ar" ? "ar" : "en")]);
 
   // The gym runs from one site. Written as "the first branch" rather than a
   // hardcoded slug so this keeps working if the gym renames it or opens
@@ -61,28 +68,61 @@ export default async function ContactPage() {
                 <h2 className="font-mono text-[11px] font-semibold tracking-[0.14em] text-muted-foreground uppercase">
                   Where to find us
                 </h2>
-                <p className="flex items-start gap-2.5 text-[13px] text-muted-foreground">
-                  <MapPin className="mt-0.5 size-4 shrink-0" strokeWidth={1.5} />
+                <p className="flex items-start gap-2.5 text-[14px] text-muted-foreground">
+                  <MapPin aria-hidden className="mt-0.5 size-4 shrink-0" strokeWidth={1.5} />
                   {fullAddress(branch)}
                 </p>
+
+                {/* A map, not just a link to one.
+                    "Get directions" answers "take me there now"; it does not
+                    answer "where is this, roughly, relative to me" — which is
+                    the question somebody deciding whether to join is actually
+                    asking, and the one an address line alone cannot settle.
+                    Embedded rather than a screenshot so it pans and zooms.
+
+                    lazy loading and no API key: this is Google's keyless embed
+                    endpoint, so it costs nothing and adds no script to the
+                    page. It sits below the address so that the text is what
+                    the screen reader and the search engine get. */}
+                <div className="relative aspect-[4/3] w-full overflow-hidden border border-border bg-surface-2 sm:aspect-video">
+                  <iframe
+                    src={`https://maps.google.com/maps?q=${encodeURIComponent(
+                      fullAddress(branch),
+                    )}&output=embed`}
+                    title={`Map showing ${BRAND.name} at ${fullAddress(branch)}`}
+                    loading="lazy"
+                    referrerPolicy="no-referrer-when-downgrade"
+                    className="absolute inset-0 size-full border-0 grayscale-[0.6] contrast-110"
+                  />
+                </div>
                 <a
                   href={mapsUrl(branch)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex w-fit items-center gap-1.5 font-mono text-[12px] font-semibold tracking-[0.06em] text-primary-soft uppercase hover:underline"
+                  className={`${contactRowClasses} font-mono text-[12px] font-semibold tracking-[0.06em] text-primary-soft uppercase`}
                 >
+                  <ExternalLink aria-hidden className="size-4 shrink-0" strokeWidth={1.5} />
                   Get directions
-                  <ExternalLink className="size-3.5" strokeWidth={1.5} />
                 </a>
               </div>
 
-              <div className="flex flex-col gap-2.5 border-t border-border pt-5">
-                <h2 className="font-mono text-[11px] font-semibold tracking-[0.14em] text-muted-foreground uppercase">
+              {/* Rows, not bare links.
+                  These three are the most valuable taps on the site — somebody
+                  who reaches them has already decided to make contact — and
+                  they were 19px-tall inline anchors with no underline, no
+                  border and nothing at all marking them as tappable. Now each
+                  is a full-width bordered row at the same 44px minimum as
+                  every other control, with the icon in a fixed gutter so the
+                  labels line up. Same visual language as the Join/Plans
+                  buttons at the foot of this panel, which is what they are:
+                  actions. */}
+              <div className="flex flex-col gap-2 border-t border-border pt-5">
+                <h2 className="mb-1 font-mono text-[11px] font-semibold tracking-[0.14em] text-muted-foreground uppercase">
                   Reach us
                 </h2>
                 <WhatsAppLink
                   message={`Hi ${BRAND.name}, I have a question.`}
-                  className="flex items-center gap-2.5 text-[13px] text-foreground hover:text-primary-soft"
+                  className={contactRowClasses}
                 >
                   <WhatsAppIcon className="size-4 shrink-0" />
                   WhatsApp
@@ -90,19 +130,16 @@ export default async function ContactPage() {
                 {branch.phone && (
                   <a
                     href={`tel:${branch.phone.replace(/\s/g, "")}`}
-                    className="flex items-center gap-2.5 text-[13px] text-foreground hover:text-primary-soft"
+                    className={contactRowClasses}
                   >
-                    <Phone className="size-4 shrink-0" strokeWidth={1.5} />
-                    {branch.phone}
+                    <Phone aria-hidden className="size-4 shrink-0" strokeWidth={1.5} />
+                    <span dir="ltr">{branch.phone}</span>
                   </a>
                 )}
                 {branch.email && (
-                  <a
-                    href={`mailto:${branch.email}`}
-                    className="flex items-center gap-2.5 text-[13px] break-all text-foreground hover:text-primary-soft"
-                  >
-                    <Mail className="size-4 shrink-0" strokeWidth={1.5} />
-                    {branch.email}
+                  <a href={`mailto:${branch.email}`} className={contactRowClasses}>
+                    <Mail aria-hidden className="size-4 shrink-0" strokeWidth={1.5} />
+                    <span className="break-all">{branch.email}</span>
                   </a>
                 )}
               </div>
@@ -138,8 +175,11 @@ export default async function ContactPage() {
               )}
 
               <div className="flex flex-col gap-2 border-t border-border pt-5">
-                <WhatsAppCta message={joinEnquiry()} className="w-full">
-                  Join on WhatsApp
+                <WhatsAppCta
+                  message={`Hi ${BRAND.name}, I have a question about membership.`}
+                  className="w-full"
+                >
+                  Ask on WhatsApp
                 </WhatsAppCta>
                 <CtaButton href="/membership" variant="outline" className="w-full">
                   See plans and prices

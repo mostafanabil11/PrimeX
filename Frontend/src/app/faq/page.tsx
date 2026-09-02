@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { BRAND, pageTitle } from "@/lib/brand";
 import { PageHeader, Section, CtaButton } from "@/components/public/section";
 import { WhatsAppCta } from "@/components/public/whatsapp";
@@ -38,7 +38,7 @@ const GROUPS: { title: string; faqs: Faq[] }[] = [
             Come in and ask at the desk, or message us on WhatsApp — we would rather show you
             the place than sell you a plan over the internet. The shortest commitment we sell is
             one month, on any tier.{" "}
-            <Link href="/membership" className="text-primary underline">
+            <Link href="/membership" className="text-primary-soft underline">
               See the plans
             </Link>
             .
@@ -87,7 +87,7 @@ const GROUPS: { title: string; faqs: Faq[] }[] = [
         answer: (
           <>
             Most plans include a set number of freeze days — the{" "}
-            <Link href="/membership" className="text-primary underline">
+            <Link href="/membership" className="text-primary-soft underline">
               plan card
             </Link>{" "}
             says how many. Ask us on WhatsApp or at the desk and we will set the date it starts.
@@ -117,7 +117,7 @@ const GROUPS: { title: string; faqs: Faq[] }[] = [
           <>
             It depends on the plan — some include a set number of classes each month, some include
             unlimited, and the entry plan is gym floor only. Each{" "}
-            <Link href="/membership" className="text-primary underline">
+            <Link href="/membership" className="text-primary-soft underline">
               plan
             </Link>{" "}
             says which.
@@ -137,7 +137,7 @@ const GROUPS: { title: string; faqs: Faq[] }[] = [
           <>
             Functional Circuit or Strength Foundations. Both are coached from the ground up and
             assume no experience. Every class also carries an{" "}
-            <Link href="/classes" className="text-primary underline">
+            <Link href="/classes" className="text-primary-soft underline">
               intensity rating
             </Link>
             .
@@ -151,7 +151,7 @@ const GROUPS: { title: string; faqs: Faq[] }[] = [
         answer: (
           <>
             Yes. The exact windows are on the{" "}
-            <Link href="/contact" className="text-primary underline">
+            <Link href="/contact" className="text-primary-soft underline">
               contact page
             </Link>
             , alongside the rest of the week.

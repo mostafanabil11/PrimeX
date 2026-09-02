@@ -9,7 +9,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import * as bcrypt from 'bcryptjs';
 import { generatePassword } from '@/common/utils/password.util';
-import { Order, OrderDocument } from '@/orders/schemas/order.schema';
 import { Subscription, SubscriptionDocument } from '@/subscriptions/schemas/subscription.schema';
 import {
   Invoice,
@@ -19,7 +18,6 @@ import {
 import { Booking, BookingDocument } from '@/bookings/schemas/booking.schema';
 import { ClassSession, ClassSessionDocument } from '@/classes/schemas/class-session.schema';
 import { Enquiry, EnquiryDocument } from '@/enquiries/schemas/enquiry.schema';
-import { Product, ProductDocument } from '@/products/schemas/product.schema';
 import { User, UserDocument } from '@/auth/schemas/user.schema';
 import { CtaClick, CtaClickDocument } from '@/funnel/schemas/cta-click.schema';
 import { AuditLog, AuditLogDocument } from './schemas/audit-log.schema';
@@ -27,20 +25,11 @@ import { AdminCustomerQueryDto } from './dto/admin-customer-query.dto';
 import { AdminAuditQueryDto } from './dto/admin-audit-query.dto';
 import { CreateStaffDto, UpdateStaffDto } from './dto/staff.dto';
 
-// A product counts as low stock the moment any one size is at or below this
-// many units — deliberately includes 0 (out of stock) rather than a
-// separate list, since both need the same admin attention.
-const LOW_STOCK_THRESHOLD = 5;
-const TOP_PRODUCTS_LIMIT = 5;
-const LOW_STOCK_LIMIT = 20;
-
 @Injectable()
 export class AdminService {
   private readonly logger = new Logger(AdminService.name);
 
   constructor(
-    @InjectModel(Order.name) private orderModel: Model<OrderDocument>,
-    @InjectModel(Product.name) private productModel: Model<ProductDocument>,
     @InjectModel(User.name) private userModel: Model<UserDocument>,
     @InjectModel(AuditLog.name) private auditLogModel: Model<AuditLogDocument>,
     @InjectModel(Subscription.name) private subscriptionModel: Model<SubscriptionDocument>,
@@ -51,63 +40,11 @@ export class AdminService {
     @InjectModel(CtaClick.name) private ctaClickModel: Model<CtaClickDocument>
   ) {}
 
-  async getDashboard() {
-    // Card orders count once Paymob confirms payment; COD orders count once
-    // delivered flips them to 'paid' (see OrdersService.updateOrderStatus)
-    // — so this single filter is "money actually collected" for both paths.
-    const [revenueAgg, statusCounts, totalOrders, lowStock, topProducts] = await Promise.all([
-      this.orderModel.aggregate([
-        { $match: { paymentStatus: 'paid' } },
-        { $group: { _id: null, total: { $sum: '$total' } } },
-      ]),
-      this.orderModel.aggregate([{ $group: { _id: '$fulfillmentStatus', count: { $sum: 1 } } }]),
-      this.orderModel.countDocuments(),
-      this.productModel
-        .find(
-          { isActive: true, sizes: { $elemMatch: { stock: { $lte: LOW_STOCK_THRESHOLD } } } },
-          'name slug sizes'
-        )
-        .limit(LOW_STOCK_LIMIT),
-      this.orderModel.aggregate([
-        { $match: { paymentStatus: 'paid' } },
-        { $unwind: '$items' },
-        {
-          $group: {
-            _id: '$items.product',
-            name: { $first: '$items.name' },
-            slug: { $first: '$items.slug' },
-            image: { $first: '$items.image' },
-            quantitySold: { $sum: '$items.quantity' },
-            revenue: { $sum: '$items.lineTotal' },
-          },
-        },
-        { $sort: { quantitySold: -1 } },
-        { $limit: TOP_PRODUCTS_LIMIT },
-      ]),
-    ]);
-
-    const ordersByStatus = Object.fromEntries(statusCounts.map(row => [row._id, row.count]));
-
-    return {
-      success: true,
-      message: 'Dashboard stats retrieved',
-      data: {
-        revenue: revenueAgg[0]?.total ?? 0,
-        totalOrders,
-        ordersByStatus,
-        lowStock,
-        topProducts,
-      },
-    };
-  }
-
   /**
-   * The gym's own KPIs, entirely separate from the storefront dashboard
-   * above. Both read this module's models directly rather than going through
-   * SubscriptionsService/InvoicesService/etc — the same read-only,
-   * cross-domain pattern the original dashboard established, and for the
-   * same reason: this is aggregation for a screen, not a write path, and
-   * routing it through five services would buy nothing.
+   * The gym's own KPIs. Reads this module's models directly rather than
+   * going through SubscriptionsService/InvoicesService/etc — this is
+   * aggregation for a screen, not a write path, and routing it through five
+   * services would buy nothing.
    */
   async getGymDashboard() {
     const now = new Date();

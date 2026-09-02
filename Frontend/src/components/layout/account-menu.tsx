@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
 import { User, LayoutDashboard, Settings, LogOut, ShieldCheck } from "lucide-react";
@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export function AccountMenu({ className, iconOnly }: { className?: string; iconOnly?: boolean }) {
+  const controlClassName = `ui-action ui-action--ghost ${iconOnly ? "ui-action--icon" : ""} ${className ?? ""}`;
   const { data: user, isLoading } = useCurrentUser();
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -34,13 +35,39 @@ export function AccountMenu({ className, iconOnly }: { className?: string; iconO
     router.push("/");
   }
 
+  // WHO GETS AN ACCOUNT CONTROL AT ALL. This is decided here rather than in the
+  // header, because the header is a server component and the answer depends on
+  // whether somebody is signed in.
+  //
+  // A signed-OUT visitor gets one only when member accounts are switched on.
+  // With them off, /account 404s and there is no way to register, so the icon
+  // led to "Welcome back — sign in to access your account" with no account to
+  // be had: a dead end dressed as a feature.
+  //
+  // A signed-IN person always gets one, whatever the flag says, and that half
+  // matters just as much. Staff and admins work out of /admin all day and reach
+  // it from this menu; hiding the control from them left typing the URL as the
+  // only way in, which is not a thing to ask of somebody on the front desk.
+  const offerSignIn = MEMBER_ACCOUNTS_ENABLED;
+
   if (isLoading) {
-    return <span className={className} aria-hidden />;
+    // Reserve the box only when a signed-out visitor would get a control too.
+    //
+    // Reserving it unconditionally was the previous fix for a real problem —
+    // an empty zero-width span meant the header laid out without the control
+    // and re-laid out with a 44px one the moment the profile query returned,
+    // shoving the header sideways on every cold load. But when sign-in is not
+    // offered, the overwhelmingly likely outcome is `null`, and holding 44px
+    // that then vanishes is the same shift in the other direction. So the
+    // reservation follows the common case: signed-out visitor, no control,
+    // nothing reserved, nothing moves.
+    return offerSignIn ? <span className={controlClassName} aria-hidden /> : null;
   }
 
   if (!user) {
+    if (!offerSignIn) return null;
     return (
-      <Link href="/login" aria-label="Account" className={className}>
+      <Link href="/login" aria-label="Account" className={controlClassName}>
         {iconOnly ? <User className="size-5" strokeWidth={1.5} /> : "Account"}
       </Link>
     );
@@ -49,7 +76,7 @@ export function AccountMenu({ className, iconOnly }: { className?: string; iconO
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        render={<button type="button" aria-label="Account menu" className={className} />}
+        render={<button type="button" aria-label="Account menu" className={controlClassName} />}
       >
         {iconOnly ? <User className="size-5" strokeWidth={1.5} /> : `Hi, ${user.firstName}`}
       </DropdownMenuTrigger>

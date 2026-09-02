@@ -88,7 +88,7 @@ export function AnnouncementBar({ items }: { items: string[] }) {
           type="button"
           onClick={() => setPaused((p) => !p)}
           aria-pressed={paused}
-          className="pointer-events-auto flex size-11 shrink-0 items-center justify-center bg-surface-1 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-foreground"
+          className="ui-action ui-action--icon ui-action--ghost pointer-events-auto flex size-11 shrink-0 items-center justify-center bg-surface-1 text-muted-foreground transition-colors hover:text-foreground focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-foreground"
         >
           {paused ? (
             <Play aria-hidden className="size-3.5" strokeWidth={2} fill="currentColor" />

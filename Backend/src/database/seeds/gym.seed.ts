@@ -42,20 +42,53 @@ const standardHours = [
   { day: 'saturday', opensAt: '00:00', closesAt: '23:59' },
 ];
 
+// The gym. Singular — there is one site and it is not a branch of anything,
+// which is why nothing on the public site says the word "branch".
+//
+// This record used to describe an invented gym on Road 9 in Maadi, and that
+// address was not a placeholder anybody would recognise as one: it reached the
+// header, the footer, /contact and the page's structured data, so the site was
+// confidently telling search engines and visitors to drive to the wrong
+// governorate. The address below is the real one.
+//
+// STILL PLACEHOLDERS, and they print publicly — replace them with the real
+// values or blank them: `phone`, `whatsappNumber` and `email` are all invented
+// Cairo-shaped strings, and `images` points at a stock photo whose filename
+// still says maadi. Coordinates are deliberately null rather than guessed: with
+// no pin, mapsUrl() falls through to the googleMapsUrl below, which searches
+// Maps for the gym by name — better than a coordinate guessed from a city
+// name, which drops the marker in the wrong street with total confidence.
 const BRANCHES = [
   {
-    slug: 'maadi',
-    name: 'Maadi',
+    slug: 'faiyum',
+    name: 'Faiyum',
     description:
       'Eight racks, a conditioning zone, a studio and a sauna. Calm, unhurried, and open around the clock.',
-    addressLine: 'Road 9',
-    city: 'Maadi',
-    governorate: 'Cairo',
-    latitude: 29.9601,
-    longitude: 31.2569,
-    phone: '+20 2 2359 1200',
-    whatsappNumber: '+20 100 555 0333',
-    email: 'maadi@primex.eg',
+    // "Qesm Al Fayoum" is in the Google listing and is dropped here: it means
+    // "Fayoum district", which First Al Faiyum and Faiyum Governorate already
+    // say between them.
+    addressLine: 'Gamal Abd El-Nasir Street',
+    city: 'First Al Faiyum',
+    governorate: 'Faiyum Governorate 63511',
+    // Google Maps, searched by the name the listing still carries: the gym
+    // traded as H2 before it was PrimeX and that is the name Google knows it
+    // by, so searching "PrimeX" finds nothing and searching the street finds
+    // the street.
+    //
+    // A SEARCH URL RATHER THAN A PIN, on purpose. The first link supplied for
+    // this was a maps.app.goo.gl short link that turned out to be a directions
+    // route rather than the place, and a short link cannot be read without
+    // following it — there is no way to tell the two apart by looking. This
+    // form is built from text, so it is verifiable by reading it and it cannot
+    // silently be somebody's route home. If you want the exact pin instead,
+    // open the H2 Gym listing, Share → Copy link, and paste that here: it
+    // takes precedence over everything else in mapsUrl().
+    googleMapsUrl: 'https://www.google.com/maps/search/?api=1&query=H2+Gym+Fayoum',
+    latitude: null,
+    longitude: null,
+    phone: '+20 10 2059 8691',
+    whatsappNumber: '+20 10 2059 8691',
+    email: 'faiyum@primex.eg',
     facilities: [
       'Eight power racks',
       'Conditioning zone',
@@ -64,7 +97,9 @@ const BRANCHES = [
       'Stretching area',
       'Juice bar',
     ],
-    images: ['/images/branch-maadi-hero.jpg'],
+    // Renamed from branch-maadi-hero.jpg. Nothing renders branch images today,
+    // but the path was the last place the old city name survived in the data.
+    images: ['/images/branch-hero.jpg'],
     openingHours: standardHours,
     womenOnlyWindows: [{ day: 'saturday', startsAt: '09:00', endsAt: '12:00' }],
     sortOrder: 1,
@@ -365,7 +400,7 @@ const TRAINERS = [
     languages: ['English', 'Arabic'],
     yearsOfExperience: 15,
     hourlyRateMinorUnits: 90000,
-    branchSlugs: ['maadi'],
+    branchSlugs: ['faiyum'],
     availability: [
       { day: 'sunday', startsAt: '07:00', endsAt: '15:00' },
       { day: 'tuesday', startsAt: '07:00', endsAt: '15:00' },
@@ -384,7 +419,7 @@ const TRAINERS = [
     languages: ['English'],
     yearsOfExperience: 9,
     hourlyRateMinorUnits: 75000,
-    branchSlugs: ['maadi'],
+    branchSlugs: ['faiyum'],
     availability: [
       { day: 'monday', startsAt: '06:00', endsAt: '13:00' },
       { day: 'wednesday', startsAt: '06:00', endsAt: '13:00' },
@@ -403,7 +438,7 @@ const TRAINERS = [
     languages: ['English', 'Korean'],
     yearsOfExperience: 12,
     hourlyRateMinorUnits: 85000,
-    branchSlugs: ['maadi'],
+    branchSlugs: ['faiyum'],
     availability: [
       { day: 'monday', startsAt: '15:00', endsAt: '21:00' },
       { day: 'wednesday', startsAt: '15:00', endsAt: '21:00' },
@@ -421,7 +456,7 @@ const TRAINERS = [
     languages: ['English', 'Italian', 'Arabic'],
     yearsOfExperience: 11,
     hourlyRateMinorUnits: 80000,
-    branchSlugs: ['maadi'],
+    branchSlugs: ['faiyum'],
     availability: [
       { day: 'sunday', startsAt: '10:00', endsAt: '18:00' },
       { day: 'thursday', startsAt: '10:00', endsAt: '18:00' },
@@ -439,7 +474,7 @@ const TRAINERS = [
     languages: ['Arabic', 'English'],
     yearsOfExperience: 14,
     hourlyRateMinorUnits: 70000,
-    branchSlugs: ['maadi'],
+    branchSlugs: ['faiyum'],
     availability: [
       { day: 'tuesday', startsAt: '16:00', endsAt: '22:00' },
       { day: 'saturday', startsAt: '10:00', endsAt: '16:00' },
@@ -457,7 +492,7 @@ const TRAINERS = [
     languages: ['Arabic', 'English'],
     yearsOfExperience: 7,
     hourlyRateMinorUnits: 65000,
-    branchSlugs: ['maadi'],
+    branchSlugs: ['faiyum'],
     availability: [
       { day: 'sunday', startsAt: '09:00', endsAt: '15:00' },
       { day: 'wednesday', startsAt: '09:00', endsAt: '15:00' },
@@ -471,14 +506,14 @@ const TESTIMONIALS = [
     name: 'Ahmed Fouad',
     quote:
       'I had trained for six years and never learned to squat properly. Marcus fixed it in three sessions. My back has not hurt since.',
-    attribution: 'Member since 2022 · New Cairo',
+    attribution: 'Member since 2022',
     rating: 5,
     sortOrder: 1,
   },
   {
     name: 'Hazem Mansour',
     quote: 'The quiet hours are what got me through the door. The coaching is what kept me here.',
-    attribution: 'Member since 2023 · Maadi',
+    attribution: 'Member since 2023',
     rating: 5,
     sortOrder: 2,
   },
@@ -486,7 +521,7 @@ const TESTIMONIALS = [
     name: 'Karim El-Sayed',
     quote:
       'Every other gym I joined felt like a showroom. This one feels like a workshop. The equipment is used and it is maintained.',
-    attribution: 'Member since 2021 · Sheikh Zayed',
+    attribution: 'Member since 2021',
     rating: 5,
     sortOrder: 3,
   },
@@ -494,15 +529,15 @@ const TESTIMONIALS = [
     name: 'Sherif Adel',
     quote:
       'Classes are capped, so the coach actually sees you. I have been corrected mid-set more times here than in four years anywhere else.',
-    attribution: 'Member since 2023 · New Cairo',
+    attribution: 'Member since 2023',
     rating: 5,
     sortOrder: 4,
   },
   {
     name: 'Youssef Ibrahim',
     quote:
-      'I travel for work and train at all three branches. Same standard every time, which is rarer than it should be.',
-    attribution: 'Member since 2020 · All branches',
+      'I travel for work and train wherever I land. I have not found anywhere that holds this standard, which is rarer than it should be.',
+    attribution: 'Member since 2020',
     rating: 5,
     sortOrder: 5,
   },
@@ -510,11 +545,28 @@ const TESTIMONIALS = [
     name: 'Tamer Nabil',
     quote:
       'Came back from a knee reconstruction. Youssef built the whole return around it and never once let me rush. I am lifting heavier now than before the injury.',
-    attribution: 'Member since 2022 · Maadi',
+    attribution: 'Member since 2022',
     rating: 5,
     sortOrder: 6,
   },
 ];
+
+// The Maadi document this file used to seed. Deactivated rather than deleted
+// on the same reasoning as the retired plans above: memberships, enquiries and
+// class instances may still reference it, and a dangling reference is worse
+// than a hidden document. The public /branches list filters on isActive, so
+// this is enough to take it off the site.
+//
+// RUN scripts/relocate-branch-to-faiyum.js BEFORE SEEDING A DATABASE THAT
+// STILL HAS THIS DOCUMENT — production included. That script renames the
+// record in place, so the seed below matches it on slug and every trainer,
+// subscription, booking and enquiry keeps pointing at a live branch. Seeding
+// first does something subtly worse than failing: it INSERTS a second branch
+// (nothing has slug "faiyum" yet) and switches the old one off, leaving every
+// one of those references attached to a deactivated document. This local
+// database has already been relocated, so the line below matches nothing here
+// and is kept for the environments that have not.
+const RETIRED_BRANCH_SLUGS = ['maadi'];
 
 async function upsertBySlug<T>(m: Model<T>, docs: Array<Record<string, unknown>>) {
   for (const doc of docs) {
@@ -550,6 +602,15 @@ async function main() {
 
   await upsertBySlug(BranchModel, BRANCHES);
   console.log(`branches      : ${BRANCHES.length}`);
+
+  // Idempotent: a second run matches the same slugs and changes nothing.
+  const retiredBranches = await BranchModel.updateMany(
+    { slug: { $in: RETIRED_BRANCH_SLUGS } },
+    { $set: { isActive: false } }
+  );
+  if (retiredBranches.modifiedCount > 0) {
+    console.log(`retired branch: ${retiredBranches.modifiedCount} deactivated`);
+  }
 
   await upsertBySlug(PlanModel, PLANS);
   console.log(`plans         : ${PLANS.length}`);

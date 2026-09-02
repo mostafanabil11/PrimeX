@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { OfferForm } from "@/components/admin/offer-form";
 
 export default function NewOfferPage() {

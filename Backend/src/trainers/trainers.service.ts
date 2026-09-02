@@ -109,6 +109,28 @@ export class TrainersService {
     };
   }
 
+  /**
+   * The live trainer document, for another module to act on.
+   *
+   * Returns the document rather than the `{ success, data }` envelope every
+   * public method here uses — a caller inside the API has no use for a wrapper
+   * built for HTTP. Mirrors PlansService.getActivePlanOrFail, which JoinService
+   * uses for exactly the same reason.
+   *
+   * Filtered on isActive: a personal training request naming a coach who has
+   * left should fail here rather than create a record nobody can fulfil.
+   */
+  async findActiveByIdOrFail(id: string): Promise<TrainerDocument> {
+    const trainer = await this.trainerModel.findOne({
+      _id: this.toObjectId(id),
+      isActive: true,
+    });
+    if (!trainer) {
+      throw new NotFoundException('Trainer not found or no longer taking sessions');
+    }
+    return trainer;
+  }
+
   async findOneAdmin(id: string) {
     const trainer = await this.trainerModel.findById(this.toObjectId(id)).lean();
     if (!trainer) {

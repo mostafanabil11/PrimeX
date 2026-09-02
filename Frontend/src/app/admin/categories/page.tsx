@@ -17,7 +17,7 @@ import { requireShop } from "@/lib/features";
 import { apiErrorMessage } from "@/lib/api-error";
 
 const inputClass =
-  "w-full border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-foreground";
+  "w-full border border-input bg-background px-3 py-2 text-base md:text-sm text-foreground outline-none focus:border-foreground";
 const labelClass = "mb-1.5 block text-[11px] font-semibold tracking-[0.1em] text-foreground uppercase";
 
 function CategoryFormFields({
@@ -165,7 +165,7 @@ export default function AdminCategoriesPage() {
         <button
           type="button"
           onClick={() => setCreating((v) => !v)}
-          className="flex items-center gap-2 bg-primary px-5 py-2.5 text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
+          className="ui-action ui-action--sm flex items-center gap-2 bg-primary px-5 py-2.5 text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
         >
           {creating ? <X className="size-4" strokeWidth={2} /> : <Plus className="size-4" strokeWidth={2} />}
           {creating ? "Cancel" : "New Category"}
@@ -184,7 +184,7 @@ export default function AdminCategoriesPage() {
           <button
             type="submit"
             disabled={createMutation.isPending}
-            className="mt-4 bg-primary px-6 py-2.5 text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
+            className="ui-action ui-action--sm inline-flex mt-4 bg-primary px-6 py-2.5 text-[12px] font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
           >
             {createMutation.isPending ? "Creating…" : "Create"}
           </button>
@@ -204,19 +204,19 @@ export default function AdminCategoriesPage() {
                   {parent.isFeaturedOnHome && " ★"}
                 </span>
                 <div className="flex items-center gap-1">
-                  <button type="button" onClick={() => move(topLevel, parentIndex, -1)} className="p-1.5 text-muted-foreground hover:text-foreground" aria-label="Move up">
+                  <button type="button" onClick={() => move(topLevel, parentIndex, -1)} className="ui-action ui-action--icon ui-action--ghost ui-action--sm inline-flex p-1.5 text-muted-foreground hover:text-foreground" aria-label="Move up">
                     <ArrowUp className="size-3.5" strokeWidth={1.75} />
                   </button>
-                  <button type="button" onClick={() => move(topLevel, parentIndex, 1)} className="p-1.5 text-muted-foreground hover:text-foreground" aria-label="Move down">
+                  <button type="button" onClick={() => move(topLevel, parentIndex, 1)} className="ui-action ui-action--icon ui-action--ghost ui-action--sm inline-flex p-1.5 text-muted-foreground hover:text-foreground" aria-label="Move down">
                     <ArrowDown className="size-3.5" strokeWidth={1.75} />
                   </button>
-                  <button type="button" onClick={() => startEdit(parent)} className="p-1.5 text-muted-foreground hover:text-foreground" aria-label="Edit">
+                  <button type="button" onClick={() => startEdit(parent)} className="ui-action ui-action--icon ui-action--ghost ui-action--sm inline-flex p-1.5 text-muted-foreground hover:text-foreground" aria-label="Edit">
                     <Pencil className="size-3.5" strokeWidth={1.75} />
                   </button>
                   <button
                     type="button"
                     onClick={() => toggleActiveMutation.mutate(parent)}
-                    className="px-2 py-1 text-[11px] text-muted-foreground underline hover:text-foreground"
+                    className="ui-action ui-action--ghost ui-action--sm inline-flex px-2 py-1 text-[11px] text-muted-foreground underline hover:text-foreground"
                   >
                     {parent.isActive ? "Deactivate" : "Activate"}
                   </button>
@@ -227,7 +227,7 @@ export default function AdminCategoriesPage() {
                         deleteMutation.mutate(parent._id);
                       }
                     }}
-                    className="p-1.5 text-muted-foreground hover:text-destructive"
+                    className="ui-action ui-action--icon ui-action--ghost ui-action--sm inline-flex p-1.5 text-muted-foreground hover:text-destructive"
                     aria-label="Delete"
                   >
                     <Trash2 className="size-3.5" strokeWidth={1.75} />
@@ -245,10 +245,10 @@ export default function AdminCategoriesPage() {
                 >
                   <CategoryFormFields value={editValue} onChange={setEditValue} parentOptions={topLevel.filter((c) => c._id !== parent._id)} />
                   <div className="mt-3 flex gap-2">
-                    <button type="submit" className="bg-primary px-5 py-2 text-[12px] font-medium text-primary-foreground uppercase transition-colors hover:bg-primary-hover">
+                    <button type="submit" className="ui-action ui-action--sm inline-flex bg-primary px-5 py-2 text-[12px] font-medium text-primary-foreground uppercase transition-colors hover:bg-primary-hover">
                       Save
                     </button>
-                    <button type="button" onClick={() => setEditingId(null)} className="border border-border px-5 py-2 text-[12px] uppercase hover:bg-muted">
+                    <button type="button" onClick={() => setEditingId(null)} className="ui-action ui-action--outline ui-action--sm inline-flex border border-border px-5 py-2 text-[12px] uppercase hover:bg-muted">
                       Cancel
                     </button>
                   </div>
@@ -267,7 +267,7 @@ export default function AdminCategoriesPage() {
                         <button
                           type="button"
                           onClick={() => move(parent.children ?? [], childIndex, -1)}
-                          className="p-1.5 text-muted-foreground hover:text-foreground"
+                          className="ui-action ui-action--icon ui-action--ghost ui-action--sm inline-flex p-1.5 text-muted-foreground hover:text-foreground"
                           aria-label="Move up"
                         >
                           <ArrowUp className="size-3.5" strokeWidth={1.75} />
@@ -275,18 +275,18 @@ export default function AdminCategoriesPage() {
                         <button
                           type="button"
                           onClick={() => move(parent.children ?? [], childIndex, 1)}
-                          className="p-1.5 text-muted-foreground hover:text-foreground"
+                          className="ui-action ui-action--icon ui-action--ghost ui-action--sm inline-flex p-1.5 text-muted-foreground hover:text-foreground"
                           aria-label="Move down"
                         >
                           <ArrowDown className="size-3.5" strokeWidth={1.75} />
                         </button>
-                        <button type="button" onClick={() => startEdit(child)} className="p-1.5 text-muted-foreground hover:text-foreground" aria-label="Edit">
+                        <button type="button" onClick={() => startEdit(child)} className="ui-action ui-action--icon ui-action--ghost ui-action--sm inline-flex p-1.5 text-muted-foreground hover:text-foreground" aria-label="Edit">
                           <Pencil className="size-3.5" strokeWidth={1.75} />
                         </button>
                         <button
                           type="button"
                           onClick={() => toggleActiveMutation.mutate(child)}
-                          className="px-2 py-1 text-[11px] text-muted-foreground underline hover:text-foreground"
+                          className="ui-action ui-action--ghost ui-action--sm inline-flex px-2 py-1 text-[11px] text-muted-foreground underline hover:text-foreground"
                         >
                           {child.isActive ? "Deactivate" : "Activate"}
                         </button>
@@ -297,7 +297,7 @@ export default function AdminCategoriesPage() {
                               deleteMutation.mutate(child._id);
                             }
                           }}
-                          className="p-1.5 text-muted-foreground hover:text-destructive"
+                          className="ui-action ui-action--icon ui-action--ghost ui-action--sm inline-flex p-1.5 text-muted-foreground hover:text-destructive"
                           aria-label="Delete"
                         >
                           <Trash2 className="size-3.5" strokeWidth={1.75} />
@@ -314,10 +314,10 @@ export default function AdminCategoriesPage() {
                       >
                         <CategoryFormFields value={editValue} onChange={setEditValue} parentOptions={topLevel} />
                         <div className="mt-3 flex gap-2">
-                          <button type="submit" className="bg-primary px-5 py-2 text-[12px] font-medium text-primary-foreground uppercase transition-colors hover:bg-primary-hover">
+                          <button type="submit" className="ui-action ui-action--sm inline-flex bg-primary px-5 py-2 text-[12px] font-medium text-primary-foreground uppercase transition-colors hover:bg-primary-hover">
                             Save
                           </button>
-                          <button type="button" onClick={() => setEditingId(null)} className="border border-border px-5 py-2 text-[12px] uppercase hover:bg-muted">
+                          <button type="button" onClick={() => setEditingId(null)} className="ui-action ui-action--outline ui-action--sm inline-flex border border-border px-5 py-2 text-[12px] uppercase hover:bg-muted">
                             Cancel
                           </button>
                         </div>

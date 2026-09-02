@@ -1,20 +1,23 @@
 "use client";
 
 import { useState, useRef, useCallback, useMemo } from "react";
+import Image from "next/image";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Check, Copy } from "lucide-react";
+import { Check, ChevronDown, Copy } from "lucide-react";
 import { previewJoin, reserveMembership, type ReserveResult } from "@/lib/api/membership";
 import { apiErrorMessage } from "@/lib/api-error";
 import { formatPrice } from "@/lib/format";
 import { formatDuration, whatsappHref } from "@/lib/gym-format";
 import { CtaButton } from "@/components/public/section";
-import { WhatsAppCta } from "@/components/public/whatsapp";
+import { WhatsAppCta, WhatsAppIcon } from "@/components/public/whatsapp";
 import { reservationMessage, joinEnquiry } from "@/lib/whatsapp-messages";
 import type { Plan } from "@/types/gym";
 import { BRAND } from "@/lib/brand";
+import { useLocale, useTranslations } from "next-intl";
+import styles from "./reserve-form.module.css";
 
 /**
- * Reserve a membership, pay at the gym.
+ * Reserve a membership for manual payment confirmation and activation.
  *
  * The counterpart to JoinFunnel, which takes a card. This asks the four things
  * staff need to finish the conversation — who you are, how to reach you, which
@@ -30,8 +33,8 @@ import { BRAND } from "@/lib/brand";
  */
 
 const inputBase =
-  "w-full border border-border bg-surface-1 px-3.5 py-3 text-[14px] text-foreground placeholder:text-muted-foreground focus:border-ring focus:outline-none focus:ring-1 focus:ring-ring";
-const labelBase = "font-mono text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase";
+  `${styles.input} w-full text-base text-foreground placeholder:text-muted-foreground`;
+const labelBase = "font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase";
 
 // Same reasoning as the join funnel's: generated inside the submit handler,
 // not during render, so a retry after a dropped connection reuses the invoice
@@ -51,6 +54,51 @@ function todayIso(): string {
 }
 
 /**
+ * "Saturday, 29 August 2026" — the date the picker holds, spelled out.
+ *
+ * Day-first with the month as a word, so it cannot be read the wrong way round
+ * whatever order the browser's own date widget happens to show above it.
+ * en-GB rather than en-EG because the Arabic-script variants of en-EG are not
+ * consistently available across browsers and this string only needs to be
+ * unambiguous, not localised — the site is English.
+ *
+ * The ISO string is parsed as local noon rather than as-is: `new Date("2026-08-29")`
+ * is parsed as UTC midnight, which in any timezone west of Greenwich prints the
+ * day before. Egypt is ahead of UTC so it would be fine here today, but a helper that
+ * silently prints the wrong day for half the planet is a trap for the next
+ * person, not a working function.
+ */
+function formatStartDate(iso: string, locale: string): string {
+  const [y, m, d] = iso.split("-").map(Number);
+  if (!y || !m || !d) return iso;
+  return new Date(y, m - 1, d, 12).toLocaleDateString(locale === "ar" ? "ar-EG" : "en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+function arabicPlanName(name: string): string {
+  return name
+    .replace(/^Starter\b/, "ستارتر")
+    .replace(/^Go Pro\b/, "جو برو")
+    .replace(/^Master\b/, "ماستر")
+    .replace(/^Elite\b/, "إيليت")
+    .replace(/Monthly$/, "شهري")
+    .replace(/3 Months$/, "٣ أشهر")
+    .replace(/6 Months$/, "٦ أشهر")
+    .replace(/Annual$/, "سنوي");
+}
+
+function localizedDuration(plan: Plan, locale: string): string {
+  if (locale !== "ar") return formatDuration(plan);
+  const value = String(plan.durationValue).replace(/\d/g, (digit) => "٠١٢٣٤٥٦٧٨٩"[Number(digit)]);
+  const unit = plan.durationUnit === "day" ? "يوم" : plan.durationUnit === "week" ? "أسبوع" : plan.durationUnit === "year" ? "سنة" : plan.durationValue === 1 ? "شهر" : "أشهر";
+  return `${value} ${unit}`;
+}
+
+/**
  * `initialPlanSlug` comes down as a prop from the page rather than being read
  * here with useSearchParams.
  *
@@ -63,17 +111,24 @@ function todayIso(): string {
  */
 export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initialPlanSlug?: string }) {
   const getIdempotencyKey = useIdempotencyKey();
+  const locale = useLocale();
+  const t = useTranslations("Join");
 
   const [planId, setPlanId] = useState(
     () => plans.find((p) => p.slug === initialPlanSlug)?._id ?? plans[0]?._id ?? ""
   );
   const [startsAt, setStartsAt] = useState(todayIso);
+  const [changingPlan, setChangingPlan] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [paymentMethod, setPaymentMethod] = useState<"cash" | "instapay" | "wallet">("instapay");
   const [accepted, setAccepted] = useState(false);
+  // Shown only after a submit attempt, never on first paint: a form that opens
+  // already telling you what you have done wrong is nagging, not helping.
+  const [showAcceptHint, setShowAcceptHint] = useState(false);
+  const acceptRef = useRef<HTMLInputElement>(null);
   const [website, setWebsite] = useState("");
   const [result, setResult] = useState<ReserveResult | null>(null);
 
@@ -82,7 +137,7 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
   // Quoted by the server, never computed here. Showing the member a number the
   // browser worked out would be a different number from the one on the invoice
   // the moment an offer changes.
-  const { data: quote } = useQuery({
+  const { data: quote, isError: quoteError, refetch: refreshQuote } = useQuery({
     queryKey: ["join", "preview", planId],
     queryFn: () => previewJoin(planId),
     enabled: Boolean(planId),
@@ -131,7 +186,7 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
         return;
       }
 
-      const href = whatsappHref(BRAND.whatsapp, reservationMessage(data));
+      const href = whatsappHref(BRAND.whatsapp, reservationMessage(data, locale));
       if (pending && !pending.closed) {
         pending.location.href = href;
       } else {
@@ -140,7 +195,7 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
         // member is not stranded — they just press it themselves.
         window.open(href, "_blank", "noopener,noreferrer");
       }
-    },
+  },
     onError: () => {
       // Nothing was reserved, so a blank tab would just be litter.
       waTab.current?.close();
@@ -160,9 +215,23 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
 
   return (
     <form
-      className="mx-auto flex w-full max-w-xl flex-col gap-6"
+      className={styles.form}
       onSubmit={(e) => {
         e.preventDefault();
+
+        // Validate the consent box here rather than disabling the button.
+        // Scrolling to it and focusing it is the half that matters: on a phone
+        // the checkbox is often off-screen by the time the submit button is in
+        // reach, so a message alone would be a complaint about something the
+        // visitor cannot see.
+        if (!accepted) {
+          setShowAcceptHint(true);
+          acceptRef.current?.scrollIntoView({ block: "center", behavior: "smooth" });
+          acceptRef.current?.focus();
+          return;
+        }
+        setShowAcceptHint(false);
+
         // Opened here, synchronously inside the click, purely so the browser
         // counts it as user-initiated. It is a blank tab for the moment; the
         // mutation points it at WhatsApp when the reference code comes back.
@@ -171,28 +240,89 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
         reserve.mutate();
       }}
     >
-      <div className="flex flex-col gap-2">
-        <label htmlFor="plan" className={labelBase}>
-          Plan
-        </label>
-        <select
-          id="plan"
-          className={inputBase}
-          value={planId}
-          onChange={(e) => setPlanId(e.target.value)}
-        >
-          {plans.map((p) => (
-            <option key={p._id} value={p._id}>
-              {p.name} — {formatDuration(p)}
-            </option>
-          ))}
-        </select>
+      <div className={styles.intro}>
+        <h1 className="font-display text-[32px] leading-tight text-foreground uppercase sm:text-[40px]">
+          {t("reservationHeading")}
+        </h1>
+        <p className="max-w-2xl text-[14px] leading-relaxed text-muted-foreground sm:text-base">
+          {t("reservationIntro")}
+        </p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <aside className={styles.summary} aria-labelledby="selected-plan-title">
+        <div className="flex items-center justify-between gap-3">
+          <p id="selected-plan-title" className={labelBase}>{t("selectedPlan")}</p>
+          <button
+            type="button"
+            aria-expanded={changingPlan}
+            aria-controls="reservation-plan-picker"
+            onClick={() => setChangingPlan((value) => !value)}
+            className={`ui-action ui-action--ghost ${styles.changePlan} font-mono text-[11px] font-bold uppercase`}
+          >
+            {t("changePlan")}
+            <ChevronDown aria-hidden className={`size-3.5 transition-transform motion-reduce:transition-none ${changingPlan ? "rotate-180" : ""}`} />
+          </button>
+        </div>
+
+        <div className={styles.planOverview}>
+          <div className="min-w-0">
+            <h2 className="font-display text-[24px] leading-tight text-foreground uppercase sm:text-[28px]">
+              {plan ? (locale === "ar" ? arabicPlanName(plan.name) : plan.name) : null}
+            </h2>
+            <p className="mt-1 text-[13px] text-muted-foreground">{plan ? localizedDuration(plan, locale) : null}</p>
+          </div>
+          <div className="min-w-0" aria-live="polite" aria-atomic="true">
+            <p className={`${labelBase} sr-only mb-1 sm:not-sr-only`}>{t("membershipPrice")}</p>
+            <p className="font-display text-[26px] leading-tight text-foreground tabular-nums sm:text-[32px]">
+              {quote ? formatPrice(quote.totalMinorUnits) : "—"}
+            </p>
+          </div>
+        </div>
+
+        <div id="reservation-plan-picker" hidden={!changingPlan}>
+          <div className="flex flex-col gap-2">
+            <label htmlFor="plan" className={labelBase}>{t("plan")}</label>
+            <select id="plan" className={inputBase} value={planId} onChange={(e) => setPlanId(e.target.value)}>
+              {plans.map((p) => (
+                <option key={p._id} value={p._id}>
+                  {locale === "ar" ? arabicPlanName(p.name) : p.name} — {localizedDuration(p, locale)}
+                </option>
+              ))}
+            </select>
+          </div>
+        </div>
+
+        {quote && (quote.joiningFeeMinorUnits > 0 || quote.taxMinorUnits > 0) && (
+          <dl className={styles.breakdown}>
+            <div><dt>{t("plan")}</dt><dd>{formatPrice(quote.planPriceMinorUnits)}</dd></div>
+            {quote.joiningFeeMinorUnits > 0 && (
+              <div><dt>{t("joiningFee")}</dt><dd>{formatPrice(quote.joiningFeeMinorUnits)}</dd></div>
+            )}
+            {quote.taxMinorUnits > 0 && (
+              <div><dt>{t("tax")}</dt><dd>{formatPrice(quote.taxMinorUnits)}</dd></div>
+            )}
+          </dl>
+        )}
+        {quoteError ? (
+          <div className="text-[13px] text-muted-foreground" role="status">
+            <p>{t("priceError")}</p>
+            <button type="button" onClick={() => void refreshQuote()} className="ui-action ui-action--outline mt-2 font-mono text-[11px] font-bold uppercase">
+              {t("retryPrice")}
+            </button>
+          </div>
+        ) : !quote && <p role="status" className="text-[12px] text-muted-foreground">{t("loadingTotal")}</p>}
+        <p className={styles.summaryNote}>
+          <WhatsAppIcon className="mt-0.5 size-4 shrink-0 text-[#25d366]" />
+          {t("confirmationNote")}
+        </p>
+      </aside>
+
+      <div className={styles.details}>
+      <h2 className="font-display text-2xl text-foreground uppercase">{t("yourDetails")}</h2>
+      <div className={styles.nameFields}>
         <div className="flex flex-col gap-2">
           <label htmlFor="firstName" className={labelBase}>
-            First name
+            {t("firstName")}
           </label>
           <input
             id="firstName"
@@ -201,11 +331,12 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
             className={inputBase}
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
+            autoComplete="given-name"
           />
         </div>
         <div className="flex flex-col gap-2">
           <label htmlFor="lastName" className={labelBase}>
-            Last name
+            {t("lastName")}
           </label>
           <input
             id="lastName"
@@ -214,13 +345,14 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
             className={inputBase}
             value={lastName}
             onChange={(e) => setLastName(e.target.value)}
+            autoComplete="family-name"
           />
         </div>
       </div>
 
       <div className="flex flex-col gap-2">
         <label htmlFor="phone" className={labelBase}>
-          Phone
+          {t("phone")}
         </label>
         <input
           id="phone"
@@ -230,15 +362,18 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
           className={inputBase}
           value={phone}
           onChange={(e) => setPhone(e.target.value)}
+          autoComplete="tel"
+          inputMode="tel"
+          aria-describedby="reservation-phone-hint"
         />
-        <p className="text-[12px] text-muted-foreground">
-          This is how we will reach you on WhatsApp.
+        <p id="reservation-phone-hint" className="text-[12px] text-muted-foreground">
+          {t("phoneHint")}
         </p>
       </div>
 
       <div className="flex flex-col gap-2">
         <label htmlFor="email" className={labelBase}>
-          Email <span className="normal-case opacity-70">(optional)</span>
+          {t("email")} <span className="normal-case opacity-70">({t("optional")})</span>
         </label>
         <input
           id="email"
@@ -246,82 +381,91 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
           className={inputBase}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          autoComplete="email"
+          inputMode="email"
+          aria-describedby="reservation-email-hint"
         />
-        <p className="text-[12px] text-muted-foreground">
-          Only if you want a receipt by email. We will not send you anything else.
+        <p id="reservation-email-hint" className="text-[12px] text-muted-foreground">
+          {t("emailReceiptNote")}
         </p>
       </div>
 
       <div className="flex flex-col gap-2">
         <label htmlFor="startsAt" className={labelBase}>
-          Start date
+          {t("startDate")}
         </label>
+        {/* lang="en-GB" on the field, and the date spelled out underneath.
+            A <input type="date"> takes its display order from the browser's
+            locale, not from the page, so this was rendering 08/29/2026 —
+            month-first, for a gym in Egypt, where nobody writes dates that
+            way. Chrome honours a `lang` on the input itself and switches to
+            29/08/2026; Firefox and Safari follow the OS instead and cannot be
+            told. So the widget is nudged where it can be, and the choice is
+            then restated in words below, where there is nothing left to
+            misread. The value on the wire is ISO either way. */}
         <input
           id="startsAt"
           required
           type="date"
+          lang={locale === "ar" ? "ar-EG" : "en-GB"}
           min={todayIso()}
           className={inputBase}
           value={startsAt}
           onChange={(e) => setStartsAt(e.target.value)}
+          aria-describedby={startsAt ? "reservation-start-hint" : undefined}
         />
+        {startsAt && (
+          <p id="reservation-start-hint" className="text-[12px] text-muted-foreground">
+            {t("starting", { date: formatStartDate(startsAt, locale) })}
+          </p>
+        )}
       </div>
 
-      <div className="flex flex-col gap-2">
-        <span className={labelBase}>How you will pay</span>
-        <div className="grid grid-cols-2 gap-2">
+      <fieldset className={styles.payment} aria-describedby="reservation-payment-hint">
+        <legend className={labelBase}>{t("paymentMethod")}</legend>
+        <div className="mt-3 grid grid-cols-2 gap-3">
           {(["instapay", "wallet"] as const).map((method) => (
             <button
               key={method}
               type="button"
               onClick={() => setPaymentMethod(method)}
-              className={`flex items-center justify-center gap-3 border px-4 py-3 font-mono text-[13px] font-semibold tracking-[0.06em] uppercase transition-colors ${
-                paymentMethod === method
-                  ? "border-primary bg-primary text-primary-foreground"
-                  : "border-border text-foreground hover:border-foreground"
-              }`}
+              aria-pressed={paymentMethod === method}
+              className={`ui-control ${styles.paymentOption} font-mono text-[12px] font-semibold tracking-[0.06em] uppercase`}
             >
+              <span className="flex w-full items-center justify-between gap-2" aria-hidden="true">
               {method === "instapay" && (
-                <img src="/brand/instapay.svg" alt="InstaPay" className="h-5 w-auto" />
+                <Image
+                  src="/brand/instapay.svg"
+                  alt=""
+                  width={20}
+                  height={20}
+                  unoptimized
+                  className="h-5 w-auto"
+                />
               )}
               {method === "wallet" && (
-                <img src="/brand/vodafone-cash.svg" alt="Vodafone Cash" className="h-5 w-auto" />
+                <Image
+                  src="/brand/vodafone-cash.svg"
+                  alt=""
+                  width={20}
+                  height={20}
+                  unoptimized
+                  className="h-5 w-auto"
+                />
               )}
-              {method === "instapay" ? "InstaPay" : "Wallet"}
+                <span className={styles.selectionMark}>{paymentMethod === method && <Check className="size-3" strokeWidth={2.5} />}</span>
+              </span>
+              <span>{method === "instapay" ? "InstaPay" : t("wallet")}</span>
             </button>
           ))}
         </div>
-      </div>
-
-      {quote && (
-        <div className="flex flex-col gap-2 border border-border bg-surface-1 p-5">
-          <div className="flex items-center justify-between text-[13px] text-muted-foreground">
-            <span>{plan?.name}</span>
-            <span className="tabular-nums">{formatPrice(quote.planPriceMinorUnits)}</span>
-          </div>
-          {quote.joiningFeeMinorUnits > 0 && (
-            <div className="flex items-center justify-between text-[13px] text-muted-foreground">
-              <span>Joining fee</span>
-              <span className="tabular-nums">{formatPrice(quote.joiningFeeMinorUnits)}</span>
-            </div>
-          )}
-          {quote.taxMinorUnits > 0 && (
-            <div className="flex items-center justify-between text-[13px] text-muted-foreground">
-              <span>Tax</span>
-              <span className="tabular-nums">{formatPrice(quote.taxMinorUnits)}</span>
-            </div>
-          )}
-          <div className="mt-2 flex items-center justify-between border-t border-border pt-3 text-[15px] font-semibold text-foreground">
-            <span>Total to pay</span>
-            <span className="tabular-nums">{formatPrice(quote.totalMinorUnits)}</span>
-          </div>
-        </div>
-      )}
+        <p id="reservation-payment-hint" className="mt-2 text-[12px] leading-relaxed text-muted-foreground">{t("paymentPreferenceNote")}</p>
+      </fieldset>
 
       {/* Hidden from people, visible to anything filling every field it finds.
           Not display:none — some bots skip those — but pushed out of the flow
           and out of the tab order. */}
-      <div aria-hidden className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
+      <div aria-hidden className="sr-only">
         <label htmlFor="website">Leave this empty</label>
         <input
           id="website"
@@ -333,32 +477,100 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
         />
       </div>
 
-      <label className="flex items-start gap-3 text-[13px] text-muted-foreground">
+      {/* size-5 and a padded label. The whole sentence was already the hit
+          area — it is inside the <label> — but the box itself was 16px, and
+          the box is what people aim at. This is the last gate in the only
+          conversion funnel on the site, so it is not the place to make
+          somebody try twice. */}
+      <label className="flex cursor-pointer items-start gap-3 py-2 text-[13px] leading-relaxed text-muted-foreground">
         <input
           type="checkbox"
-          required
+          ref={acceptRef}
           checked={accepted}
           onChange={(e) => setAccepted(e.target.checked)}
-          className="mt-0.5 size-4 shrink-0 accent-primary"
+          aria-describedby={showAcceptHint ? "accept-hint" : undefined}
+          className={`${styles.consent} mt-0.5 size-5 shrink-0 accent-primary`}
         />
-        <span>
-          I accept the membership agreement and the gym rules.
-        </span>
+        <span>{t("agreement")}</span>
       </label>
+
+      {/* The button stays ENABLED, and that is the fix.
+          It used to be disabled until this box was ticked, which rendered dark
+          red on dark red with grey text at the end of a long form — it read as
+          a broken control rather than a waiting one, and nothing on screen
+          connected it to a 16px checkbox two rows above. A control that cannot
+          say why it will not work is worse than one that tells you what is
+          missing when you press it. So: press it, and it either submits or
+          points at the thing standing in the way. */}
+      {showAcceptHint && (
+        <p id="accept-hint" role="alert" className="text-[13px] text-destructive">
+          {t("agreementError")}
+        </p>
+      )}
 
       {reserve.isError && (
         <p className="border border-destructive px-4 py-3 text-[13px] text-destructive">
-          {apiErrorMessage(reserve.error, "Could not reserve that — please try again")}
+          {apiErrorMessage(reserve.error, t("reservationError"))}
         </p>
       )}
 
       <button
         type="submit"
-        disabled={reserve.isPending || !accepted}
-        className="press bg-primary px-6 py-4 font-mono text-[13px] font-semibold tracking-[0.08em] text-primary-foreground uppercase transition-all hover:bg-primary-hover disabled:opacity-50"
+        disabled={reserve.isPending}
+        aria-busy={reserve.isPending || undefined}
+        className="ui-action hidden min-h-13 w-full bg-primary font-mono text-[13px] font-bold tracking-[0.08em] uppercase lg:flex"
       >
-        {reserve.isPending ? "Reserving…" : "Reserve my membership"}
+        <WhatsAppIcon className="size-5" />
+        {reserve.isPending ? t("reserving") : t("reserveWhatsapp")}
       </button>
+      </div>
+
+      {/* ---- The same button, pinned, on a phone -------------------------
+          THE TOTAL AND THE COMMITMENT HAVE TO BE ON SCREEN TOGETHER. The
+          breakdown panel sits above the payment method, the consent box and
+          two error slots, so by the time the submit button was in reach the
+          figure it commits to was several hundred pixels up the page. That is
+          the one thing the redesign is most insistent about, and it applies to
+          this form exactly as it does to the card funnel.
+
+          A second <button type="submit"> inside the same <form>, not a
+          duplicate handler — it runs the identical onSubmit, which means the
+          consent check, the synchronous window.open that keeps the WhatsApp
+          tab out of the popup blocker, and the mutation are all untouched and
+          have only one implementation. The in-flow button above simply stops
+          being drawn below lg. */}
+      <div className={styles.mobileBar}>
+        <div className={styles.mobileBarInner}>
+          <div className={styles.mobilePrice} aria-live="polite" aria-atomic="true">
+            <div>
+            <p className="font-mono text-[10px] font-semibold tracking-[0.06em] text-muted-foreground uppercase">
+              {t("membershipPrice")}
+            </p>
+            {quote ? (
+              <p
+                key={quote.totalMinorUnits}
+                className="fade-in mt-0.5 font-display text-2xl leading-none text-foreground tabular-nums"
+              >
+                {formatPrice(quote.totalMinorUnits)}
+              </p>
+            ) : (
+              <p className="mt-0.5 text-[12px] text-muted-foreground">{quoteError ? "—" : t("loadingTotal")}</p>
+            )}
+            </div>
+            <p className={styles.noPayment}>{t("noOnlinePayment")}</p>
+          </div>
+
+          <button
+            type="submit"
+            disabled={reserve.isPending}
+            aria-busy={reserve.isPending || undefined}
+            className={`ui-action ${styles.mobileSubmit} bg-primary font-mono text-[13px] font-bold tracking-[0.06em] uppercase`}
+          >
+            <WhatsAppIcon className="size-5" />
+            {reserve.isPending ? t("reserving") : t("reserveWhatsapp")}
+          </button>
+        </div>
+      </div>
     </form>
   );
 }
@@ -382,6 +594,8 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
  */
 function ReservedPanel({ result }: { result: Extract<ReserveResult, { status: "reserved" }> }) {
   const [copied, setCopied] = useState(false);
+  const locale = useLocale();
+  const t = useTranslations("Join");
 
   return (
     <div className="mx-auto flex w-full max-w-xl flex-col gap-6 border border-border bg-surface-1 p-8 text-center">
@@ -390,19 +604,18 @@ function ReservedPanel({ result }: { result: Extract<ReserveResult, { status: "r
       </div>
 
       <div className="flex flex-col gap-2">
-        <h2 className="font-display text-3xl tracking-[-0.02em] text-foreground uppercase">
-          Reserved
-        </h2>
+        <h1 className="font-display text-3xl tracking-[-0.02em] text-foreground uppercase">
+          {t("reserved")}
+        </h1>
         <p className="text-body-md text-muted-foreground">
-          {result.planName} is held for you. Nothing has been charged — you pay{" "}
-          {result.paymentMethod === "cash" ? "at the gym" : result.paymentMethod === "wallet" ? "by Wallet" : "by InstaPay"}.
+          {t("reservedBody", { plan: result.planName })}
         </p>
       </div>
 
       {result.referenceCode && (
         <div className="flex flex-col gap-2">
           <span className="font-mono text-[11px] font-semibold tracking-[0.12em] text-muted-foreground uppercase">
-            Your reference
+            {t("yourReference")}
           </span>
           <button
             type="button"
@@ -411,7 +624,7 @@ function ReservedPanel({ result }: { result: Extract<ReserveResult, { status: "r
               setCopied(true);
               window.setTimeout(() => setCopied(false), 2000);
             }}
-            className="mx-auto flex items-center gap-3 border border-border bg-background px-6 py-4 font-mono text-3xl font-bold tracking-[0.2em] text-foreground transition-colors hover:border-primary"
+            className="ui-action ui-action--code mx-auto flex items-center gap-3 border border-border bg-background px-6 py-4 font-mono text-3xl font-bold tracking-[0.2em] text-foreground transition-colors hover:border-primary"
           >
             {result.referenceCode}
             {copied ? (
@@ -421,7 +634,7 @@ function ReservedPanel({ result }: { result: Extract<ReserveResult, { status: "r
             )}
           </button>
           <p className="text-[12px] text-muted-foreground">
-            Quote this at the desk, or in the chat.
+            {t("referenceHint")}
           </p>
         </div>
       )}
@@ -431,12 +644,11 @@ function ReservedPanel({ result }: { result: Extract<ReserveResult, { status: "r
             tab — while still making sense if the popup was blocked and this
             button is the member's first sight of it. */}
         <p className="mb-2 text-[13px] text-muted-foreground">
-          We have opened WhatsApp with your details ready to send. Send the message and we
-          will confirm everything and take payment.
+          {t("whatsappReady")}
         </p>
-        <WhatsAppCta message={reservationMessage(result)}>Open WhatsApp again</WhatsAppCta>
+        <WhatsAppCta message={reservationMessage(result, locale)}>{t("openWhatsapp")}</WhatsAppCta>
         <CtaButton href="/contact" variant="outline">
-          Or find us
+          {t("findUs")}
         </CtaButton>
       </div>
     </div>
@@ -444,7 +656,9 @@ function ReservedPanel({ result }: { result: Extract<ReserveResult, { status: "r
 }
 
 function AlreadyActivePanel({ activeUntil, planName }: { activeUntil: string; planName: string }) {
-  const until = new Date(activeUntil).toLocaleDateString("en-GB", {
+  const locale = useLocale();
+  const t = useTranslations("Join");
+  const until = new Date(activeUntil).toLocaleDateString(locale === "ar" ? "ar-EG" : "en-GB", {
     day: "numeric",
     month: "long",
     year: "numeric",
@@ -452,16 +666,16 @@ function AlreadyActivePanel({ activeUntil, planName }: { activeUntil: string; pl
 
   return (
     <div className="mx-auto flex w-full max-w-xl flex-col gap-6 border border-border bg-surface-1 p-8 text-center">
-      <h2 className="font-display text-3xl tracking-[-0.02em] text-foreground uppercase">
-        You are already a member
-      </h2>
+      <h1 className="font-display text-3xl tracking-[-0.02em] text-foreground uppercase">
+        {t("alreadyMember")}
+      </h1>
       <p className="text-body-md text-muted-foreground">
-        Your {planName} membership runs until {until}. Nothing has been changed.
+        {t("alreadyMemberBody", { plan: planName, date: until })}
       </p>
       <div className="flex flex-col gap-2">
-        <WhatsAppCta message={joinEnquiry()}>Ask us about your membership</WhatsAppCta>
+        <WhatsAppCta message={joinEnquiry(locale)}>{t("askMembership")}</WhatsAppCta>
         <CtaButton href="/membership" variant="outline">
-          See all plans
+          {t("seePlans")}
         </CtaButton>
       </div>
     </div>

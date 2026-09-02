@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { ProductForm } from "@/components/admin/product-form";
 import { requireShop } from "@/lib/features";
 

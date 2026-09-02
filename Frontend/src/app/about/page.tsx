@@ -6,6 +6,7 @@ import { BRAND, pageTitle } from "@/lib/brand";
 import { PageHeader, Section, SectionHeader, CtaButton } from "@/components/public/section";
 import { Reveal } from "@/components/public/reveal";
 import { CountUp } from "@/components/public/count-up";
+import { getLocale } from "next-intl/server";
 
 export const metadata: Metadata = {
   title: pageTitle("About"),
@@ -14,8 +15,9 @@ export const metadata: Metadata = {
 };
 
 export default async function AboutPage() {
+  const locale = await getLocale();
   const [content, branches, trainers] = await Promise.all([
-    getContentServer(),
+    getContentServer(locale === "ar" ? "ar" : "en"),
     getBranchesServer(),
     getTrainersServer(),
   ]);
@@ -55,12 +57,24 @@ export default async function AboutPage() {
       {/* border-t only: the stats Section right after already supplies its
           own border-t, and a border-b here would double that line. */}
       <div className="relative aspect-[4/3] w-full overflow-hidden border-t border-border sm:aspect-[16/9]">
+        {/* No `unoptimized`, and quality 90 rather than 100.
+            With `unoptimized` set, Next served the original file untouched —
+            1376x768 and 743KB — into a slot that is 375px wide on a phone.
+            That made it the single largest thing any mobile visitor downloaded
+            on this site, and roughly eight times more image than the slot could
+            ever show. Optimised at the same visual quality it is under 90KB at
+            750px.
+
+            quality={100} was doing nothing useful either: next.config.ts only
+            permits [75, 90], so Next was coercing it to the nearest allowed
+            value anyway. 90 is stated explicitly here — it is the step the hero
+            already uses for exactly this kind of large flat-gradient frame,
+            where JPEG artefacts actually show. */}
         <Photo
           src="/images/about-story.jpg"
           alt=""
           fill
-          quality={100}
-          unoptimized={true}
+          quality={90}
           sizes="100vw"
           className="object-cover"
         />

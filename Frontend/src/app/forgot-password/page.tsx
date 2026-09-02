@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { forgotPassword } from "@/lib/api/auth";
 import { BRAND } from "@/lib/brand";
 import { AuthPanel } from "@/components/public/auth-panel";
+import { Wordmark } from "@/components/layout/wordmark";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -31,11 +32,19 @@ export default function ForgotPasswordPage() {
 
       <div className="flex flex-col items-center justify-center px-margin-mobile py-stack-xl md:px-margin-desktop">
         <div className="w-full max-w-sm">
+          {/* The lockup, not the name set in the headline face.
+              Every other surface in this app shows the real mark — the header,
+              the footer, the mobile menu — and a typographic stand-in on the
+              one screen where somebody is being asked to trust the site with a
+              password reads as an oversight, because it is one. This is the
+              same substitution that was removed from the mobile menu; it had
+              simply survived over here. */}
           <Link
             href="/"
-            className="mb-10 block text-center font-display text-3xl tracking-[-0.02em] text-foreground uppercase"
+            aria-label={`${BRAND.name} — home`}
+            className="mb-10 flex justify-center"
           >
-            {BRAND.name}
+            <Wordmark className="h-16 w-auto" width={128} />
           </Link>
 
           {submitted ? (
@@ -44,12 +53,11 @@ export default function ForgotPasswordPage() {
                 Check Your Email
               </h1>
               <p className="mb-8 text-center text-body-md text-muted-foreground">
-                If an account exists for <span className="text-foreground">{email}</span>, we&apos;ve sent a link to
-                reset your password. It expires in 1 hour.
+                {`If an account exists for ${email}, we've sent a link to reset your password. It expires in 1 hour.`}
               </p>
               <Link
                 href="/login"
-                className="block w-full bg-primary py-4 text-center text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
+                className="ui-action block w-full bg-primary py-4 text-center text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
               >
                 Back to Sign In
               </Link>
@@ -77,14 +85,14 @@ export default function ForgotPasswordPage() {
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full border border-border bg-background px-4 py-3 text-sm text-foreground outline-none focus:border-foreground"
+                    className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={mutation.isPending}
-                  className="w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
+                  className="ui-action inline-flex w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
                 >
                   {mutation.isPending ? "Sending…" : "Send Reset Link"}
                 </button>

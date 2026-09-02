@@ -9,7 +9,7 @@ export const BRAND = {
   // string stays readable for page titles, share cards and email subjects.
   tagline: "Commit to be fit",
   description:
-    "Industrial strength discipline in Cairo. Strength, conditioning and coaching for people who refuse to settle.",
+    "Industrial strength discipline in Fayoum. Strength, conditioning and coaching for people who refuse to settle.",
 
   // The gym-wide support line and the InstaPay account money is transferred
   // to. Deliberately separate from the per-branch phone/whatsappNumber on a

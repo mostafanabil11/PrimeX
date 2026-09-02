@@ -70,7 +70,7 @@ export function CouponField({
           type="button"
           onClick={() => setCoupon(null)}
           aria-label="Remove coupon"
-          className="text-muted-foreground transition-colors hover:text-foreground"
+          className="ui-action ui-action--icon ui-action--ghost inline-flex text-muted-foreground transition-colors hover:text-foreground"
         >
           <X className="size-4" strokeWidth={1.5} />
         </button>
@@ -96,12 +96,12 @@ export function CouponField({
           }}
           placeholder="Coupon code"
           disabled={mutation.isPending}
-          className="min-w-0 flex-1 bg-background px-4 py-3 text-[13px] tracking-[0.03em] text-foreground placeholder:text-muted-foreground focus:outline-none"
+          className="min-w-0 flex-1 bg-background px-4 py-3 text-base md:text-[13px] tracking-[0.03em] text-foreground placeholder:text-muted-foreground focus:outline-none"
         />
         <button
           type="submit"
           disabled={!code.trim() || mutation.isPending}
-          className="flex items-center gap-1.5 border-l border-border px-5 font-mono text-[12px] font-medium tracking-[0.05em] text-foreground uppercase transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
+          className="ui-action ui-action--outline flex items-center gap-1.5 border-l border-border px-5 font-mono text-[12px] font-medium tracking-[0.05em] text-foreground uppercase transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-40"
         >
           {mutation.isPending && <Loader2 className="size-3.5 animate-spin" strokeWidth={2} />}
           Apply

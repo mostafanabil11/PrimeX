@@ -1,0 +1,249 @@
+.gallery {
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  min-width: 0;
+}
+
+.track {
+  display: flex;
+  gap: 12px;
+}
+
+.card {
+  container-type: inline-size;
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 440px;
+  transition: flex-grow 650ms var(--ease), flex-basis 650ms var(--ease);
+}
+
+.card[data-active="true"] { flex-grow: 2.8; }
+
+.visual {
+  position: relative;
+  height: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgb(255 255 255 / 9%);
+  border-radius: 8px;
+  background: linear-gradient(145deg, #282b2b, #111313 75%);
+  box-shadow: 0 14px 32px -24px rgb(0 0 0 / 70%);
+}
+
+.visual:has(:focus-visible) { outline: 2px solid #e6e8e8; outline-offset: 3px; }
+.media { position: absolute; inset: 0; }
+.compactTitle { display: none; }
+.image { object-fit: cover; object-position: center; }
+.card[data-kind="trainer"] .image { object-position: center 25%; }
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgb(0 0 0 / 20%), rgb(0 0 0 / 10%) 25%, rgb(0 0 0 / 70%) 65%, #0b0c0c 100%);
+  pointer-events: none;
+}
+
+.topline {
+  position: absolute;
+  inset: 20px 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  pointer-events: none;
+}
+.number { color: #d4d8d8; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-shadow: 0 1px 6px #000; }
+.toggleIcon {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: 50%;
+  background: rgb(15 16 16 / 55%);
+}
+.toggleIcon svg { width: 15px; height: 15px; }
+.card[data-active="true"] .toggleIcon { background: rgb(22 25 25 / 82%); border-color: rgb(255 255 255 / 28%); }
+.select { position: absolute; inset: 0; z-index: 2; width: 100%; cursor: pointer; outline: none; }
+
+.content {
+  position: absolute;
+  inset-inline: 16px;
+  bottom: 24px;
+  z-index: 3;
+  pointer-events: none;
+}
+.title {
+  color: #fff;
+  font-size: clamp(14px, 8.5cqw, 24px);
+  line-height: 1.05;
+  letter-spacing: -.02em;
+  text-transform: uppercase;
+  overflow-wrap: anywhere;
+  transition: font-size 500ms var(--ease), color 200ms ease;
+}
+.card[data-active="true"] .title { font-size: 36px; }
+.card[data-active="true"] .content { inset-inline: 24px; }
+.details {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  visibility: hidden;
+  transition: grid-template-rows 500ms var(--ease), opacity 220ms ease, visibility 500ms;
+}
+.card[data-active="true"] .details {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+  transition: grid-template-rows 550ms var(--ease), opacity 400ms ease 100ms, visibility 0s;
+}
+.detailsInner { min-height: 0; overflow: hidden; }
+.subtitle { margin-top: 10px; color: #e1e5e5; font-size: 13px; font-weight: 600; }
+.description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  margin-top: 12px;
+  color: #dfdfdf;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.meta { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 16px; color: #c4caca; font-size: 12px; }
+.link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  min-height: 44px;
+  margin-top: 16px;
+  border-top: 1px solid rgb(255 255 255 / 16%);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  pointer-events: auto;
+}
+.link .arrow { transition: translate 220ms var(--ease); }
+.link:hover .arrow { translate: 3px 0; }
+.gallery[dir="rtl"] .link:hover .arrow { translate: -3px 0; }
+.link:focus-visible { outline: 2px solid #e6e8e8; outline-offset: -2px; }
+.controls { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-top: 16px; }
+.hint { font-size: 12px; color: var(--muted-foreground); }
+.mobileHint { display: none; }
+.arrows { display: flex; gap: 8px; }
+.nav { display: grid; place-items: center; width: 44px; height: 44px; border: 1px solid rgb(255 255 255 / 12%); border-radius: 50%; background: rgb(255 255 255 / 3%); color: var(--foreground); cursor: pointer; transition: border-color 200ms ease, background-color 200ms ease; }
+.nav:hover:not(:disabled) { border-color: rgb(255 255 255 / 32%); background: rgb(255 255 255 / 8%); }
+.nav:disabled { opacity: .3; cursor: default; }
+.nav:focus-visible { outline: 2px solid #e6e8e8; outline-offset: 2px; }
+.gallery[dir="rtl"] .arrow { transform: scaleX(-1); }
+.gallery[dir="rtl"] .title { line-height: 1.6; }
+
+@media (max-width: 1023px) {
+  .track {
+    container-type: inline-size;
+    --closed-width: clamp(32px, 8vw, 56px);
+    --card-gap: clamp(5px, 1vw, 10px);
+    --content-inset: 14px;
+    --expanded-width: calc(100cqw - (var(--card-count) - 1) * (var(--closed-width) + var(--card-gap)));
+    gap: var(--card-gap);
+  }
+  .card {
+    container-type: normal;
+    flex: 0 0 var(--closed-width);
+    height: 420px;
+    /* A shared basis means only the spare space moves between cards. */
+    transition: flex-grow 520ms cubic-bezier(.25, .8, .25, 1);
+  }
+  .card[data-active="true"] { flex: 1 0 var(--closed-width); }
+  /* Hold the final image/text widths throughout the motion. Resizing them
+     with the card would recrop the photo and rewrap text on every frame. */
+  .media {
+    inset: 0 auto 0 50%;
+    width: var(--expanded-width);
+    transform: translateX(-50%) scale(1);
+    transition: transform 650ms cubic-bezier(.25, .8, .25, 1);
+  }
+  .card[data-active="true"] .media { transform: translateX(-50%) scale(1.06); }
+  .content, .card[data-active="true"] .content {
+    inset-inline: var(--content-inset) auto;
+    bottom: 20px;
+    width: calc(var(--expanded-width) - 2 * var(--content-inset) - 2px);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity 90ms ease, transform 180ms ease, visibility 0s 90ms;
+  }
+  .card[data-active="true"] .content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition: opacity 240ms ease 160ms, transform 340ms var(--ease) 140ms, visibility 0s;
+  }
+  .title, .card[data-active="true"] .title {
+    font-size: clamp(19px, calc(var(--expanded-width) * .09), 32px);
+    transition: color 200ms ease;
+  }
+  .details, .card[data-active="true"] .details {
+    display: block;
+    opacity: 1;
+    visibility: inherit;
+    transition: none;
+  }
+  .topline { inset: 14px 12px auto; }
+  .number { opacity: 1; transition: opacity 100ms ease; }
+  .toggleIcon { opacity: 0; transition: opacity 90ms ease; }
+  .card[data-active="true"] .toggleIcon { opacity: 1; transition: opacity 220ms ease 180ms; }
+  .card[data-active="false"] .topline { inset-inline: 0; justify-content: center; }
+  .card[data-active="false"] .toggleIcon { position: absolute; visibility: hidden; }
+  /* Separate label layers crossfade instead of snapping the same heading
+     between rotated and horizontal layouts. Arabic stays connected. */
+  .compactTitle {
+    display: block;
+    position: absolute;
+    z-index: 3;
+    top: calc(50% + 24px);
+    left: 50%;
+    width: 280px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    text-align: start;
+    color: #fff;
+    font-size: 13px;
+    line-height: 1.6;
+    text-transform: uppercase;
+    transform: translate(-50%, -50%) rotate(-90deg);
+    opacity: 1;
+    pointer-events: none;
+    transition: opacity 180ms ease 180ms;
+  }
+  .card[data-active="true"] .compactTitle { opacity: 0; transition: opacity 90ms ease; }
+  .shade::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgb(0 0 0 / 25%);
+    opacity: 1;
+    transition: opacity 400ms ease;
+  }
+  .card[data-active="true"] .shade::after { opacity: 0; }
+  .description { font-size: 13px; }
+  .meta { gap: 5px 10px; margin-top: 12px; }
+  .link { margin-top: 12px; }
+  .controls { gap: 12px; margin-top: 14px; }
+  .arrows { flex-shrink: 0; }
+  .desktopHint { display: none; }
+  .mobileHint { display: inline; }
+}
+
+@media (max-width: 599px) {
+  .track { margin-inline: -12px; --content-inset: 12px; }
+}
+
+@media (max-width: 359px) {
+  .description { -webkit-line-clamp: 2; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .gallery *, .gallery *::before, .gallery *::after { transition: none !important; animation: none !important; }
+}

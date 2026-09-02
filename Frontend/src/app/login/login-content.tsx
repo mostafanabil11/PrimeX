@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -13,6 +13,7 @@ import { mergeLocalCartIntoServerCart } from "@/lib/cart-merge";
 import { apiErrorMessage } from "@/lib/api-error";
 import { AuthPanel } from "@/components/public/auth-panel";
 import { MEMBER_ACCOUNTS_ENABLED } from "@/lib/features";
+import { Wordmark } from "@/components/layout/wordmark";
 
 // Only same-origin paths are honoured. Taking ?next= at face value would let a
 // crafted link bounce someone to another site immediately after they sign in,
@@ -59,11 +60,19 @@ export function LoginContent() {
       {/* Form */}
       <div className="flex flex-col items-center justify-center px-margin-mobile py-stack-xl md:px-margin-desktop">
         <div className="w-full max-w-sm">
+          {/* The lockup, not the name set in the headline face.
+              Every other surface in this app shows the real mark — the header,
+              the footer, the mobile menu — and a typographic stand-in on the
+              one screen where somebody is being asked to trust the site with a
+              password reads as an oversight, because it is one. This is the
+              same substitution that was removed from the mobile menu; it had
+              simply survived over here. */}
           <Link
             href="/"
-            className="mb-10 block text-center font-display text-3xl tracking-[-0.02em] text-foreground uppercase"
+            aria-label={`${BRAND.name} — home`}
+            className="mb-10 flex justify-center"
           >
-            {BRAND.name}
+            <Wordmark className="h-16 w-auto" width={128} />
           </Link>
 
           <h1 className="mb-2 text-center font-heading text-headline-sm font-bold text-foreground">
@@ -87,7 +96,7 @@ export function LoginContent() {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-border bg-background px-4 py-3 text-sm text-foreground outline-none focus:border-foreground"
+                className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
               />
             </div>
 
@@ -99,7 +108,14 @@ export function LoginContent() {
                 >
                   Password
                 </label>
-                <Link href="/forgot-password" className="text-[12px] text-muted-foreground hover:text-foreground">
+                {/* -my-3 cancels the padding for layout, so the link stays on
+                    the label's baseline and only its hit box grows. It sat at
+                    18px, in the corner of a form, next to a 12px label — the
+                    exact spot a thumb overshoots into the password field. */}
+                <Link
+                  href="/forgot-password"
+                  className="-my-3 inline-flex min-h-11 items-center py-3 text-[12px] text-muted-foreground hover:text-foreground"
+                >
                   Forgot password?
                 </Link>
               </div>
@@ -110,14 +126,14 @@ export function LoginContent() {
                 minLength={6}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full border border-border bg-background px-4 py-3 text-sm text-foreground outline-none focus:border-foreground"
+                className="w-full border border-input bg-background px-4 py-3 text-base md:text-sm text-foreground outline-none focus:border-foreground"
               />
             </div>
 
             <button
               type="submit"
               disabled={isPending}
-              className="w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
+              className="ui-action inline-flex w-full bg-primary py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover disabled:opacity-50"
             >
               {isPending ? "Signing In…" : "Sign In"}
             </button>
@@ -131,7 +147,7 @@ export function LoginContent() {
 
           <a
             href={`${API_BASE_PATH}/auth/google`}
-            className="flex w-full items-center justify-center gap-3 border border-border py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
+              className="ui-action ui-action--outline flex w-full items-center justify-center gap-3 border border-border py-3 text-sm font-medium text-foreground transition-colors hover:bg-muted"
           >
             <GoogleIcon className="size-4" />
             Continue with Google

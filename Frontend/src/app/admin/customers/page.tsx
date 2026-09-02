@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getCustomers } from "@/lib/api/admin";
 import { AdminPageHeader } from "@/components/admin/resource-list";
@@ -33,7 +33,7 @@ export default function AdminCustomersPage() {
           setPage(1);
         }}
         placeholder="Search by name or email…"
-        className="mb-6 w-full max-w-sm border border-border bg-surface-2 px-4 py-2.5 text-[13px] text-foreground outline-none focus:border-ring focus:ring-1 focus:ring-ring"
+        className="mb-6 w-full max-w-sm border border-input bg-surface-2 px-4 py-2.5 text-base md:text-[13px] text-foreground outline-none focus:border-ring focus:ring-1 focus:ring-ring"
       />
 
       {isLoading || !data ? (
@@ -74,7 +74,7 @@ export default function AdminCustomersPage() {
                 type="button"
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page === 1}
-                className="border border-border px-4 py-2 text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
+                className="ui-action ui-action--outline ui-action--sm inline-flex border border-border px-4 py-2 text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
               >
                 Previous
               </button>
@@ -85,7 +85,7 @@ export default function AdminCustomersPage() {
                 type="button"
                 onClick={() => setPage((p) => Math.min(data.pagination.pages, p + 1))}
                 disabled={page === data.pagination.pages}
-                className="border border-border px-4 py-2 text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
+                className="ui-action ui-action--outline ui-action--sm inline-flex border border-border px-4 py-2 text-[12px] font-semibold tracking-[0.06em] text-foreground uppercase disabled:opacity-40"
               >
                 Next
               </button>

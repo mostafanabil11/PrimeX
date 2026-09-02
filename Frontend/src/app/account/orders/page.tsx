@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { getOrders } from "@/lib/api/orders";
@@ -49,7 +49,7 @@ export default function OrderHistoryPage() {
           <p className="mb-8 text-body-lg text-muted-foreground">You haven&apos;t placed any orders yet.</p>
           <Link
             href="/"
-            className="bg-primary px-8 py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
+            className="ui-action inline-flex bg-primary px-8 py-4 text-button font-medium tracking-[0.05em] text-primary-foreground uppercase transition-colors hover:bg-primary-hover"
           >
             Start Shopping
           </Link>
@@ -71,8 +71,7 @@ export default function OrderHistoryPage() {
                     day: "numeric",
                   })}
                   {" · "}
-                  {order.items.reduce((sum, i) => sum + i.quantity, 0)} item
-                  {order.items.reduce((sum, i) => sum + i.quantity, 0) === 1 ? "" : "s"}
+                  {`${order.items.reduce((sum, i) => sum + i.quantity, 0)} item${order.items.reduce((sum, i) => sum + i.quantity, 0) === 1 ? "" : "s"}`}
                 </p>
               </div>
               <div className="flex items-center gap-6">

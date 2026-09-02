@@ -1,15 +1,15 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { TrendingUp, TrendingDown, Inbox, Phone, ArrowRight } from "lucide-react";
+import { TrendingUp, TrendingDown, Inbox, ArrowRight } from "lucide-react";
 import { getGymDashboard, getFunnelInsights, type FunnelInsights } from "@/lib/api/admin";
 import { formatPrice } from "@/lib/format";
-import { formatMembershipDate, whatsappHref } from "@/lib/gym-format";
+import { formatMembershipDate } from "@/lib/gym-format";
 import { chaseReservation } from "@/lib/whatsapp-messages";
 import { daysRemaining } from "@/types/membership";
 import { RecordCashButton } from "@/components/admin/record-cash-button";
-import { WhatsAppIcon } from "@/components/public/whatsapp";
+import { AdminContactButtons } from "@/components/admin/contact-buttons";
 import { MEMBERSHIP_TRACKING_ENABLED, CLASS_BOOKING_ENABLED } from "@/lib/features";
 
 export default function AdminDashboardPage() {
@@ -209,25 +209,16 @@ function AtRiskSection({ atRisk }: { atRisk: FunnelInsights["atRisk"] }) {
               </div>
 
               <div className="flex shrink-0 items-center gap-2">
+                {/* Shared with the memberships table — see AdminContactButtons.
+                    This pair used to be written out here and nowhere else,
+                    which is why the screen staff actually chase payments from
+                    did not have it. */}
                 {row.phone && (
-                  <>
-                    <a
-                      href={`tel:${row.phone.replace(/\s/g, "")}`}
-                      aria-label={`Call ${name}`}
-                      className="border border-border p-2 text-muted-foreground hover:text-foreground"
-                    >
-                      <Phone className="size-4" strokeWidth={1.5} />
-                    </a>
-                    <a
-                      href={whatsappHref(row.phone, chaseReservation(row.referenceCode, row.firstName ?? "there"))}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Message ${name} on WhatsApp`}
-                      className="border border-border p-2 text-muted-foreground hover:text-foreground"
-                    >
-                      <WhatsAppIcon className="size-4" />
-                    </a>
-                  </>
+                  <AdminContactButtons
+                    phone={row.phone}
+                    name={name}
+                    message={chaseReservation(row.referenceCode, row.firstName ?? "there")}
+                  />
                 )}
                 <RecordCashButton
                   invoiceId={row.invoiceId}

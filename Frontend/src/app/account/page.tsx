@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getCurrentMembership, getMyInvoices } from "@/lib/api/membership";
 import { getMyBookings } from "@/lib/api/schedule";
@@ -27,7 +27,7 @@ export default function AccountDashboardPage() {
     <div className="flex flex-col gap-stack-sm">
       <div>
         <h1 className="font-display text-4xl tracking-[-0.02em] text-foreground uppercase md:text-5xl">
-          Welcome back{user ? `, ${user.firstName}` : ""}
+          {`Welcome back${user ? `, ${user.firstName}` : ""}`}
         </h1>
       </div>
 
@@ -100,7 +100,7 @@ function UpcomingClasses() {
           </p>
           <Link
             href="/schedule"
-            className="bg-primary px-5 py-2.5 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase"
+            className="ui-action inline-flex bg-primary px-5 py-2.5 text-[12px] font-semibold tracking-[0.08em] text-primary-foreground uppercase"
           >
             Find a class
           </Link>
