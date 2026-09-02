@@ -1,0 +1,122 @@
+/* The shape both reservation funnels share.
+ *
+ * Membership (join/reserve-form) and personal training (trainers/
+ * pt-reserve-form) ask for the same thing in the same way: a summary of what
+ * you are asking for, a short column of fields, a consent tick, and one
+ * button that hands off to WhatsApp. They looked like different products
+ * because only one of them had been designed; this file is that design, held
+ * in one place so the second form cannot drift away from the first.
+ *
+ * Names are deliberately generic. The summary holds a plan and a price on one
+ * form and a coach on the other, so it is .summaryHead rather than
+ * .planOverview, and the pinned bar carries .barMeta rather than .mobilePrice.
+ * Anything genuinely specific to one funnel — the price breakdown, the payment
+ * chooser, the change-plan button — stays in that form's own module.
+ *
+ * Control surfaces (the fields themselves) are not here: those are shared with
+ * every form on the site and live in ui/form-styles.css.
+ */
+
+.form {
+  display: grid;
+  gap: 24px;
+  width: 100%;
+  max-width: 1040px;
+  margin-inline: auto;
+  /* Clears the pinned action bar, which is fixed and would otherwise sit on
+     top of the last field. Dropped at lg, where the bar is not rendered. */
+  padding-bottom: calc(144px + env(safe-area-inset-bottom));
+}
+
+/* For a reservation that does NOT own the bottom of the viewport.
+ *
+ * The pinned bar works on /join because that route is checkout chrome: the
+ * site header, footer and floating WhatsApp button are all removed there, so
+ * the bar has the bottom of the screen to itself. Personal training sits at
+ * the foot of a normal trainer page, where the floating contact button is
+ * already fixed at bottom:0 on the same z-index — two bars stacking on each
+ * other. That form uses an in-flow button instead and turns off the space
+ * reserved for a bar that is not there. */
+.noPinnedBar { padding-bottom: 0; }
+
+.intro { display: grid; gap: 10px; }
+
+.summary {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 18px;
+  align-self: start;
+  border: 1px solid #3d4444;
+  border-radius: 10px;
+  background: #171b1b;
+  padding: 16px;
+}
+
+.summaryHead { display: grid; gap: 12px; }
+
+.summaryNote {
+  display: flex;
+  gap: 8px;
+  margin-top: 2px;
+  padding-top: 14px;
+  border-top: 1px solid #333a3a;
+  color: var(--muted-foreground);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.details { display: flex; min-width: 0; flex-direction: column; gap: 18px; }
+.nameFields { display: grid; gap: 16px; }
+
+/* The action bar, pinned to the bottom of a phone screen.
+   THE COMMITMENT AND THE BUTTON HAVE TO BE ON SCREEN TOGETHER — on membership
+   that is the total, on personal training it is the coach being requested.
+   Either way the form is long enough that the thing being agreed to had
+   scrolled away by the time the button was in reach. */
+.mobileBar {
+  position: fixed;
+  inset-inline: 0;
+  bottom: 0;
+  z-index: 40;
+  padding-bottom: env(safe-area-inset-bottom);
+  border-top: 1px solid #414949;
+  background: #191e1e;
+  box-shadow: 0 -8px 24px rgb(0 0 0 / 14%);
+}
+
+.mobileBarInner {
+  display: grid;
+  max-width: 720px;
+  margin-inline: auto;
+  gap: 10px;
+  padding: 10px 20px 12px;
+}
+
+.barMeta { display: flex; min-width: 0; justify-content: space-between; align-items: center; gap: 14px; }
+.barNote { color: var(--muted-foreground); font-size: 11px; text-align: end; }
+.mobileBar .mobileSubmit { display: flex; width: 100%; min-height: 48px; }
+
+@media (min-width: 360px) {
+  .summaryHead { grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 16px; }
+}
+
+@media (min-width: 420px) {
+  .nameFields { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+@media (min-width: 600px) {
+  .summary { padding: 24px; }
+  .mobileBarInner { grid-template-columns: minmax(0, 1fr) auto; align-items: center; padding-block: 14px; }
+  .barMeta { display: block; }
+  .barNote { margin-top: 4px; text-align: start; }
+}
+
+@media (min-width: 1024px) {
+  .form { grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr); column-gap: 56px; row-gap: 32px; padding-bottom: 0; }
+  .intro { grid-column: 1 / -1; }
+  .summary { position: sticky; top: 80px; }
+  .summaryHead { grid-template-columns: 1fr; gap: 24px; }
+  .details { gap: 20px; }
+  .mobileBar { display: none; }
+}

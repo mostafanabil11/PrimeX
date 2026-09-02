@@ -15,6 +15,8 @@ import type { Plan } from "@/types/gym";
 import { BRAND } from "@/lib/brand";
 import { useLocale, useTranslations } from "next-intl";
 import styles from "./reserve-form.module.css";
+import layout from "@/components/forms/reservation-form.module.css";
+import { fieldInput, fieldLabel, consentBox } from "@/components/ui/form-classes";
 
 /**
  * Reserve a membership for manual payment confirmation and activation.
@@ -32,9 +34,11 @@ import styles from "./reserve-form.module.css";
  * at the desk on the first visit, where someone can explain why.
  */
 
-const inputBase =
-  `${styles.input} w-full text-base text-foreground placeholder:text-muted-foreground`;
-const labelBase = "font-mono text-[11px] font-semibold tracking-[0.06em] text-muted-foreground uppercase";
+// The control styling these two carried is now shared — see ui/form-styles.css
+// and ui/form-classes.ts. They stay as local aliases because this file names
+// them at ~20 call sites and renaming those adds churn without adding meaning.
+const inputBase = fieldInput;
+const labelBase = fieldLabel;
 
 // Same reasoning as the join funnel's: generated inside the submit handler,
 // not during render, so a retry after a dropped connection reuses the invoice
@@ -215,7 +219,7 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
 
   return (
     <form
-      className={styles.form}
+      className={layout.form}
       onSubmit={(e) => {
         e.preventDefault();
 
@@ -240,7 +244,7 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
         reserve.mutate();
       }}
     >
-      <div className={styles.intro}>
+      <div className={layout.intro}>
         <h1 className="font-display text-[32px] leading-tight text-foreground uppercase sm:text-[40px]">
           {t("reservationHeading")}
         </h1>
@@ -249,7 +253,7 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
         </p>
       </div>
 
-      <aside className={styles.summary} aria-labelledby="selected-plan-title">
+      <aside className={layout.summary} aria-labelledby="selected-plan-title">
         <div className="flex items-center justify-between gap-3">
           <p id="selected-plan-title" className={labelBase}>{t("selectedPlan")}</p>
           <button
@@ -264,7 +268,7 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
           </button>
         </div>
 
-        <div className={styles.planOverview}>
+        <div className={layout.summaryHead}>
           <div className="min-w-0">
             <h2 className="font-display text-[24px] leading-tight text-foreground uppercase sm:text-[28px]">
               {plan ? (locale === "ar" ? arabicPlanName(plan.name) : plan.name) : null}
@@ -311,15 +315,15 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
             </button>
           </div>
         ) : !quote && <p role="status" className="text-[12px] text-muted-foreground">{t("loadingTotal")}</p>}
-        <p className={styles.summaryNote}>
+        <p className={layout.summaryNote}>
           <WhatsAppIcon className="mt-0.5 size-4 shrink-0 text-[#25d366]" />
           {t("confirmationNote")}
         </p>
       </aside>
 
-      <div className={styles.details}>
+      <div className={layout.details}>
       <h2 className="font-display text-2xl text-foreground uppercase">{t("yourDetails")}</h2>
-      <div className={styles.nameFields}>
+      <div className={layout.nameFields}>
         <div className="flex flex-col gap-2">
           <label htmlFor="firstName" className={labelBase}>
             {t("firstName")}
@@ -430,7 +434,7 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
               type="button"
               onClick={() => setPaymentMethod(method)}
               aria-pressed={paymentMethod === method}
-              className={`ui-control ${styles.paymentOption} font-mono text-[12px] font-semibold tracking-[0.06em] uppercase`}
+              className="ui-control ui-choice font-mono text-[12px] font-semibold tracking-[0.06em] uppercase"
             >
               <span className="flex w-full items-center justify-between gap-2" aria-hidden="true">
               {method === "instapay" && (
@@ -453,7 +457,7 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
                   className="h-5 w-auto"
                 />
               )}
-                <span className={styles.selectionMark}>{paymentMethod === method && <Check className="size-3" strokeWidth={2.5} />}</span>
+                <span className="ui-choice-mark">{paymentMethod === method && <Check className="size-3" strokeWidth={2.5} />}</span>
               </span>
               <span>{method === "instapay" ? "InstaPay" : t("wallet")}</span>
             </button>
@@ -489,7 +493,7 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
           checked={accepted}
           onChange={(e) => setAccepted(e.target.checked)}
           aria-describedby={showAcceptHint ? "accept-hint" : undefined}
-          className={`${styles.consent} mt-0.5 size-5 shrink-0 accent-primary`}
+          className={consentBox}
         />
         <span>{t("agreement")}</span>
       </label>
@@ -555,9 +559,9 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
           tab out of the popup blocker, and the mutation are all untouched and
           have only one implementation. The in-flow button above simply stops
           being drawn below lg. */}
-      <div className={styles.mobileBar}>
-        <div className={styles.mobileBarInner}>
-          <div className={styles.mobilePrice} aria-live="polite" aria-atomic="true">
+      <div className={layout.mobileBar}>
+        <div className={layout.mobileBarInner}>
+          <div className={layout.barMeta} aria-live="polite" aria-atomic="true">
             <div>
             <p className="font-mono text-[10px] font-semibold tracking-[0.06em] text-muted-foreground uppercase">
               {t("membershipPrice")}
@@ -573,7 +577,7 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
               <p className="mt-0.5 text-[12px] text-muted-foreground">{quoteError ? "—" : t("loadingTotal")}</p>
             )}
             </div>
-            <p id="accept-required-mobile" className={styles.noPayment}>
+            <p id="accept-required-mobile" className={layout.barNote}>
               {accepted ? t("noOnlinePayment") : t("agreementRequired")}
             </p>
           </div>
@@ -583,7 +587,7 @@ export function ReserveForm({ plans, initialPlanSlug }: { plans: Plan[]; initial
             disabled={reserve.isPending || !accepted}
             aria-busy={reserve.isPending || undefined}
             aria-describedby={!accepted ? "accept-required-mobile" : undefined}
-            className={`ui-action ${styles.mobileSubmit} bg-primary font-mono text-[13px] font-bold tracking-[0.06em] uppercase`}
+            className={`ui-action ${layout.mobileSubmit} bg-primary font-mono text-[13px] font-bold tracking-[0.06em] uppercase`}
           >
             <WhatsAppIcon className="size-5" />
             {reserve.isPending ? t("reserving") : t("reserveWhatsapp")}

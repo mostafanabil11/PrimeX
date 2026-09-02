@@ -8,6 +8,7 @@ import { trainerBranchNames, DAY_LABELS, formatTime } from "@/lib/gym-format";
 import { Section, SectionHeader, CtaButton, ctaClasses } from "@/components/public/section";
 import { PtReserveForm } from "@/components/trainers/pt-reserve-form";
 import { PersonSchema } from "@/components/public/structured-data";
+import { getTranslations } from "next-intl/server";
 
 interface Params {
   slug: string;
@@ -45,6 +46,7 @@ export default async function TrainerPage({ params }: { params: Promise<Params> 
 
   const branches = trainerBranchNames(trainer);
   const firstName = trainer.name.split(" ")[0];
+  const t = await getTranslations("PersonalTraining");
 
   return (
     <>
@@ -209,15 +211,27 @@ export default async function TrainerPage({ params }: { params: Promise<Params> 
           sticky header, which would otherwise swallow the heading when the
           anchor above jumps here. */}
       <Section id="request" className="scroll-mt-24 border-t border-border">
-        <div className="grid gap-stack-sm lg:grid-cols-[2fr_1fr]">
-          <div className="max-w-xl">
-            <SectionHeader
-              eyebrow="Personal training"
-              title={`Train with ${firstName}`}
-              body={`Tell us when you want to start and what you are working towards. Nothing is charged online — ${firstName} and the team confirm the details with you on WhatsApp.`}
-            />
-            <PtReserveForm trainerId={trainer._id} trainerFirstName={firstName} />
-          </div>
+        {/* No column grid around this any more. The form brings its own
+            two-column layout — a sticky coach summary beside the fields, the
+            same shape the membership reservation uses — and the old
+            lg:grid-cols-[2fr_1fr] wrapper with a max-w-xl inside it left the
+            form 576px wide, narrower than one of its own columns. */}
+        <div className="mx-auto w-full max-w-[1040px]">
+          <SectionHeader
+            eyebrow={t("pageEyebrow")}
+            title={t("pageTitle", { name: firstName })}
+            body={t("pageBody", { name: firstName })}
+          />
+        </div>
+        <div className="mt-stack-sm">
+          <PtReserveForm
+            trainerId={trainer._id}
+            trainerFirstName={firstName}
+            trainerName={trainer.name}
+            trainerPhoto={trainer.photo}
+            trainerHeadline={trainer.headline}
+            trainerYears={trainer.yearsOfExperience}
+          />
         </div>
       </Section>
     </>

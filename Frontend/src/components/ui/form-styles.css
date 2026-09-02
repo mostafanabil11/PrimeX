@@ -1,0 +1,91 @@
+/* Form control surfaces, shared by every public form on the site.
+ *
+ * The membership reserve form is where this look was settled, so these rules
+ * are that form's, lifted verbatim rather than reinterpreted — same 48px
+ * target, same #111515 well, same two-step focus treatment. It lived in
+ * reserve-form.module.css while it had one consumer; it is here now because
+ * the personal-training form, the enquiry form and the auth screens all need
+ * to be the same control, and three near-copies of a border colour is how a
+ * design drifts.
+ *
+ * Structural styling only. Width, type scale and placeholder colour stay in
+ * Tailwind alongside the markup — see ui/form-classes.ts, which pairs with
+ * this file the way action-button.tsx pairs with button-styles.css.
+ */
+
+.ui-input {
+  min-width: 0;
+  min-height: 48px;
+  border: 1px solid #586060;
+  border-radius: 8px;
+  background: #111515;
+  padding: 11px 13px;
+  /* Dark-scheme calendar and select pickers. Without it a <input type="date">
+     opens a white picker on a dark field. */
+  color-scheme: dark;
+  /* Keeps a focused field clear of the sticky header above and the pinned
+     action bar below when the browser scrolls it into view. */
+  scroll-margin-block: 90px 160px;
+  transition: border-color 160ms ease, background-color 160ms ease;
+}
+
+.ui-input:hover { border-color: #788383; }
+
+.ui-input:focus-visible {
+  border-color: #a7b4b4;
+  outline: 2px solid #a7b4b4;
+  outline-offset: 2px;
+  background: #171c1c;
+}
+
+.ui-input[aria-invalid="true"] { border-color: var(--destructive); }
+
+/* Consent and preference boxes. The offset ring is drawn outside a 20px box,
+   which is too small to show an inset one. */
+.ui-check { scroll-margin-block: 100px 170px; }
+.ui-check:focus-visible { outline: 2px solid #e4eded; outline-offset: 4px; }
+
+/* A selectable card — the payment-method control on the reserve form, and the
+   same shape anywhere a form offers two or three visual choices. */
+.ui-choice {
+  display: flex;
+  min-width: 0;
+  min-height: 84px;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px;
+  border: 1px solid #505b5b;
+  border-radius: 8px;
+  background: #111515;
+  color: var(--foreground);
+  text-align: start;
+}
+
+.ui-choice[aria-pressed="true"],
+.ui-choice[aria-checked="true"] {
+  border-color: #91a2a0;
+  background: #242c2b;
+}
+
+.ui-choice-mark {
+  display: flex;
+  width: 17px;
+  height: 17px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #7f8b8b;
+  border-radius: 50%;
+}
+
+.ui-choice[aria-pressed="true"] .ui-choice-mark,
+.ui-choice[aria-checked="true"] .ui-choice-mark {
+  background: #dce6e4;
+  border-color: #dce6e4;
+  color: #172321;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ui-input { transition: none; }
+}
