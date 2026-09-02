@@ -24,7 +24,7 @@ export default async function MembershipPage() {
         <div className={styles.container}>
           <Eyebrow>{t("eyebrow")}</Eyebrow>
           <h1 className={`${styles.heading} font-display uppercase`}>
-            {t.rich("heading", { accent: (chunks) => <span className="text-primary">{chunks}</span> })}
+            {t.rich("heading", { accent: (chunks) => <span>{chunks}</span> })}
           </h1>
           <p className={styles.introduction}>{t("intro")}</p>
         </div>

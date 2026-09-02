@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Clock3, Lock } from "lucide-react";
-import { BRAND } from "@/lib/brand";
 import { MEMBERSHIP_SALES_ENABLED } from "@/lib/features";
 import { useTranslations } from "next-intl";
 import { localizePath } from "@/i18n/config";
@@ -46,8 +45,13 @@ export function CheckoutHeader() {
         <span className="sr-only">{t("goBack")}</span>
       </button>
 
+      {/* Just "Join now". The brand name was appended here and, at 17px in a
+          48px bar, wrapped onto a second line on a 375px screen — pushing the
+          header taller than the back button it sits beside. The wordmark is
+          already three lines up on every page that links here, so repeating it
+          bought nothing but the wrap. */}
       <span className="font-display text-[17px] tracking-[-0.01em] text-foreground uppercase">
-        {t("joinNow")} · {BRAND.name}
+        {t("joinNow")}
       </span>
 
       <span className="ms-auto flex items-center gap-2 pe-2">
