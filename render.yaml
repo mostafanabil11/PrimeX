@@ -50,6 +50,21 @@ services:
       - key: FRONTEND_URL
         sync: false
 
+      # Feature flags. Every one defaults to false in env.validation.ts, so a
+      # flag left out here is a feature silently switched OFF in production —
+      # which is how the entire reservation funnel would have gone missing:
+      # /join redirects to /membership whenever tracking is off. These mirror
+      # Backend/.env, and the frontend has NEXT_PUBLIC_ twins on Vercel that
+      # must be kept in step with them.
+      - key: MEMBERSHIP_TRACKING_ENABLED
+        value: "true"
+      - key: MEMBERSHIP_SALES_ENABLED
+        value: "false"
+      - key: CLASS_BOOKING_ENABLED
+        value: "false"
+      - key: MEMBER_ACCOUNTS_ENABLED
+        value: "false"
+
       - key: JWT_EXPIRATION
         value: 15m
       - key: JWT_REFRESH_EXPIRATION

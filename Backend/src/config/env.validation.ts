@@ -107,7 +107,20 @@ export const envSchema = z.object({
 export type EnvConfig = z.infer<typeof envSchema>;
 
 export function validateEnv(config: Record<string, unknown>) {
-  const result = envSchema.safeParse(config);
+  // A blank value means "not set", not "set to an empty string".
+  //
+  // Render creates every variable declared in render.yaml, including the
+  // sync:false ones left empty in the dashboard — so an optional field like
+  // MAIL_FROM_ADDRESS arrives as "" rather than undefined. z.email() then
+  // rejects it and the whole service dies at boot on "Invalid environment
+  // variables", which reads like a missing required key rather than an
+  // optional one somebody deliberately skipped. Same trap for
+  // GOOGLE_CALLBACK_URL (.url()) and EMAIL_USER (.email()).
+  const cleaned = Object.fromEntries(
+    Object.entries(config).filter(([, value]) => value !== ''),
+  );
+
+  const result = envSchema.safeParse(cleaned);
 
   if (!result.success) {
     console.error('❌ Invalid environment variables:', result.error.format());
