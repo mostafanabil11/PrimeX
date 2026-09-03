@@ -368,31 +368,13 @@ export default async function Home() {
         </Section>
       )}
 
-      {/* Membership CTA, followed by the full location and social sections. */}
-      <Section>
-        <div className="flex flex-col items-start gap-4 border-t-2 border-primary bg-surface-1 px-5 py-7 md:items-center md:gap-6 md:px-6 md:py-stack-md md:text-center">
-          <h2 className="max-w-2xl font-display text-[34px] leading-[0.88] tracking-[-0.035em] text-balance text-foreground uppercase md:text-5xl md:leading-[0.95] md:tracking-[-0.02em]">
-            No excuses
-          </h2>
-          <p className="max-w-xl text-[15px] leading-[1.5] text-muted-foreground md:text-body-md">
-            Come and see the place before you decide. Somebody at the desk will tell you honestly
-            which tier fits.
-          </p>
-          <div className="flex w-full flex-col gap-2.5 md:w-auto md:flex-row md:flex-wrap md:justify-center md:gap-3">
-            <CtaButton href="/membership" className="max-md:w-full max-md:py-4">
-              See plans and prices
-            </CtaButton>
-            <WhatsAppCta
-              message={`Hi ${BRAND.name}, I have a question about membership.`}
-              variant="outline"
-              className="max-md:w-full max-md:py-4"
-            >
-              Talk to us
-            </WhatsAppCta>
-          </div>
-        </div>
-      </Section>
-
+      {/* The "No excuses" band used to sit here, between the coaches and the
+          location. It was the third full-width call to action on one page —
+          after the hero's two buttons and the pricing grid's per-plan links —
+          and it arrived at the point where somebody scrolling has already been
+          asked twice. It now runs across the top of the footer as a single
+          line, which is where a closing prompt belongs and where it is on
+          every page rather than only this one. */}
       <VisitUsSection branch={branch} locale={locale} />
       <FollowUsSection locale={locale} />
     </>

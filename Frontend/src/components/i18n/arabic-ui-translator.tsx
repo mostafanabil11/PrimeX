@@ -42,7 +42,7 @@ const AR: Record<string, string> = {
   "Classes capped so you get seen": "أعداد محدودة في الحصص لتحصل على متابعة حقيقية",
   "Train with a coach": "تدرّب مع مدرب", "Capped numbers, so you get corrected rather than counted.": "أعداد محدودة تضمن لك التوجيه وتصحيح الأداء.", "All classes →": "كل الحصص ←",
   "Personal training": "التدريب الشخصي", "The team": "فريق المدربين", "Coached floor most of the day, and one-to-one when you want it.": "مدربون متواجدون أغلب اليوم، وجلسات فردية عندما تحتاجها.", "Meet the team →": "تعرّف على الفريق ←",
-  "No excuses": "لا أعذار", "Come and see the place before you decide. Somebody at the desk will tell you honestly which tier fits.": "زُر المكان قبل أن تقرر. سيساعدك فريق الاستقبال بوضوح في اختيار الاشتراك الأنسب لك.",
+  "No excuses": "لا أعذار", "Come and see the place before you decide.": "زُر المكان قبل أن تقرر.", "Come and see the place before you decide. Somebody at the desk will tell you honestly which tier fits.": "زُر المكان قبل أن تقرر. سيساعدك فريق الاستقبال بوضوح في اختيار الاشتراك الأنسب لك.",
   "See plans and prices": "عرض الاشتراكات والأسعار", "Talk to us": "تحدث معنا", "Open now · directions": "مفتوح الآن · الاتجاهات",
   "← All classes": "→ كل الحصص", "What you will use": "ما ستحتاجه", "Length": "المدة", "Group size": "عدد المجموعة", "Intensity": "الشدة", "Ask about this class": "اسأل عن هذه الحصة",
   "Message us on WhatsApp for the full details on this class — what it covers, who coaches it, and when it runs.": "راسلنا على واتساب لمعرفة كل تفاصيل هذه الحصة — محتواها، والمدرب المسؤول عنها، ومواعيدها.",

@@ -7,6 +7,8 @@ import { FOOTER_NAV } from "@/lib/nav";
 import { SocialLinks } from "@/components/public/floating-contact";
 import { getBranchesServer } from "@/lib/api/gym-server";
 import { fullAddress, mapsUrl } from "@/lib/gym-format";
+import { CtaButton } from "@/components/public/section";
+import { WhatsAppCta } from "@/components/public/whatsapp";
 
 export async function SiteFooter() {
   // The gym's own address and phone, from the same source the contact page and
@@ -28,14 +30,44 @@ export async function SiteFooter() {
     // is the one place a full-width red element is not competing with anything
     // because there is nothing below it.
     //
-    // The bottom padding is deliberately large and safe-area aware. The
-    // floating WhatsApp button is fixed 16px from the bottom of the viewport
-    // and is 52px across, so anything within ~84px of the page's end sits
-    // underneath it — which is exactly what used to happen to the copyright
-    // line on every page, and to "Privacy Policy" on /contact. Reserving the
-    // room here is the only fix that works, because the button cannot know how
-    // tall the page is.
-    <footer className="mt-stack-xl w-full border-t-2 border-primary bg-surface-1 pb-[calc(5.5rem+env(safe-area-inset-bottom))]">
+    // The bottom padding was 5.5rem to clear the floating WhatsApp button,
+    // which was fixed 16px from the bottom of the viewport and sat on top of
+    // the copyright line. That button is gone, so the reservation is now just
+    // empty space at the end of every page — back to normal padding, with the
+    // safe-area inset kept because that part was never about the button.
+    <footer className="mt-stack-xl w-full border-t-2 border-primary bg-surface-1 pb-[calc(2rem+env(safe-area-inset-bottom))]">
+      {/* The closing prompt, moved down from the homepage where it was a
+          full-width band. One line and two buttons: enough to be an offer,
+          small enough that it reads as the end of the page rather than another
+          section of it. On every page now, not just the homepage.
+
+          Stacked below sm because two buttons side by side on a 375px screen
+          leaves each about 160px — narrower than "See plans and prices" needs. */}
+      <div className="mx-auto w-full max-w-(--spacing-container-max) border-b border-border px-margin-mobile py-6 md:px-margin-desktop">
+        <div className="flex flex-col items-start gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
+          <div className="min-w-0">
+            <p className="font-display text-xl leading-none tracking-[-0.02em] text-foreground uppercase md:text-2xl">
+              No excuses
+            </p>
+            <p className="mt-2 text-[13px] leading-relaxed text-muted-foreground">
+              Come and see the place before you decide.
+            </p>
+          </div>
+          <div className="flex w-full shrink-0 flex-col gap-2.5 sm:w-auto sm:flex-row sm:gap-3">
+            <CtaButton href="/membership" className="max-sm:w-full max-sm:py-3.5">
+              See plans and prices
+            </CtaButton>
+            <WhatsAppCta
+              message={`Hi ${BRAND.name}, I have a question about membership.`}
+              variant="outline"
+              className="max-sm:w-full max-sm:py-3.5"
+            >
+              Talk to us
+            </WhatsAppCta>
+          </div>
+        </div>
+      </div>
+
       {/* gap-6 on a phone rather than the 24px gutter, and the blocks below
           are tightened to match. The footer ran to 800px on a 375px screen —
           taller than the viewport, for four blocks of secondary material — and
