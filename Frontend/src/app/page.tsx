@@ -105,13 +105,13 @@ export default async function Home() {
               svh is the small viewport — the height with the address bar
               visible — which is the state the page first paints in.
 
-              70svh deliberately leaves roughly a third of the screen for the
+              78svh deliberately leaves about a fifth of the screen for the
               eyebrow and the start of the headline. A full-height hero would
               be a wall of video with nothing indicating there is a page under
               it; this shows enough to read as the top of something. The
               min/max keep it sane on a short landscape phone and on a very
               tall desktop window. */}
-          <div className="relative order-first h-[70svh] max-h-[680px] min-h-[420px] w-full overflow-hidden sm:h-[74svh] lg:order-last lg:h-auto lg:max-h-none lg:min-h-[46rem]">
+          <div className="relative order-first h-[78svh] max-h-[760px] min-h-[460px] w-full overflow-hidden sm:h-[80svh] lg:order-last lg:h-auto lg:max-h-none lg:min-h-[52rem]">
             {/* The poster sits UNDER the video rather than only in its poster
                 attribute, so it covers the first frames while the clip is
                 still buffering and stays put if the video never plays at all —
