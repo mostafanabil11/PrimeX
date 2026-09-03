@@ -98,9 +98,15 @@ export const metadata: Metadata = {
     // Absolute-resolved against metadataBase. WhatsApp and Facebook both
     // refuse to scrape a relative one, which is how a share ends up as a
     // grey box.
+    //
+    // The filename changed with the picture on purpose. og.jpg was a stock
+    // photograph left over from another gym — lime accent line and all — and
+    // scrapers cache by URL for weeks. Replacing the file in place would have
+    // left every previously shared link, and every chat thread that had
+    // already fetched it, still showing the wrong gym.
     images: [
       {
-        url: "/brand/og.jpg",
+        url: "/brand/og-primex.jpg",
         width: 1200,
         height: 630,
         alt: `${BRAND.name} — ${BRAND.tagline}`,
@@ -111,7 +117,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${BRAND.name} — ${BRAND.tagline}`,
     description: BRAND.description,
-    images: ["/brand/og.jpg"],
+    images: ["/brand/og-primex.jpg"],
   },
 };
 
