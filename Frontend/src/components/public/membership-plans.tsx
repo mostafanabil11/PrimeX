@@ -18,8 +18,18 @@ function tierName(plan: Plan, locale: string) {
   return names[name] ?? name;
 }
 
-/** One selected term, with immediate updates and a restrained CSS entrance. */
-export function MembershipPlans({ plans }: { plans: Plan[] }) {
+/**
+ * One selected term, with immediate updates and a restrained CSS entrance.
+ *
+ * `preview` is the homepage's cut: the shortest term's four tiers, with no
+ * term selector and no small print. The homepage used to render PricingGrid
+ * instead, which printed every tier at every term — sixteen plans, 106 lines
+ * of text and 33 tap targets on a phone — and did it in the older accordion,
+ * so the site had two different pricing designs and the busier one was on the
+ * page most people land on. Four cards and a link to /membership say the same
+ * thing; the page that exists to compare terms is one tap away.
+ */
+export function MembershipPlans({ plans, preview = false }: { plans: Plan[]; preview?: boolean }) {
   const t = useTranslations("Membership");
   const terms = useMemo(() => buildTerms(plans), [plans]);
   const [activeTermIndex, setActiveTermIndex] = useState(0);
@@ -31,7 +41,7 @@ export function MembershipPlans({ plans }: { plans: Plan[] }) {
 
   return (
     <div className={styles.plansWrapper}>
-      <div className={styles.termSelectorContainer}>
+      {!preview && <div className={styles.termSelectorContainer}>
         <div className={styles.termToolbar}>
           <span className={`${styles.termLabel} font-mono font-semibold uppercase`}>{t("termLabel")}</span>
           {activeTerm.saving > 0 && (
@@ -52,17 +62,17 @@ export function MembershipPlans({ plans }: { plans: Plan[] }) {
             </button>
           ))}
         </div>
-      </div>
-      <p className="sr-only" role="status">{t("selectedTerm", { term: selectedLabel })}</p>
+      </div>}
+      {!preview && <p className="sr-only" role="status">{t("selectedTerm", { term: selectedLabel })}</p>}
       <div id={cardsId} key={activeTerm.months} className={styles.cardsContainer}>
-        {activeTerm.tiers.map(({ plan }) => <MembershipCard key={plan._id} plan={plan} />)}
+        {activeTerm.tiers.map(({ plan }) => <MembershipCard key={plan._id} plan={plan} preview={preview} />)}
       </div>
-      <p className={styles.priceNote}>{t("priceNote")}</p>
+      {!preview && <p className={styles.priceNote}>{t("priceNote")}</p>}
     </div>
   );
 }
 
-function MembershipCard({ plan }: { plan: Plan }) {
+function MembershipCard({ plan, preview = false }: { plan: Plan; preview?: boolean }) {
   const locale = useLocale();
   const t = useTranslations("Membership");
   const name = tierName(plan, locale);
@@ -130,9 +140,9 @@ function MembershipCard({ plan }: { plan: Plan }) {
         </div>
       </div>
 
-      <hr className={styles.divider} />
+      {!preview && <hr className={styles.divider} />}
 
-      <ul className={styles.benefits}>
+      {!preview && <ul className={styles.benefits}>
         <li className={styles.benefitItem}>
           <div className={styles.benefitIcon}><Dumbbell className="size-5" /></div>
           <div className={styles.benefitText}>
@@ -160,9 +170,9 @@ function MembershipCard({ plan }: { plan: Plan }) {
             <span className={styles.benefitDesc}>{locale === "ar" ? "أحضر صديقاً" : "Bring a friend"}</span>
           </div>
         </li>
-      </ul>
+      </ul>}
 
-      {perks.length > 0 && (
+      {!preview && perks.length > 0 && (
         <div className={styles.extraPerks}>
           <span className={styles.extraPerksTitle}>{locale === "ar" ? "يشمل أيضاً:" : "Also includes:"}</span> {perks.join(" · ")}
         </div>
@@ -171,12 +181,17 @@ function MembershipCard({ plan }: { plan: Plan }) {
       {/* A span, not a second link: the card around it already navigates,
           and nesting an anchor inside an anchor is invalid and unreachable by
           keyboard. It keeps the button styling because it is still what a
-          visitor aims at. */}
-      <span
+          visitor aims at.
+
+          Dropped in preview. Four 52px buttons is what turns a homepage
+          glance into a second copy of the pricing page, and the card is a
+          link with or without it — the section header's "All plans" is the
+          affordance that matters there. */}
+      {!preview && <span
         className={`ui-action ${styles.chooseBtn} ${plan.isFeatured ? styles.chooseBtnPrimary : styles.chooseBtnOutline}`}
       >
         {t("choose", { tier: name })}<ArrowRight aria-hidden className="rtl-flip size-4" />
-      </span>
+      </span>}
       </TrackedPlanLink>
     </article>
   );

@@ -12,10 +12,10 @@ import { OrganizationSchema } from "@/components/public/structured-data";
 import { Section, SectionHeader, CtaButton } from "@/components/public/section";
 import { ExpandingCards } from "@/components/public/expanding-cards";
 import { WhatsAppCta } from "@/components/public/whatsapp";
-import { PricingGrid } from "@/components/public/pricing-grid";
+import { MembershipPlans } from "@/components/public/membership-plans";
 import { formatPrice } from "@/lib/format";
 import { getLocale, getTranslations } from "next-intl/server";
-import { FollowUsSection, VisitUsSection } from "@/components/public/home-connect";
+import { VisitUsSection } from "@/components/public/home-connect";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -271,10 +271,10 @@ export default async function Home() {
           <SectionHeader
             eyebrow="Membership"
             title="Choose your path"
-            body="Four tiers, each sold over four terms. Pick how often you intend to train and how long you want to commit for."
+            body="Four tiers, each sold over four terms. These are the monthly prices — the full grid is one tap away."
             action={{ href: "/membership", label: "Compare all plans", shortLabel: "All plans" }}
           />
-          <PricingGrid plans={plans} />
+          <MembershipPlans plans={plans} preview />
         </Section>
       )}
 
@@ -376,7 +376,12 @@ export default async function Home() {
           line, which is where a closing prompt belongs and where it is on
           every page rather than only this one. */}
       <VisitUsSection branch={branch} locale={locale} />
-      <FollowUsSection locale={locale} />
+
+      {/* FollowUsSection used to close the page here. It rendered SOCIAL_LINKS,
+          which the footer also renders — the same two icons twice, about 340px
+          apart, so a visitor scrolling to the bottom met them and then met them
+          again. The footer's copy is the one that appears on every page, so it
+          is the one that stays. */}
     </>
   );
 }

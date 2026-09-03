@@ -125,10 +125,15 @@
 
 @media (max-width: 767px) {
   .visitCard { grid-template-columns: 1fr; border-radius: 10px; }
-  .mapPanel { min-height: 280px; }
-  .visitDetails { padding: 28px 24px; }
-  .heading { font-size: 32px; }
-  .rule { margin-block: 16px 20px; }
+  /* Trimmed rather than cut. The map earns its height — it is the one thing
+     here a visitor cannot get from the text — so it loses 40px, not more,
+     while the framing around the details gives up the slack instead. */
+  .mapPanel { min-height: 240px; }
+  .visitDetails { padding: 22px 20px; }
+  .heading { font-size: 30px; }
+  .rule { margin-block: 12px 16px; }
+  .hours { margin-block: 18px; padding-top: 16px; }
+  .hoursRow { margin-top: 8px; }
   .eyebrow { font-size: 12px; }
   .followSection { padding-top: 12px; }
   .followCopy { font-size: 14px; }
