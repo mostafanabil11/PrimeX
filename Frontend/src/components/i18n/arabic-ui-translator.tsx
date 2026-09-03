@@ -40,7 +40,7 @@ const AR: Record<string, string> = {
   "Coaches who are certified, not just enthusiastic": "مدربون معتمدون يمتلكون الخبرة، لا الحماس فقط",
   "Equipment maintained on a schedule, not when it breaks": "صيانة دورية للمعدات قبل حدوث الأعطال",
   "Classes capped so you get seen": "أعداد محدودة في الحصص لتحصل على متابعة حقيقية",
-  "Train with a coach": "تدرّب مع مدرب", "Capped numbers, so you get corrected rather than counted.": "أعداد محدودة تضمن لك التوجيه وتصحيح الأداء.", "All classes →": "كل الحصص ←",
+  "The class floor": "صالة الحصص", "Capped numbers, so you get corrected rather than counted.": "أعداد محدودة تضمن لك التوجيه وتصحيح الأداء.", "All classes →": "كل الحصص ←",
   "Personal training": "التدريب الشخصي", "The team": "فريق المدربين", "Coached floor most of the day, and one-to-one when you want it.": "مدربون متواجدون أغلب اليوم، وجلسات فردية عندما تحتاجها.", "Meet the team →": "تعرّف على الفريق ←",
   "No excuses": "لا أعذار", "Come and see the place before you decide.": "زُر المكان قبل أن تقرر.", "Come and see the place before you decide. Somebody at the desk will tell you honestly which tier fits.": "زُر المكان قبل أن تقرر. سيساعدك فريق الاستقبال بوضوح في اختيار الاشتراك الأنسب لك.",
   "See plans and prices": "عرض الاشتراكات والأسعار", "Talk to us": "تحدث معنا", "Open now · directions": "مفتوح الآن · الاتجاهات",

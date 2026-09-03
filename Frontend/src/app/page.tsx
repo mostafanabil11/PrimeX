@@ -312,7 +312,7 @@ export default async function Home() {
         <Section className="border-b border-border">
           <SectionHeader
             eyebrow="Classes"
-            title="Train with a coach"
+            title="The class floor"
             body="Capped numbers, so you get corrected rather than counted."
             action={{
               href: "/classes",
