@@ -15,7 +15,7 @@ import { WhatsAppCta } from "@/components/public/whatsapp";
 import { MembershipPlans } from "@/components/public/membership-plans";
 import { formatPrice } from "@/lib/format";
 import { getLocale, getTranslations } from "next-intl/server";
-import { VisitUsSection } from "@/components/public/home-connect";
+import { FollowUsSection, VisitUsSection } from "@/components/public/home-connect";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -377,11 +377,12 @@ export default async function Home() {
           every page rather than only this one. */}
       <VisitUsSection branch={branch} locale={locale} />
 
-      {/* FollowUsSection used to close the page here. It rendered SOCIAL_LINKS,
-          which the footer also renders — the same two icons twice, about 340px
-          apart, so a visitor scrolling to the bottom met them and then met them
-          again. The footer's copy is the one that appears on every page, so it
-          is the one that stays. */}
+      {/* Kept, despite duplicating the footer's social links a few hundred
+          pixels below. The footer's pair are 20px icons in a utility row; this
+          is the section that actually asks — and the gym's Instagram is where
+          most of its audience already is, so being asked twice at the end of
+          the page is the point rather than an oversight. */}
+      <FollowUsSection locale={locale} />
     </>
   );
 }
