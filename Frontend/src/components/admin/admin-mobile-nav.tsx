@@ -7,7 +7,6 @@ import { Menu, ChevronDown } from "lucide-react";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Wordmark } from "@/components/layout/wordmark";
 import { AdminNav, useAdminNavItems, isAdminNavItemActive } from "./admin-nav";
-import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { useLocale } from "next-intl";
 
 /**
@@ -82,7 +81,6 @@ export function AdminMobileNav() {
             <p className="mt-4 inline-block bg-primary px-2 py-1 text-[11px] font-bold tracking-[0.16em] text-primary-foreground uppercase">
               {locale === "ar" ? "الإدارة" : "Admin"}
             </p>
-            <LanguageSwitcher className="mt-4 w-full border border-border text-muted-foreground" />
           </div>
 
           {/* Scrolls, because sixteen rows at 44px is taller than a phone. */}

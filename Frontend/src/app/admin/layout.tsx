@@ -7,7 +7,6 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { AdminNav } from "@/components/admin/admin-nav";
 import { AdminMobileNav } from "@/components/admin/admin-mobile-nav";
 import { Wordmark } from "@/components/layout/wordmark";
-import { LanguageSwitcher } from "@/components/layout/language-switcher";
 import { useLocale } from "next-intl";
 
 export default function AdminLayout({ children }: LayoutProps<"/admin">) {
@@ -50,7 +49,11 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
         <p className="mb-5 ms-4 inline-block bg-primary px-2 py-1 text-[10px] font-bold tracking-[0.16em] text-primary-foreground uppercase">
           {locale === "ar" ? "الإدارة" : "Admin"}
         </p>
-        <LanguageSwitcher className="mx-4 mb-4 w-[calc(100%-2rem)] border border-border text-muted-foreground" />
+        {/* No language switcher here. Admin is English-only by routing, not by
+            preference: proxy.ts pins x-primex-locale to "en" for every /admin
+            path and redirects /ar/admin back to /admin. The control could
+            therefore set the cookie but never change this page — it was an
+            affordance that could not do the thing it offered. */}
         <AdminNav />
       </aside>
       <div className="min-w-0 flex-1">
