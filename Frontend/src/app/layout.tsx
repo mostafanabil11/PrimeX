@@ -9,7 +9,6 @@ import { AnnouncementBar } from "@/components/layout/announcement-bar";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { HideOnCheckout, ShowOnCheckout } from "@/components/layout/checkout-chrome";
 import { CheckoutHeader } from "@/components/layout/checkout-header";
-import { FloatingContact } from "@/components/public/floating-contact";
 import { getContentServer } from "@/lib/api/gym-server";
 import { contentList } from "@/types/gym";
 import { BRAND } from "@/lib/brand";
@@ -187,7 +186,6 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
           </main>
           <HideOnCheckout>
             <SiteFooter />
-            <FloatingContact locale={locale} />
           </HideOnCheckout>
           </Providers>
         </NextIntlClientProvider>

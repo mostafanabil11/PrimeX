@@ -1,24 +1,19 @@
-import { BRAND } from "@/lib/brand";
-import { WhatsAppIcon, WhatsAppLink } from "./whatsapp";
-
 /**
- * One floating button: WhatsApp, bottom-right, on every page.
+ * The site's social links.
  *
- * Instagram and Facebook used to float here too. They were removed because
- * three persistent buttons over the content read as clutter rather than as
- * service — and two of them were links that send people *off* the site, which
- * is a strange thing to keep permanently in front of someone. Social now lives
- * in the footer only, which is where people look for it anyway. See SocialLinks.
+ * Nothing floats over the content any more. This file once held a rail of
+ * Instagram, Facebook and WhatsApp buttons pinned to the viewport; the two
+ * profile links went first, because a permanent affordance that sends people
+ * OFF the site is a strange thing to keep in front of them, and the WhatsApp
+ * circle that outlived them has now gone too.
  *
- * What is left is the one thing that is genuinely an action. WhatsApp is how
- * this gym is actually contacted, ahead of the phone and well ahead of email,
- * so it earns a permanent affordance in a way a profile link does not.
+ * Losing it costs less than it sounds. WhatsApp is still how this gym is
+ * contacted, but it is reached from the CTA that nearly every page already
+ * ends on — each carrying a message written for its own context — rather than
+ * from one green circle sitting on top of all of them.
  *
- * It wears WhatsApp's own #25D366 and does not change colour on hover. With
- * nothing beside it there is no cluster to stay consistent with, and the green
- * is doing the same job an app icon does: people find this button by colour
- * before they read anything. Hover is a small scale — motion, not colour — so
- * the mark itself never shifts.
+ * The filename is a leftover: what is left here is SOCIAL_LINKS and the footer
+ * list that renders it.
  */
 
 type Social = { href: string; label: string; icon: React.ReactNode };
@@ -114,40 +109,18 @@ const baseClasses =
 // gives the glyphs an edge to read against without turning them into buttons.
 const buttonClasses = `${baseClasses} bg-surface-2 text-foreground`;
 
-export function FloatingContact({ locale = "en" }: { locale?: string }) {
-  const isArabic = locale === "ar";
-  return (
-    <>
-      {/* ---- The circle, visible on all screens ---------------------------
-          The sticky bar was removed as it took up too much mobile screen space. */}
-      <WhatsAppLink
-        message={isArabic ? `مرحباً ${BRAND.name}، لدي استفسار.` : `Hi ${BRAND.name}, I have a question.`}
-        // The offsets are max() against the safe-area inset rather than flat
-        // rem values. The same insets are non-zero in landscape on a notched
-        // device, where the button would otherwise sit under the rounded
-        // corner. Pinned to the opposite corner in Arabic — env() only takes
-        // physical sides, so the side has to be picked in JS rather than with
-        // a direction-aware Tailwind utility.
-        className={`press fixed bottom-[max(1.5rem,env(safe-area-inset-bottom))] z-40 flex size-13 items-center justify-center rounded-full bg-[#25D366] text-black transition-transform duration-200 hover:scale-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-foreground motion-reduce:transition-none motion-reduce:hover:scale-100 ${
-          isArabic
-            ? "left-[max(1.5rem,env(safe-area-inset-left))]"
-            : "right-[max(1.5rem,env(safe-area-inset-right))]"
-        }`}
-      >
-        <WhatsAppIcon className="size-6" />
-        <span className="sr-only">{isArabic ? `تواصل مع ${BRAND.name} عبر واتساب` : `Message ${BRAND.name} on WhatsApp`}</span>
-      </WhatsAppLink>
-    </>
-  );
-}
-
 /**
  * The two social links, in the footer. This is now the site's only social
- * presence — the floating rail that used to carry them was removed.
+ * presence — the floating rail that used to carry them was removed, and so was
+ * the floating WhatsApp button that replaced it.
  *
- * WhatsApp is deliberately not here. It has a permanent floating button of its
- * own a few hundred pixels away, and a second affordance for the same action in
- * the same viewport is noise rather than convenience.
+ * WhatsApp is still not here, but the reason has changed. It used to be that a
+ * permanent floating button sat a few hundred pixels away and a second
+ * affordance for the same action was noise. Now it is that WhatsApp is the
+ * action nearly every page already ends on — the homepage, membership,
+ * contact, FAQ, the class and coach pages and both reservation forms all carry
+ * their own CTA, each with a message written for its context. A bare footer
+ * link would be the only one with nothing to say.
  */
 export function SocialLinks({ className = "" }: { className?: string }) {
   return (
